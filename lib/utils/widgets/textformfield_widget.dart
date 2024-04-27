@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TextFormFieldComponent extends StatefulWidget {
+class TextFormFieldWidget extends StatefulWidget {
   Color? cursorColor;
   TextEditingController controller;
   TextInputType? textInputType;
@@ -15,13 +15,14 @@ class TextFormFieldComponent extends StatefulWidget {
   Color? focusColor;
   String labelText;
   Widget? suffixIcon;
+  TextStyle? labelStyle;
   double borderRadius;
   Color? fillColor;
   String? Function(String?)? validator;
   Color? unfocusBorderColor;
   bool? readOnly;
 
-  TextFormFieldComponent({
+  TextFormFieldWidget({
     Key? key,
     this.cursorColor = Colors.black,
     required this.controller,
@@ -45,10 +46,10 @@ class TextFormFieldComponent extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TextFormFieldComponent> createState() => _TextFormFieldComponentState();
+  State<TextFormFieldWidget> createState() => _TextFormFieldWidgetState();
 }
 
-class _TextFormFieldComponentState extends State<TextFormFieldComponent> {
+class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
   bool isObsecureText = false;
   String validateText = '';
   @override
@@ -78,6 +79,7 @@ class _TextFormFieldComponentState extends State<TextFormFieldComponent> {
                 borderRadius: BorderRadius.circular(widget.borderRadius),
               ),
               child: TextFormField(
+                
                 readOnly: widget.readOnly ?? false,
                 validator: (val) {
                   setState(() {
@@ -93,7 +95,9 @@ class _TextFormFieldComponentState extends State<TextFormFieldComponent> {
                 keyboardType: widget.textInputType,
                 obscureText: isObsecureText,
                 decoration: InputDecoration(
-                  labelStyle: const TextStyle(color: Colors.grey),
+                  
+                  labelStyle:
+                      widget.labelStyle ?? const TextStyle(color: Colors.grey),
                   labelText: widget.labelText,
                   fillColor: Colors.black,
                   focusedBorder: OutlineInputBorder(
