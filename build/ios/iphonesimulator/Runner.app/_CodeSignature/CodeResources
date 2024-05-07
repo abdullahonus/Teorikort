@@ -18,7 +18,7 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		nUjZMazen0qAgDl4SLkzrRyN0Wc=
+		0nXjhvDB/xI3ZDZy+QeUbDkJ8vc=
 		</data>
 		<key>Base.lproj/LaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		naiqu9W4ib9XRmc428iiaCJO54c=
+		4VFsPywOH2jP1hw1vIMbaKqRMog=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,15 +54,15 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		G5p1bIL9BlZqf9vCnhFIM4ytg28=
+		xE4XUgs9yS21d3IgPs+/NTogJfU=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<data>
-		uysFZ7FJv1FykLNchATx86TILIw=
+		3Z6LjV9A6XHPL5XDcoBIfd2sLRE=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<data>
-		TrG4Rl+zr0hXNxNR38ZzEXGFvxI=
+		gC/V0zU/Yiw2HEKKZTeWrBBcj9U=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
 		<data>
@@ -70,7 +70,11 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/NOTICES.Z</key>
 		<data>
-		MjoIVuqDr9FXotBDTKG2sC2O4Ho=
+		MgU0uSD8AR2/Wc/hHD7+wdb9mx4=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/icons/car.png</key>
+		<data>
+		+aEMVg8vst7qPFlkv9EyU3ZqH+s=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/assets/icons/direksiyon.png</key>
 		<data>
@@ -188,6 +192,18 @@
 		<data>
 		Ubat0LvE4LUgCwHeyl0Anx2vnzk=
 		</data>
+		<key>Frameworks/simple_animation_progress_bar.framework/Info.plist</key>
+		<data>
+		d3+/g9pGRhhI0TDgcCDrd3EO1E8=
+		</data>
+		<key>Frameworks/simple_animation_progress_bar.framework/_CodeSignature/CodeResources</key>
+		<data>
+		Bw6LJA4mexx9nbTSvJe8dhLPVHk=
+		</data>
+		<key>Frameworks/simple_animation_progress_bar.framework/simple_animation_progress_bar</key>
+		<data>
+		GD63cgADXFmcykTb6BZVy3PJ4q4=
+		</data>
 		<key>Info.plist</key>
 		<data>
 		O0ghGbmeuIt8Zi8hLmpp9qLDLgs=
@@ -224,7 +240,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			8sVTeuD8H/8b/wCHL/7BYuWdJPyT2Ps7gQX/oBLG+Eg=
+			tI5MEzXfAKJ/3ccjFG4ll5OyQ6v74Ny3q8iqg4amgbo=
 			</data>
 		</dict>
 		<key>Base.lproj/LaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
@@ -273,7 +289,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			WfpiKE6ACgXVvWq8SK+3tgrODQju22W5Fg6k/ZlcKHw=
+			P8nv/5Y8LVLB8pIlfq7oT84EydmyGiUa78jNT0D/DZQ=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -287,21 +303,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			jvnPhkZCiNVtJ70wC0eW2lL/qYNxS/Z/L7oDjFdnIjY=
+			5Mq3rd1Py6vXyEjbVivXnsj8PZSUvGj3JmIHB63YOWo=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			RA3jX/OmWeAQ3GOXEYGCe8sQis8HO6LRovAa+GQdP0c=
+			IXhaxCroURoZGYCQ1Px3JBSoYvoPRvyfNeAivhljsLs=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			iAxWi89eAFOeX4zFe800wW7DaxiNpNKsNDZrlrk/6zI=
+			Vm0y/NdHWaWUZE5IF9jyT3mWYWL5HrP52aBjWj5pVUk=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
@@ -315,7 +331,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			F4Uu7FizvaATqdvfqkee1DMC8ssVu/wK3h4teOk6xOM=
+			2SNLsqVG/eOdpKS0SP2d9v6jbAkc22zOZ7PsSx7JvlI=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/icons/car.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			QKKettJXbLMsNl1TsK1TE0vMjhqye0VaXaEiG27oCj4=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/assets/icons/direksiyon.png</key>
@@ -519,6 +542,27 @@
 			<key>hash2</key>
 			<data>
 			ZepykIMSjfzhwAcmupMrkaqvXkhza1ZE3TdHjl8odaw=
+			</data>
+		</dict>
+		<key>Frameworks/simple_animation_progress_bar.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			sExHYZTF8Kp8Eg9F2FJdbR8ANjnhQsJasFMIICk5q2o=
+			</data>
+		</dict>
+		<key>Frameworks/simple_animation_progress_bar.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			W+0/whQN02qDBhA+Er1r3iIr0hYnB+IU+OOweIOQNt8=
+			</data>
+		</dict>
+		<key>Frameworks/simple_animation_progress_bar.framework/simple_animation_progress_bar</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			IfjZ1/ZGZ6WvbF/n7Zp5E47H8zbcvoEeZBrttTIxsrI=
 			</data>
 		</dict>
 	</dict>

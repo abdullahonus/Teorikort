@@ -79,7 +79,6 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
                 borderRadius: BorderRadius.circular(widget.borderRadius),
               ),
               child: TextFormField(
-            
                 readOnly: widget.readOnly ?? false,
                 validator: (val) {
                   setState(() {
@@ -95,7 +94,6 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
                 keyboardType: widget.textInputType,
                 obscureText: isObsecureText,
                 decoration: InputDecoration(
-                  
                   labelStyle:
                       widget.labelStyle ?? const TextStyle(color: Colors.grey),
                   labelText: widget.labelText,
@@ -136,13 +134,11 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
               ),
             ),
             validateText.isNotEmpty
-                ? Container(
-                    child: Text(
-                      validateText,
-                      style: TextStyle(color: Colors.red, fontSize: 15),
-                    ),
+                ? Text(
+                    validateText,
+                    style: const TextStyle(color: Colors.red, fontSize: 15),
                   )
-                : SizedBox(),
+                : const SizedBox(),
           ],
         ),
       ),

@@ -110,6 +110,24 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "pie_chart",
+      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/pie_chart-5.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "plugin_platform_interface",
+      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "simple_animation_progress_bar",
+      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/simple_animation_progress_bar-1.8.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///Users/abdullahonus/development/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -170,7 +188,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-05-07T18:06:18.920692Z",
+  "generated": "2024-05-07T19:25:12.396303Z",
   "generator": "pub",
   "generatorVersion": "3.5.0-131.0.dev",
   "flutterRoot": "file:///Users/abdullahonus/development/flutter",

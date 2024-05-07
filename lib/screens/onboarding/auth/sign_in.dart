@@ -129,10 +129,11 @@ class _SignInScreenState extends State<SignInScreen> {
  */
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:taxi/screens/main_screen/main_screen.dart';
 import 'package:taxi/screens/onboarding/auth/sign_up.dart';
-import 'package:taxi/utils/widgets/button_widget.dart';
-import 'package:taxi/utils/widgets/textformfield_widget.dart';
-import 'package:taxi/utils/widgets/uniq_appbar.dart';
+import 'package:taxi/widgets/button_widget.dart';
+import 'package:taxi/widgets/textformfield_widget.dart';
+import 'package:taxi/widgets/uniq_appbar.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -243,7 +244,13 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       const SizedBox(height: 100),
                       BasicButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const MainScreen(),
+                            ),
+                          );
+                        },
                         child: const Text(
                           'Sign In',
                           style: TextStyle(color: Colors.black),

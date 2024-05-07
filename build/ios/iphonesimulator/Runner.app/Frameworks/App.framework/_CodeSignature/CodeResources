@@ -10,11 +10,11 @@
 		</data>
 		<key>flutter_assets/AssetManifest.bin</key>
 		<data>
-		uysFZ7FJv1FykLNchATx86TILIw=
+		3Z6LjV9A6XHPL5XDcoBIfd2sLRE=
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		TrG4Rl+zr0hXNxNR38ZzEXGFvxI=
+		gC/V0zU/Yiw2HEKKZTeWrBBcj9U=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -22,7 +22,11 @@
 		</data>
 		<key>flutter_assets/NOTICES.Z</key>
 		<data>
-		MjoIVuqDr9FXotBDTKG2sC2O4Ho=
+		MgU0uSD8AR2/Wc/hHD7+wdb9mx4=
+		</data>
+		<key>flutter_assets/assets/icons/car.png</key>
+		<data>
+		+aEMVg8vst7qPFlkv9EyU3ZqH+s=
 		</data>
 		<key>flutter_assets/assets/icons/direksiyon.png</key>
 		<data>
@@ -59,14 +63,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			RA3jX/OmWeAQ3GOXEYGCe8sQis8HO6LRovAa+GQdP0c=
+			IXhaxCroURoZGYCQ1Px3JBSoYvoPRvyfNeAivhljsLs=
 			</data>
 		</dict>
 		<key>flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			iAxWi89eAFOeX4zFe800wW7DaxiNpNKsNDZrlrk/6zI=
+			Vm0y/NdHWaWUZE5IF9jyT3mWYWL5HrP52aBjWj5pVUk=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -80,7 +84,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			F4Uu7FizvaATqdvfqkee1DMC8ssVu/wK3h4teOk6xOM=
+			2SNLsqVG/eOdpKS0SP2d9v6jbAkc22zOZ7PsSx7JvlI=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/icons/car.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			QKKettJXbLMsNl1TsK1TE0vMjhqye0VaXaEiG27oCj4=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/icons/direksiyon.png</key>
