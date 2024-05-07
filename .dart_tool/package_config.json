@@ -93,13 +93,13 @@
     },
     {
       "name": "material_color_utilities",
-      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/material_color_utilities-0.8.0",
+      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/material_color_utilities-0.11.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "meta",
-      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/meta-1.12.0",
+      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/meta-1.14.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -147,7 +147,7 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/test_api-0.7.0",
+      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/test_api-0.7.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -159,7 +159,7 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/vm_service-14.2.0",
+      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/vm_service-14.2.1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -170,10 +170,10 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-04-27T16:56:20.914391Z",
+  "generated": "2024-05-07T18:06:18.920692Z",
   "generator": "pub",
-  "generatorVersion": "3.5.0-6.0.dev",
+  "generatorVersion": "3.5.0-131.0.dev",
   "flutterRoot": "file:///Users/abdullahonus/development/flutter",
-  "flutterVersion": "3.22.0-2.0.pre.21",
+  "flutterVersion": "3.22.0-23.0.pre.46",
   "pubCache": "file:///Users/abdullahonus/.pub-cache"
 }
