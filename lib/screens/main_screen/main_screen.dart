@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:taxi/extencions/general.dart';
 import 'package:taxi/screens/test/show_test_tabs.dart';
-import 'package:taxi/utils/appBar_widget.dart';
+import 'package:taxi/widgets/appBar_widget.dart';
 import 'package:taxi/widgets/card_widget.dart';
 import 'package:taxi/widgets/line_chart_widget.dart';
 

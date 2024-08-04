@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:taxi/extencions/general.dart';
+import 'package:taxi/screens/main_screen/main_screen.dart';
+import 'package:taxi/widgets/bottom_sheet_listtile_button_widget.dart';
 
 class HomeAppBar extends AppBar {
   HomeAppBar(BuildContext context,
@@ -90,10 +92,10 @@ class HomeAppBar extends AppBar {
                                       leading: ClipRRect(
                                         borderRadius: BorderRadius.circular(50),
                                         child: CircleAvatar(
-                                          radius: 22.h,
                                           child: SvgPicture.asset(
                                             "assets/icons/svg/img_account-profile-empty.svg",
-                                            fit: BoxFit.cover,
+                                            width: 18.w,
+                                            height: 18.w,
                                           ),
                                         ),
                                       ),
@@ -104,6 +106,18 @@ class HomeAppBar extends AppBar {
                                         size: 20,
                                         color: Colors.grey.shade500,
                                       ),
+                                    ),
+                                  ),
+                                ),
+                                BottomSheetListTileButton(
+                                  routePage: const MainScreen(),
+                                  title: 'Ayarlar',
+                                  icon: Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 15, left: 12),
+                                    child: const Icon(
+                                      Icons.settings,
+                                      color: Colors.black,
                                     ),
                                   ),
                                 ),
@@ -126,6 +140,4 @@ class HomeAppBar extends AppBar {
             )
           ],
         );
-
-  void accountBottomSheet(context) {}
 }
