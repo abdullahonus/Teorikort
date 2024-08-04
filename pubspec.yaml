@@ -38,6 +38,7 @@ dependencies:
   pie_chart: ^5.4.0
   simple_animation_progress_bar: ^1.8.2
   flutter_screenutil: ^5.9.0
+  flutter_svg: ^2.0.10+1
   
 dev_dependencies:
   flutter_test:

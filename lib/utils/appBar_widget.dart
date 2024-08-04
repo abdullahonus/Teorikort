@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:taxi/extencions/general.dart';
 
 class HomeAppBar extends AppBar {
@@ -36,9 +37,88 @@ class HomeAppBar extends AppBar {
             ),
           ),
           actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 15.0.w),
-              child: GestureDetector(
+            GestureDetector(
+              onTap: () => showModalBottomSheet(
+                backgroundColor: Colors.transparent,
+                context: context,
+                isDismissible: true,
+                isScrollControlled: true,
+                constraints: BoxConstraints(maxHeight: 0.9.sh),
+                builder: (BuildContext bc) {
+                  return DecoratedBox(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                      color: Colors.white,
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 10),
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: 20.w),
+                            width: 50,
+                            height: 5,
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(20)),
+                          ),
+                          Container(
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40),
+                              ),
+                              color: Colors.white,
+                            ),
+                            // margin: const EdgeInsets.all(10),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    //Account Screen
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.only(
+                                        top: 16.w, right: 5.w, left: 5.5.w),
+                                    child: ListTile(
+                                      leading: ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: CircleAvatar(
+                                          radius: 22.h,
+                                          child: SvgPicture.asset(
+                                            "assets/icons/svg/img_account-profile-empty.svg",
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      title: Text("User Name"),
+                                      subtitle: Text("User Phone"),
+                                      trailing: Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 20,
+                                        color: Colors.grey.shade500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 30.w),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(right: 15.0.w),
                 child: CircleAvatar(
                     backgroundColor: Colors.grey.shade300,
                     child: Image.asset('assets/icons/police.png', scale: 1.5)),
@@ -46,4 +126,6 @@ class HomeAppBar extends AppBar {
             )
           ],
         );
+
+  void accountBottomSheet(context) {}
 }
