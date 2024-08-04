@@ -39,7 +39,7 @@
 31    <application
 32        android:name="android.app.Application"
 33        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-33-->[androidx.core:core:1.6.0] /Users/abdullahonus/.gradle/caches/transforms-3/3c66a5784cb7020cba20d4a0e62599b1/transformed/core-1.6.0/AndroidManifest.xml:24:18-86
+33-->[androidx.core:core:1.6.0] /Users/abdullahonus/.gradle/caches/transforms-3/137d1d3f883095e23d6a0e1ce55eddac/transformed/core-1.6.0/AndroidManifest.xml:24:18-86
 34        android:debuggable="true"
 35        android:icon="@mipmap/ic_launcher"
 36        android:label="taxi" >
@@ -78,17 +78,17 @@
 69            android:value="2" />
 70
 71        <uses-library
-71-->[androidx.window:window:1.0.0-beta04] /Users/abdullahonus/.gradle/caches/transforms-3/6a5ca894728d140231e721fa4fb81edf/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+71-->[androidx.window:window:1.0.0-beta04] /Users/abdullahonus/.gradle/caches/transforms-3/0b197c2c2762887ea6c6284453beddcf/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
 72            android:name="androidx.window.extensions"
-72-->[androidx.window:window:1.0.0-beta04] /Users/abdullahonus/.gradle/caches/transforms-3/6a5ca894728d140231e721fa4fb81edf/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+72-->[androidx.window:window:1.0.0-beta04] /Users/abdullahonus/.gradle/caches/transforms-3/0b197c2c2762887ea6c6284453beddcf/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
 73            android:required="false" />
-73-->[androidx.window:window:1.0.0-beta04] /Users/abdullahonus/.gradle/caches/transforms-3/6a5ca894728d140231e721fa4fb81edf/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+73-->[androidx.window:window:1.0.0-beta04] /Users/abdullahonus/.gradle/caches/transforms-3/0b197c2c2762887ea6c6284453beddcf/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
 74        <uses-library
-74-->[androidx.window:window:1.0.0-beta04] /Users/abdullahonus/.gradle/caches/transforms-3/6a5ca894728d140231e721fa4fb81edf/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+74-->[androidx.window:window:1.0.0-beta04] /Users/abdullahonus/.gradle/caches/transforms-3/0b197c2c2762887ea6c6284453beddcf/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
 75            android:name="androidx.window.sidecar"
-75-->[androidx.window:window:1.0.0-beta04] /Users/abdullahonus/.gradle/caches/transforms-3/6a5ca894728d140231e721fa4fb81edf/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+75-->[androidx.window:window:1.0.0-beta04] /Users/abdullahonus/.gradle/caches/transforms-3/0b197c2c2762887ea6c6284453beddcf/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
 76            android:required="false" />
-76-->[androidx.window:window:1.0.0-beta04] /Users/abdullahonus/.gradle/caches/transforms-3/6a5ca894728d140231e721fa4fb81edf/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+76-->[androidx.window:window:1.0.0-beta04] /Users/abdullahonus/.gradle/caches/transforms-3/0b197c2c2762887ea6c6284453beddcf/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
 77    </application>
 78
 79</manifest>

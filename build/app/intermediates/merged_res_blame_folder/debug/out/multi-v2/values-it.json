@@ -4,7 +4,7 @@
             "outputFile": "com.example.taxi.app-mergeDebugResources-9:/values-it/values-it.xml",
             "map": [
                 {
-                    "source": "/Users/abdullahonus/.gradle/caches/transforms-3/3c66a5784cb7020cba20d4a0e62599b1/transformed/core-1.6.0/res/values-it/values-it.xml",
+                    "source": "/Users/abdullahonus/.gradle/caches/transforms-3/137d1d3f883095e23d6a0e1ce55eddac/transformed/core-1.6.0/res/values-it/values-it.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
