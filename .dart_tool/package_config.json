@@ -129,7 +129,7 @@
     },
     {
       "name": "meta",
-      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/meta-1.12.0",
+      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/meta-1.15.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -207,9 +207,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/test_api-0.7.0",
+      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/test_api-0.7.2",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "typed_data",
@@ -243,7 +243,7 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/vm_service-14.2.0",
+      "rootUri": "file:///Users/abdullahonus/.pub-cache/hosted/pub.dev/vm_service-14.2.4",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -266,10 +266,10 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-08-04T16:45:04.581623Z",
+  "generated": "2024-08-07T17:06:41.252390Z",
   "generator": "pub",
-  "generatorVersion": "3.5.0-18.0.dev",
+  "generatorVersion": "3.5.0",
   "flutterRoot": "file:///Users/abdullahonus/development/flutter",
-  "flutterVersion": "3.22.0-4.0.pre",
+  "flutterVersion": "3.24.0",
   "pubCache": "file:///Users/abdullahonus/.pub-cache"
 }

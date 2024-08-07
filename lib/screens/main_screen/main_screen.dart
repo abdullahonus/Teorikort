@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:taxi/extencions/general.dart';
 import 'package:taxi/screens/test/show_test_tabs.dart';
+import 'package:taxi/screens/test_screen.dart';
 import 'package:taxi/widgets/appBar_widget.dart';
 import 'package:taxi/widgets/card_widget.dart';
 import 'package:taxi/widgets/line_chart_widget.dart';
@@ -138,60 +139,68 @@ class _MainScreenState extends State<MainScreen> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CustomCard(
-                margin: const EdgeInsets.all(
-                  10,
-                ).copyWith(bottom: 0),
-                color:
-                    //burda eğer charttaki değer 0 ise colorı kırmızı olarak gösterecez
-                    randomColorList[index],
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10)),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 18.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                              padding: context.paddingAll(10),
-                              child: Text(
-                                "Test ${index + 1}",
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              )),
-                          Icon(
-                            Icons.arrow_circle_right_rounded,
-                            size: 25.w,
-                            color: Colors.white,
-                          ),
-                        ],
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TestScreen(),
+                  ),
+                ),
+                child: CustomCard(
+                  margin: const EdgeInsets.all(
+                    10,
+                  ).copyWith(bottom: 0),
+                  color:
+                      //burda eğer charttaki değer 0 ise colorı kırmızı olarak gösterecez
+                      randomColorList[index],
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10)),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 18.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                                padding: context.paddingAll(10),
+                                child: Text(
+                                  "Test ${index + 1}",
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                            Icon(
+                              Icons.arrow_circle_right_rounded,
+                              size: 25.w,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    PieChart(
-                      centerText:
-                          "%${(solvedQuestions / totalQuestions * 100).toInt()}", // Yüzdeyi göster
-                      dataMap: dataMap,
-                      colorList: questionColorList,
-                      chartType: ChartType.ring,
-                      ringStrokeWidth: 5.w,
-                      legendOptions: const LegendOptions(
-                        showLegends: false,
+                      PieChart(
+                        centerText:
+                            "%${(solvedQuestions / totalQuestions * 100).toInt()}", // Yüzdeyi göster
+                        dataMap: dataMap,
+                        colorList: questionColorList,
+                        chartType: ChartType.ring,
+                        ringStrokeWidth: 5.w,
+                        legendOptions: const LegendOptions(
+                          showLegends: false,
+                        ),
+                        chartRadius: 55.w,
+                        centerTextStyle: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        chartValuesOptions: const ChartValuesOptions(
+                          showChartValueBackground: false,
+                          showChartValues: false,
+                        ),
                       ),
-                      chartRadius: 55.w,
-                      centerTextStyle: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      chartValuesOptions: const ChartValuesOptions(
-                        showChartValueBackground: false,
-                        showChartValues: false,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Container(
