@@ -5,12 +5,14 @@ class ChoiceOption extends StatelessWidget {
   final String text;
   final bool isSelected;
   final bool isCorrect;
+  final bool showCorrect;
   final VoidCallback onTap;
 
   const ChoiceOption({
     required this.text,
     required this.isSelected,
     required this.isCorrect,
+    required this.showCorrect,
     required this.onTap,
   });
 
@@ -19,16 +21,20 @@ class ChoiceOption extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 50.h,
+        height: 45.h,
         width: double.infinity,
         decoration: BoxDecoration(
           color: isSelected
               ? (isCorrect ? Colors.green.shade300 : Colors.red.shade200)
-              : Colors.transparent,
+              : (showCorrect && isCorrect
+                  ? Colors.green.shade300
+                  : Colors.transparent),
           border: Border.all(
             color: isSelected
                 ? (isCorrect ? Colors.green.shade300 : Colors.red.shade200)
-                : Colors.grey,
+                : (showCorrect && isCorrect
+                    ? Colors.green.shade300
+                    : Colors.grey),
           ),
           borderRadius: BorderRadius.circular(30),
         ),
@@ -38,22 +44,28 @@ class ChoiceOption extends StatelessWidget {
             Icon(
               isSelected
                   ? (isCorrect ? Icons.check_circle_outline : Icons.close)
-                  : Icons.circle_outlined,
-              color: isSelected ? Colors.white : Colors.grey,
-              size: 35.h,
+                  : (showCorrect && isCorrect
+                      ? Icons.check_circle_outline
+                      : Icons.circle_outlined),
+              color: isSelected || (showCorrect && isCorrect)
+                  ? Colors.white
+                  : Colors.grey,
+              size: 32.h,
             ),
             const SizedBox(width: 20),
             Flexible(
               child: Text(
                 text,
                 style: TextStyle(
-                  fontSize: 13.h,
+                  fontSize: 12.h,
                   fontWeight: FontWeight.w500,
-                  color: isSelected ? Colors.white : Colors.black,
+                  color: isSelected || (showCorrect && isCorrect)
+                      ? Colors.white
+                      : Colors.black,
                 ),
               ),
             ),
-            const SizedBox(width: 20),
+            SizedBox(width: 20.h),
           ],
         ),
       ),
