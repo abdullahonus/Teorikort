@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:taxi/product/manager/network/network_manager.dart';
 
 abstract class IQuizService extends INetworkManager {
@@ -11,11 +13,14 @@ class QuizService extends IQuizService {
       final response = await dio.get("", queryParameters: {
         'amount': 10,
       });
-      print(response.data);
-      return response.data;
+      if (response.statusCode == HttpStatus.ok) {
+        print(response.data);
+        return response.data;
+      }
     } catch (e) {
       print(e);
       return null;
     }
+    return null;
   }
 }

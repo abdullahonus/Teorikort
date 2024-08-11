@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class ChoiceOption extends StatelessWidget {
   final String text;
@@ -9,6 +10,7 @@ class ChoiceOption extends StatelessWidget {
   final VoidCallback onTap;
 
   const ChoiceOption({
+    super.key,
     required this.text,
     required this.isSelected,
     required this.isCorrect,
@@ -50,18 +52,15 @@ class ChoiceOption extends StatelessWidget {
               color: isSelected || (showCorrect && isCorrect)
                   ? Colors.white
                   : Colors.grey,
-              size: 32.h,
+              size: 20.h,
             ),
             const SizedBox(width: 20),
             Flexible(
-              child: Text(
+              child: HtmlWidget(
                 text,
-                style: TextStyle(
-                  fontSize: 12.h,
+                textStyle: TextStyle(
+                  fontSize: 10.h,
                   fontWeight: FontWeight.w500,
-                  color: isSelected || (showCorrect && isCorrect)
-                      ? Colors.white
-                      : Colors.black,
                 ),
               ),
             ),
