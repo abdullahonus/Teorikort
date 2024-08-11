@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:taxi/extencions/general.dart';
+import 'package:taxi/product/extensions/general.dart';
 import 'package:taxi/screens/main_screen/main_screen.dart';
-import 'package:taxi/widgets/bottom_sheet_listtile_button_widget.dart';
+import 'package:taxi/product/widgets/bottom_sheet_listtile_button_widget.dart';
 
 class HomeAppBar extends AppBar {
   HomeAppBar(BuildContext context,
@@ -99,8 +99,8 @@ class HomeAppBar extends AppBar {
                                           ),
                                         ),
                                       ),
-                                      title: Text("User Name"),
-                                      subtitle: Text("User Phone"),
+                                      title: const Text("User Name"),
+                                      subtitle: const Text("User Phone"),
                                       trailing: Icon(
                                         Icons.arrow_forward_ios,
                                         size: 20,

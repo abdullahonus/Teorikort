@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart';
-import 'package:taxi/extencions/general.dart';
+import 'package:taxi/product/extensions/general.dart';
 
 class LineProgressIndicator extends StatelessWidget {
   const LineProgressIndicator({

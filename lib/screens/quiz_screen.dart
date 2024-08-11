@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taxi/widgets/options.dart';
+import 'package:taxi/product/widgets/options.dart';
+import 'package:taxi/screens/quiz/viewModel/quiz_view_model.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -9,11 +10,15 @@ class QuizScreen extends StatefulWidget {
   State<QuizScreen> createState() => _QuizScreenState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
+class _QuizScreenState extends State<QuizScreen> with QuizViewModel {
+  @override
   int? selectedOption;
+  @override
   final int correctOption = 0; // Doğru cevabın indexi
+  @override
   bool showCorrect = false;
 
+  @override
   void onOptionTap(int index) {
     setState(() {
       selectedOption = index;
@@ -111,7 +116,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       color: Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Icon(Icons.arrow_back_ios),
+                    child: const Icon(Icons.arrow_back_ios),
                   ),
                 ],
               )

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taxi/utils/advertisement_card.dart';
-import 'package:taxi/widgets/card_widget.dart';
-import 'package:taxi/widgets/transparent_appbar_widget.dart';
+import 'package:taxi/product/utils/advertisement_card.dart';
+import 'package:taxi/product/widgets/card_widget.dart';
+import 'package:taxi/product/widgets/transparent_appbar_widget.dart';
 
 class AllTestTabs extends StatelessWidget {
   const AllTestTabs({super.key});

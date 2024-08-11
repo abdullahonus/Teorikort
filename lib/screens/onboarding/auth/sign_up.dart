@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:taxi/widgets/button_widget.dart';
-import 'package:taxi/widgets/textformfield_widget.dart';
+import 'package:taxi/product/widgets/button_widget.dart';
+import 'package:taxi/product/widgets/textformfield_widget.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

@@ -131,9 +131,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:taxi/screens/main_screen/main_screen.dart';
 import 'package:taxi/screens/onboarding/auth/sign_up.dart';
-import 'package:taxi/widgets/button_widget.dart';
-import 'package:taxi/widgets/textformfield_widget.dart';
-import 'package:taxi/widgets/uniq_appbar.dart';
+import 'package:taxi/product/widgets/button_widget.dart';
+import 'package:taxi/product/widgets/textformfield_widget.dart';
+import 'package:taxi/product/widgets/uniq_appbar.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
