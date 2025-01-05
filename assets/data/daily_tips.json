@@ -1,0 +1,74 @@
+{
+  "tips": [
+    {
+      "id": 1,
+      "title": "Güvenli Takip Mesafesi",
+      "content": "Önünüzdeki araçla aranızda en az 3 saniyelik mesafe bırakın. Yağmurlu ve karlı havalarda bu mesafeyi 5 saniyeye çıkarın.",
+      "category": "traffic_rules",
+      "icon": "follow_distance"
+    },
+    {
+      "id": 2,
+      "title": "Kör Nokta Kontrolü",
+      "content": "Şerit değiştirmeden önce dikiz aynalarından kontrol etmenin yanı sıra, omuz üstünden de kör nokta kontrolü yapın.",
+      "category": "safety",
+      "icon": "blind_spot"
+    },
+    {
+      "id": 3,
+      "title": "Yaya Geçidi Kuralı",
+      "content": "Yaya geçidine yaklaşırken hızınızı düşürün ve yayalara her zaman geçiş önceliği verin.",
+      "category": "traffic_rules",
+      "icon": "pedestrian"
+    },
+    {
+      "id": 4,
+      "title": "Sinyal Kullanımı",
+      "content": "Dönüşlerden en az 150 metre önce sinyal vermeye başlayın ve dönüşü tamamlayana kadar sinyali açık tutun.",
+      "category": "traffic_rules",
+      "icon": "signal"
+    },
+    {
+      "id": 5,
+      "title": "Lastik Kontrolü",
+      "content": "Lastik basıncını ayda bir kez kontrol edin. Doğru lastik basıncı yakıt tasarrufu sağlar ve güvenliği artırır.",
+      "category": "maintenance",
+      "icon": "tire"
+    },
+    {
+      "id": 6,
+      "title": "Kavşak Yaklaşımı",
+      "content": "Kavşaklara yaklaşırken hızınızı düşürün ve sağınızı-solunuzu kontrol edin, gerektiğinde tamamen durun.",
+      "category": "traffic_rules",
+      "icon": "intersection"
+    },
+    {
+      "id": 7,
+      "title": "Gece Sürüşü",
+      "content": "Gece sürüşlerinde karşıdan gelen araç yoksa uzun farları kullanın, araç yaklaşınca kısa farlara geçin.",
+      "category": "safety",
+      "icon": "night_driving"
+    },
+    {
+      "id": 8,
+      "title": "Park Etme",
+      "content": "Park ederken aracınızla kaldırım arasında en fazla 30 cm mesafe bırakın ve direksiyonu kaldırıma doğru kırın.",
+      "category": "parking",
+      "icon": "parking"
+    },
+    {
+      "id": 9,
+      "title": "Hız Limitleri",
+      "content": "Şehir içinde azami hız 50 km/s, şehirlerarası yollarda 90 km/s, otoyollarda 120 km/s'dir.",
+      "category": "traffic_rules",
+      "icon": "speed_limit"
+    },
+    {
+      "id": 10,
+      "title": "Emniyet Kemeri",
+      "content": "Emniyet kemerini sadece sürücü değil, araçtaki tüm yolcular takmalıdır. Bu bir zorunluluktur.",
+      "category": "safety",
+      "icon": "seat_belt"
+    }
+  ]
+} 

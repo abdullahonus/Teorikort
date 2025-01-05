@@ -1,0 +1,110 @@
+{
+    "japanese_literature": [
+      {
+        "question": "Which period is known as the 'Golden Age' of Japanese literature?",
+        "options": ["Heian Period", "Edo Period", "Meiji Period", "Taisho Period"],
+        "correctAnswer": "Heian Period"
+      },
+      {
+        "question": "Who wrote 'The Tale of Genji'?",
+        "options": ["Murasaki Shikibu", "Sei Shonagon", "Matsuo Basho", "Yoshida Kenko"],
+        "correctAnswer": "Murasaki Shikibu"
+      },
+      {
+        "question": "What is the oldest surviving Japanese narrative?",
+        "options": ["Kojiki", "The Tale of Genji", "The Pillow Book", "Manyoshu"],
+        "correctAnswer": "Kojiki"
+      },
+      {
+        "question": "Which form of poetry is traditionally written in 5-7-5 syllables?",
+        "options": ["Haiku", "Tanka", "Renga", "Waka"],
+        "correctAnswer": "Haiku"
+      },
+      {
+        "question": "Who is considered the master of Haiku poetry?",
+        "options": ["Matsuo Basho", "Yosa Buson", "Kobayashi Issa", "Masaoka Shiki"],
+        "correctAnswer": "Matsuo Basho"
+      }
+    ],
+    "math": [
+      {
+        "question": "What is the value of π (pi) to two decimal places?",
+        "options": ["3.14", "3.16", "3.12", "3.18"],
+        "correctAnswer": "3.14"
+      },
+      {
+        "question": "What is the square root of 144?",
+        "options": ["12", "14", "10", "16"],
+        "correctAnswer": "12"
+      },
+      {
+        "question": "What is the result of 7 × 8?",
+        "options": ["56", "54", "58", "52"],
+        "correctAnswer": "56"
+      },
+      {
+        "question": "What is 25% of 80?",
+        "options": ["20", "25", "15", "30"],
+        "correctAnswer": "20"
+      },
+      {
+        "question": "What is the sum of angles in a triangle?",
+        "options": ["180°", "360°", "90°", "270°"],
+        "correctAnswer": "180°"
+      }
+    ],
+    "chemistry": [
+      {
+        "question": "What is the atomic number of Carbon?",
+        "options": ["6", "12", "14", "8"],
+        "correctAnswer": "6"
+      },
+      {
+        "question": "What is the chemical symbol for Gold?",
+        "options": ["Au", "Ag", "Fe", "Cu"],
+        "correctAnswer": "Au"
+      },
+      {
+        "question": "What is the most abundant gas in Earth's atmosphere?",
+        "options": ["Nitrogen", "Oxygen", "Carbon Dioxide", "Argon"],
+        "correctAnswer": "Nitrogen"
+      },
+      {
+        "question": "What is the pH value of pure water?",
+        "options": ["7", "6", "8", "5"],
+        "correctAnswer": "7"
+      },
+      {
+        "question": "Which element has the chemical symbol 'Fe'?",
+        "options": ["Iron", "Fluorine", "Francium", "Iodine"],
+        "correctAnswer": "Iron"
+      }
+    ],
+    "literature": [
+      {
+        "question": "Who wrote 'Romeo and Juliet'?",
+        "options": ["William Shakespeare", "Charles Dickens", "Jane Austen", "Mark Twain"],
+        "correctAnswer": "William Shakespeare"
+      },
+      {
+        "question": "In which year was 'Pride and Prejudice' first published?",
+        "options": ["1813", "1823", "1833", "1803"],
+        "correctAnswer": "1813"
+      },
+      {
+        "question": "Who wrote '1984'?",
+        "options": ["George Orwell", "Aldous Huxley", "Ray Bradbury", "Ernest Hemingway"],
+        "correctAnswer": "George Orwell"
+      },
+      {
+        "question": "What is the name of the protagonist in 'The Great Gatsby'?",
+        "options": ["Jay Gatsby", "Nick Carraway", "Tom Buchanan", "George Wilson"],
+        "correctAnswer": "Jay Gatsby"
+      },
+      {
+        "question": "Who wrote 'To Kill a Mockingbird'?",
+        "options": ["Harper Lee", "John Steinbeck", "F. Scott Fitzgerald", "Ernest Hemingway"],
+        "correctAnswer": "Harper Lee"
+      }
+    ]
+  }

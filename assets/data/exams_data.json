@@ -1,0 +1,104 @@
+{
+  "categories": [
+    {
+      "id": "traffic_signs",
+      "title": "Trafik İşaretleri",
+      "icon": "https://raw.githubusercontent.com/your-repo/traffic-signs.png",
+      "total_questions": 250,
+      "exams": [
+        {
+          "id": "ts_1",
+          "title": "Tehlike Uyarı İşaretleri",
+          "subtitle": "Konu Testi",
+          "duration_minutes": 15,
+          "question_count": 15,
+          "difficulty": "Kolay",
+          "required_score": 70,
+          "icon": "https://cdn-icons-png.flaticon.com/512/5332/5332772.png",
+          "is_locked": false
+        },
+        {
+          "id": "ts_2",
+          "title": "Yasaklama İşaretleri",
+          "subtitle": "Konu Testi",
+          "duration_minutes": 15,
+          "question_count": 15,
+          "difficulty": "Orta",
+          "required_score": 70,
+          "icon": "https://cdn-icons-png.flaticon.com/512/5332/5332789.png",
+          "is_locked": false
+        }
+      ]
+    },
+    {
+      "id": "traffic_rules",
+      "title": "Trafik Kuralları",
+      "icon": "https://cdn-icons-png.flaticon.com/512/2554/2554978.png",
+      "total_questions": 200,
+      "exams": [
+        {
+          "id": "tr_1",
+          "title": "Genel Trafik Kuralları",
+          "subtitle": "Temel Seviye",
+          "duration_minutes": 20,
+          "question_count": 20,
+          "difficulty": "Kolay",
+          "required_score": 70,
+          "icon": "https://cdn-icons-png.flaticon.com/512/4185/4185581.png",
+          "is_locked": false
+        }
+      ]
+    },
+    {
+      "id": "first_aid",
+      "title": "İlk Yardım",
+      "icon": "https://cdn-icons-png.flaticon.com/512/2376/2376100.png",
+      "total_questions": 150,
+      "exams": [
+        {
+          "id": "fa_1",
+          "title": "Temel İlk Yardım",
+          "subtitle": "Giriş Seviyesi",
+          "duration_minutes": 15,
+          "question_count": 15,
+          "difficulty": "Kolay",
+          "required_score": 70,
+          "icon": "https://cdn-icons-png.flaticon.com/512/2376/2376058.png",
+          "is_locked": false
+        }
+      ]
+    },
+    {
+      "id": "vehicle_tech",
+      "title": "Motor ve Araç Tekniği",
+      "icon": "https://cdn-icons-png.flaticon.com/512/3774/3774278.png",
+      "total_questions": 100,
+      "exams": [
+        {
+          "id": "vt_1",
+          "title": "Araç Teknik Bilgisi",
+          "subtitle": "Temel Seviye",
+          "duration_minutes": 15,
+          "question_count": 15,
+          "difficulty": "Kolay",
+          "required_score": 70,
+          "icon": "https://cdn-icons-png.flaticon.com/512/3774/3774270.png",
+          "is_locked": false
+        }
+      ]
+    }
+  ],
+  "completed_exams": [
+    {
+      "id": "completed_1",
+      "exam_id": "ts_1",
+      "title": "Trafik İşaretleri Final",
+      "completed_at": "2024-02-19T14:20:00Z",
+      "score": 85,
+      "duration_taken": 42,
+      "correct_answers": 17,
+      "total_questions": 20,
+      "icon": "url"
+    }
+  ]
+} 

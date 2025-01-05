@@ -1,44 +1,42 @@
+import 'package:driving_license_exam/core/providers/theme_provider.dart';
+import 'package:driving_license_exam/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taxi/screen_routs.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:driving_license_exam/features/splash/presentation/splash_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:driving_license_exam/core/localization/app_localization.dart';
+import 'package:driving_license_exam/core/providers/locale_provider.dart';
 
-void main() async {
-  runApp(const MyApp());
+void main() {
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(360, 690),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: const TextScaler.linear(1.0),
-            boldText: false,
-          ),
-          child: MaterialApp(
-            title: 'Taxi App',
-            debugShowCheckedModeBanner: false,
-            routes: ScreenRouteList.screenRoutes,
-            home: null,
-            theme: ThemeData(
-              primarySwatch: Colors.grey,
-              textSelectionTheme: const TextSelectionThemeData(
-                cursorColor: Colors.black,
-                selectionHandleColor: Colors.grey,
-                selectionColor: Color.fromARGB(255, 0, 0, 0),
-              ),
-              useMaterial3: false,
-            ),
-            initialRoute: '/splash',
-          ),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(localeProvider);
+    final themeMode = ref.watch(themeProvider);
+
+    return MaterialApp(
+      title: 'Ehliyet Sınavı',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
+      locale: currentLocale,
+      supportedLocales: const [
+        Locale('tr', 'TR'),
+        Locale('en', 'US'),
+      ],
+      localizationsDelegates: const [
+        AppLocalization.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      home: const SplashScreen(),
     );
   }
 }

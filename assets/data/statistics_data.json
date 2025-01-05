@@ -1,0 +1,35 @@
+{
+  "overall_stats": {
+    "total_exams_taken": 24,
+    "average_score": 85,
+    "best_score": 95,
+    "total_study_time": 1840,
+    "total_questions_answered": 480,
+    "correct_answers_rate": 82
+  },
+  "category_performance": [
+    {
+      "category_id": "traffic_signs",
+      "name": "Trafik İşaretleri",
+      "exams_taken": 10,
+      "average_score": 88,
+      "best_score": 95,
+      "progress": 75,
+      "weak_areas": ["Tehlike Uyarı İşaretleri", "Yasaklama İşaretleri"],
+      "strong_areas": ["Bilgi İşaretleri", "Park Etme İşaretleri"]
+    }
+  ],
+  "recent_exams": [
+    {
+      "id": "recent_1",
+      "title": "Trafik İşaretleri Final",
+      "category": "traffic_signs",
+      "completed_at": "2024-02-20T15:30:00Z",
+      "score": 85,
+      "duration_minutes": 42,
+      "correct_answers": 17,
+      "total_questions": 20,
+      "improvement": "+%5"
+    }
+  ]
+} 

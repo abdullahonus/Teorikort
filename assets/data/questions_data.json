@@ -1,0 +1,312 @@
+{
+  "exam_info": {
+    "id": "ts_1",
+    "title": "Trafik İşaretleri",
+    "duration_minutes": 45,
+    "total_questions": 20,
+    "passing_score": 70
+  },
+  "questions": {
+    "traffic_signs": [
+      {
+        "id": "q1",
+        "question": "Aşağıdaki trafik işaretlerinden hangisi 'Dur' anlamına gelir?",
+        "image_url": "https://cdn-icons-png.flaticon.com/512/5332/5332798.png",
+        "options": [
+          {
+            "id": "A",
+            "text": "Kırmızı sekizgen içinde beyaz 'DUR' yazısı",
+            "image_url": "https://cdn-icons-png.flaticon.com/512/5332/5332798.png"
+          },
+          {
+            "id": "B",
+            "text": "Kırmızı üçgen içinde ünlem işareti",
+            "image_url": "https://cdn-icons-png.flaticon.com/512/5332/5332772.png"
+          },
+          {
+            "id": "C",
+            "text": "Mavi daire içinde ok işareti",
+            "image_url": "https://cdn-icons-png.flaticon.com/512/5332/5332782.png"
+          },
+          {
+            "id": "D",
+            "text": "Kırmızı daire içinde çizgi",
+            "image_url": "https://cdn-icons-png.flaticon.com/512/5332/5332789.png"
+          }
+        ],
+        "correct_answer": "A",
+        "explanation": "Sekizgen şeklindeki kırmızı zemin üzerine beyaz DUR yazılı levha, sürücülerin durmasını gerektiren işarettir."
+      },
+      {
+        "id": "q5",
+        "question": "Aşağıdaki trafik işaretlerinden hangisi 'Yaya Geçidi' anlamına gelir?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Mavi kare içinde yaya sembolü"
+          },
+          {
+            "id": "B",
+            "text": "Sarı üçgen içinde yaya sembolü"
+          },
+          {
+            "id": "C",
+            "text": "Kırmızı daire içinde yaya sembolü"
+          },
+          {
+            "id": "D",
+            "text": "Mavi daire içinde yaya sembolü"
+          }
+        ],
+        "correct_answer": "A",
+        "explanation": "Mavi kare içinde yaya sembolü olan işaret, yaya geçidini gösterir."
+      },
+      {
+        "id": "q6",
+        "question": "Aşağıdaki trafik işaretlerinden hangisi 'Okul Geçidi' anlamına gelir?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Kırmızı üçgen içinde çocuk sembolü"
+          },
+          {
+            "id": "B",
+            "text": "Sarı kare içinde çocuk sembolü"
+          },
+          {
+            "id": "C",
+            "text": "Mavi daire içinde çocuk sembolü"
+          },
+          {
+            "id": "D",
+            "text": "Kırmızı daire içinde çocuk sembolü"
+          }
+        ],
+        "correct_answer": "A",
+        "explanation": "Kırmızı üçgen içinde çocuk sembolü olan işaret, okul geçidini gösterir."
+      }
+    ],
+    "traffic_rules": [
+      {
+        "id": "q2",
+        "question": "Yerleşim yeri içindeki bölünmemiş yollarda azami hız sınırı kaç kilometredir?",
+        "options": [
+          {
+            "id": "A",
+            "text": "30 km/s"
+          },
+          {
+            "id": "B",
+            "text": "50 km/s"
+          },
+          {
+            "id": "C",
+            "text": "70 km/s"
+          },
+          {
+            "id": "D",
+            "text": "90 km/s"
+          }
+        ],
+        "correct_answer": "B",
+        "explanation": "Yerleşim yeri içindeki bölünmemiş yollarda azami hız sınırı 50 kilometredir."
+      },
+      {
+        "id": "q7",
+        "question": "Aşağıdakilerden hangisi trafikte yavaşlama sebebi değildir?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Kavşağa yaklaşırken"
+          },
+          {
+            "id": "B",
+            "text": "Yaya geçidine yaklaşırken"
+          },
+          {
+            "id": "C",
+            "text": "Yeşil ışık yanarken"
+          },
+          {
+            "id": "D",
+            "text": "Okul bölgesine girerken"
+          }
+        ],
+        "correct_answer": "C",
+        "explanation": "Yeşil ışık, geçiş hakkı verir ve yavaşlama sebebi değildir."
+      },
+      {
+        "id": "q8",
+        "question": "Hangi durumda araç sürücüsü yoluna devam etme hakkına sahiptir?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Kırmızı ışık yanarken"
+          },
+          {
+            "id": "B",
+            "text": "Sarı ışık yanarken"
+          },
+          {
+            "id": "C",
+            "text": "Yeşil ışık yanarken"
+          },
+          {
+            "id": "D",
+            "text": "Yaya geçidinde yaya varken"
+          }
+        ],
+        "correct_answer": "C",
+        "explanation": "Yeşil ışık yandığında, sürücü yoluna devam etme hakkına sahiptir."
+      }
+    ],
+    "first_aid": [
+      {
+        "id": "q3",
+        "question": "Kalp masajı uygulaması dakikada kaç bası olmalıdır?",
+        "options": [
+          {
+            "id": "A",
+            "text": "60 bası"
+          },
+          {
+            "id": "B",
+            "text": "80 bası"
+          },
+          {
+            "id": "C",
+            "text": "100 bası"
+          },
+          {
+            "id": "D",
+            "text": "120 bası"
+          }
+        ],
+        "correct_answer": "C",
+        "explanation": "Yetişkinlerde kalp masajı dakikada 100 bası olmalıdır."
+      },
+      {
+        "id": "q9",
+        "question": "Kaza yerinde yaralıya ilk müdahaleyi kim yapmalıdır?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Herhangi bir sürücü"
+          },
+          {
+            "id": "B",
+            "text": "İlk yardım eğitimi almış kişi"
+          },
+          {
+            "id": "C",
+            "text": "Polis memuru"
+          },
+          {
+            "id": "D",
+            "text": "Yoldan geçen herhangi biri"
+          }
+        ],
+        "correct_answer": "B",
+        "explanation": "Kaza yerinde ilk müdahaleyi ilk yardım eğitimi almış kişi yapmalıdır."
+      },
+      {
+        "id": "q10",
+        "question": "Hangi durumda yaralı yerinden oynatılmamalıdır?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Hafif yaralanmalarda"
+          },
+          {
+            "id": "B",
+            "text": "Omurga yaralanması şüphesinde"
+          },
+          {
+            "id": "C",
+            "text": "Kol kırığı durumunda"
+          },
+          {
+            "id": "D",
+            "text": "Ayak burkulmasında"
+          }
+        ],
+        "correct_answer": "B",
+        "explanation": "Omurga yaralanması şüphesi varsa, yaralı kesinlikle yerinden oynatılmamalıdır."
+      }
+    ],
+    "vehicle_tech": [
+      {
+        "id": "q4",
+        "question": "Motorun soğutma sisteminde aşağıdakilerden hangisi kullanılır?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Fren hidroliği"
+          },
+          {
+            "id": "B",
+            "text": "Motor yağı"
+          },
+          {
+            "id": "C",
+            "text": "Antifriz"
+          },
+          {
+            "id": "D",
+            "text": "Akü suyu"
+          }
+        ],
+        "correct_answer": "C",
+        "explanation": "Motorun soğutma sisteminde antifriz kullanılır."
+      },
+      {
+        "id": "q11",
+        "question": "Araçta lastik basıncı ne sıklıkla kontrol edilmelidir?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Ayda bir"
+          },
+          {
+            "id": "B",
+            "text": "Üç ayda bir"
+          },
+          {
+            "id": "C",
+            "text": "Altı ayda bir"
+          },
+          {
+            "id": "D",
+            "text": "Yılda bir"
+          }
+        ],
+        "correct_answer": "A",
+        "explanation": "Araçta lastik basıncı ayda bir kontrol edilmelidir."
+      },
+      {
+        "id": "q12",
+        "question": "Motor yağı hangi sıklıkla değiştirilmelidir?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Her 5.000 km'de"
+          },
+          {
+            "id": "B",
+            "text": "Her 10.000 km'de"
+          },
+          {
+            "id": "C",
+            "text": "Her 15.000 km'de"
+          },
+          {
+            "id": "D",
+            "text": "Her 20.000 km'de"
+          }
+        ],
+        "correct_answer": "B",
+        "explanation": "Motor yağı genellikle her 10.000 km'de bir değiştirilmelidir."
+      }
+    ]
+  }
+} 

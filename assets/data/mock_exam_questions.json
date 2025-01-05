@@ -1,0 +1,123 @@
+{
+  "easy": {
+    "questions": [
+      {
+        "id": "e1",
+        "question": "Aşağıdaki trafik işaretlerinden hangisi 'Dur' anlamına gelir?",
+        "image_url": "assets/images/questions/stop_sign.png",
+        "options": [
+          "Sekizgen kırmızı levha",
+          "Üçgen kırmızı levha",
+          "Yuvarlak mavi levha",
+          "Dikdörtgen yeşil levha"
+        ],
+        "correct_answer": 0,
+        "explanation": "Sekizgen şeklindeki kırmızı levha, 'Dur' işaretidir ve sürücülerin tamamen durmasını gerektirir."
+      },
+      {
+        "id": "e2",
+        "question": "Araç kullanırken hangi durumda emniyet kemeri takılması zorunlu değildir?",
+        "options": [
+          "Şehir içi yollarda",
+          "Otobanda",
+          "Geri geri giderken",
+          "Emniyet kemeri her zaman takılmalıdır"
+        ],
+        "correct_answer": 3,
+        "explanation": "Emniyet kemeri, istisnasız her durumda takılmalıdır. Bu, temel bir güvenlik kuralıdır."
+      },
+      {
+        "id": "e3",
+        "question": "Aşağıdakilerden hangisi yaya geçidinde yapılması gereken doğru davranıştır?",
+        "options": [
+          "Yavaşlamadan geçmek",
+          "Yayalara yol vermek",
+          "Korna çalarak geçmek",
+          "Hızlanarak geçmek"
+        ],
+        "correct_answer": 1,
+        "explanation": "Yaya geçitlerinde yayalara her zaman yol verilmelidir. Bu, temel bir trafik kuralıdır."
+      }
+    ]
+  },
+  "medium": {
+    "questions": [
+      {
+        "id": "m1",
+        "question": "Kavşaklarda geçiş üstünlüğü sıralaması aşağıdakilerden hangisinde doğru verilmiştir?",
+        "options": [
+          "Özel araç - Ambulans - İtfaiye",
+          "İtfaiye - Ambulans - Polis",
+          "Ambulans - Polis - Özel araç",
+          "Polis - İtfaiye - Ambulans"
+        ],
+        "correct_answer": 1,
+        "explanation": "Geçiş üstünlüğü sıralaması: İtfaiye, Ambulans, Polis şeklindedir."
+      },
+      {
+        "id": "m2",
+        "question": "Alkollü araç kullanmanın cezası aşağıdakilerden hangisidir?",
+        "options": [
+          "Sadece para cezası",
+          "Sadece ehliyet iptali",
+          "Para cezası ve ehliyet iptali",
+          "Sözlü uyarı"
+        ],
+        "correct_answer": 2,
+        "explanation": "Alkollü araç kullanmanın cezası hem para cezası hem de ehliyet iptalidir."
+      },
+      {
+        "id": "m3",
+        "question": "Aşağıdaki durumların hangisinde motorlu araç trafikten men edilir?",
+        "options": [
+          "Zorunlu mali sorumluluk sigortası yoksa",
+          "Farlar çalışmıyorsa",
+          "Plaka lambası yanmıyorsa",
+          "Park lambaları yanmıyorsa"
+        ],
+        "correct_answer": 0,
+        "explanation": "Zorunlu mali sorumluluk sigortası olmayan araçlar trafikten men edilir."
+      }
+    ]
+  },
+  "hard": {
+    "questions": [
+      {
+        "id": "h1",
+        "question": "Römorklu bir araç virajlı yolda nasıl hareket etmelidir?",
+        "options": [
+          "Viraja geniş girmeli",
+          "Viraja dar girmeli",
+          "Römork savrulmasını önlemek için hızlanmalı",
+          "Ani fren yapmalı"
+        ],
+        "correct_answer": 0,
+        "explanation": "Römorklu araçlar virajlara geniş girmeli, böylece römorkun savrulması önlenmelidir."
+      },
+      {
+        "id": "h2",
+        "question": "ABS fren sistemi olan bir araçta, buzlu yolda acil fren yapılması durumunda aşağıdakilerden hangisi doğrudur?",
+        "options": [
+          "Fren pedalı pompalanmalıdır",
+          "Debriyaja basılmalıdır",
+          "Fren pedalına sürekli ve sabit basınç uygulanmalıdır",
+          "El freni çekilmelidir"
+        ],
+        "correct_answer": 2,
+        "explanation": "ABS sistemli araçlarda, acil fren durumunda pedala sabit basınç uygulanmalıdır. Sistem otomatik olarak frenlemeyi kontrol eder."
+      },
+      {
+        "id": "h3",
+        "question": "Hangi durumda motosiklet sürücüsü emniyet şeridi kullanabilir?",
+        "options": [
+          "Trafik sıkışık olduğunda",
+          "Acil durumda görevli değilse hiçbir zaman",
+          "Yağmurlu havada",
+          "Gece sürüşlerinde"
+        ],
+        "correct_answer": 1,
+        "explanation": "Emniyet şeridi sadece acil durum araçları tarafından kullanılabilir. Motosiklet sürücüleri görevli değilse kullanamaz."
+      }
+    ]
+  }
+} 

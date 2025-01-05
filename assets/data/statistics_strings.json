@@ -1,0 +1,20 @@
+{
+  "screen_title": "İstatistikler",
+  "error_message": "Bir hata oluştu",
+  "cards": {
+    "overall_performance": {
+      "title": "Genel Performans",
+      "total_exams": "Toplam Sınav",
+      "average_score": "Ortalama Puan",
+      "best_score": "En İyi Puan"
+    },
+    "category_performance": {
+      "title": "Kategori Performansı"
+    },
+    "recent_exams": {
+      "title": "Son Sınavlar",
+      "correct_answers_format": "%d/%d doğru",
+      "duration_format": "%d dakika"
+    }
+  }
+} 

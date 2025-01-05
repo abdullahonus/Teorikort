@@ -1,0 +1,48 @@
+{
+  "user": {
+    "id": "1",
+    "name": "Kullanıcı Adı",
+    "progress": {
+      "overall_progress": 65,
+      "total_exams": 24,
+      "completed_exams": 18,
+      "average_score": 85
+    }
+  },
+  "today_tests": [
+    {
+      "id": "1",
+      "title": "Trafik İşaretleri",
+      "subtitle": "Deneme Sınavı",
+      "duration_minutes": 45,
+      "question_count": 50,
+      "difficulty": "Orta",
+      "color": "#E3F2FD",
+      "icon": "assets/icons/traffic_signs.png"
+    },
+    {
+      "id": "2",
+      "title": "İlk Yardım",
+      "subtitle": "Alıştırma Testi",
+      "duration_minutes": 15,
+      "question_count": 15,
+      "difficulty": "Kolay",
+      "color": "#FFEBEE",
+      "icon": "assets/icons/first_aid.png"
+    }
+  ],
+  "last_exam": {
+    "id": "15",
+    "title": "Trafik Kuralları",
+    "completed_at": "2024-02-20T15:30:00Z",
+    "score": 85,
+    "duration_minutes": 45,
+    "correct_answers": 42,
+    "total_questions": 50,
+    "icon": "assets/icons/traffic_rules.png"
+  },
+  "notifications": {
+    "unread_count": 3,
+    "messages_count": 2
+  }
+} 

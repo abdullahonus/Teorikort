@@ -1,0 +1,267 @@
+{
+  "app_name": "Ehliyet Sınavı",
+  "app_subtitle": "Ehliyet Sınavına Hazırlık",
+  "statistics": {
+    "screen_title": "İstatistikler",
+    "subtitle": "Performans Analizi",
+    "error_message": "Bir hata oluştu",
+    "cards": {
+      "overall_performance": {
+        "title": "Genel Performans",
+        "total_exams": "Toplam Sınav",
+        "average_score": "Ortalama Puan",
+        "best_score": "En İyi Puan"
+      },
+      "category_performance": {
+        "title": "Kategori Performansı"
+      },
+      "recent_exams": {
+        "title": "Son Sınavlar",
+        "correct_answers_format": "%d/%d doğru",
+        "duration_format": "%d dakika",
+        "correct_answers": "doğru cevap"
+      }
+    },
+    "correct_answers": "doğru cevap",
+    "wrong_answers": "yanlış cevap",
+    "empty_answers": "boş cevap",
+    "success_rate": "başarı oranı",
+    "total_exams": "toplam sınav",
+    "total_questions": "toplam soru"
+  },
+  "common": {
+    "language": "Dil",
+    "settings": "Ayarlar",
+    "home": "Ana Sayfa",
+    "exams": "Sınavlar",
+    "profile": "Profil",
+    "stats": "İstatistikler",
+    "search": "Sınav Ara",
+    "back": "Geri",
+    "no_data": "Veri bulunamadı",
+    "loading": "Yükleniyor...",
+    "cancel": "İptal",
+    "clear": "Temizle",
+    "save": "Kaydet",
+    "error": "Bir hata oluştu",
+    "retry": "Tekrar Dene"
+  },
+  "home": {
+    "welcome": "Hoş Geldiniz",
+    "progress_subtitle": "Geçen Haftaki İlerlemeniz",
+    "progress_card": {
+      "beat_percentage": "Diğer adayların %95'inden daha iyi performans gösterdiniz",
+      "read_more": "Daha Fazla"
+    },
+    "today_tests": {
+      "title": "Bugünkü Sınavlar",
+      "subtitle": "Bugün için sınav listeniz",
+      "math_final": "Trafik İşaretleri\nSınavı",
+      "biology_quiz": "İlk Yardım\nQuiz",
+      "chemistry_final": "Motor Bilgisi\nSınavı",
+      "duration_45": "45 Dakika",
+      "duration_30": "30 Dakika",
+      "duration_60": "60 Dakika"
+    },
+    "last_exam": {
+      "title": "Son Tamamlanan Sınav",
+      "physics_quiz": "Trafik Kuralları Quiz",
+      "duration": "45 Dakika"
+    },
+    "welcome_name": "Merhaba, %s",
+    "motivation_message": "Bugün yeni konuları öğrenmeye hazır mısın?",
+    "quick_start": "Hızlı Başlangıç",
+    "practice_exam": "Pratik Sınav\nBaşlat",
+    "mock_exam": "Deneme Sınavı\nBaşlat",
+    "random_questions": "Rastgele Sorular",
+    "your_progress": "İlerleme Durumun",
+    "success_rate": "Başarı Oranı",
+    "completed_tests": "Tamamlanan Test",
+    "weak_topics": "Zayıf Konular",
+    "daily_tip": "Günün İpucu",
+    "tip_content": "Sağa dönüşlerde yayalara yol vermeyi unutmayın. Bu, trafik kurallarının önemli bir parçasıdır.",
+    "exam_reminder": "Yaklaşan Sınav",
+    "exam_date": "15 Mart 2024, 10:00"
+  },
+  "exam": {
+    "all_exams": "Tüm Sınavlar",
+    "class_info": "Ehliyet Sınavı",
+    "start_exam": "Sınava Başla",
+    "exam_info": "Sınav Bilgisi",
+    "no_exams": "Henüz sınav bulunmuyor",
+    "exam_completed": "Sınav Tamamlandı"
+  },
+  "profile": {
+    "title": "Profil",
+    "edit_name": "İsim Düzenle",
+    "enter_name": "İsminizi girin",
+    "save": "Kaydet",
+    "name_updated": "İsim başarıyla güncellendi",
+    "name_update_error": "İsim güncellenirken bir hata oluştu",
+    "appearance": "Görünüm",
+    "language": "Dil",
+    "dark_mode": "Koyu Mod",
+    "notifications": "Bildirimler",
+    "push_notifications": "Anlık Bildirimler",
+    "data_storage": "Veri ve Depolama",
+    "clear_data": "Verileri Temizle",
+    "clear_data_confirmation": "Tüm sınav sonuçları ve istatistikler silinecek. Bu işlem geri alınamaz. Devam etmek istiyor musunuz?",
+    "data_cleared": "Veriler başarıyla temizlendi",
+    "data_clear_error": "Veriler temizlenirken bir hata oluştu",
+    "app": "Uygulama",
+    "share_app": "Uygulamayı Paylaş",
+    "share_message": "Ehliyet sınavına hazırlanmak için harika bir uygulama! https://play.google.com/store/apps/details?id=com.yourapp",
+    "share_subject": "Ehliyet Sınavı Hazırlık Uygulaması",
+    "rate_app": "Bizi Değerlendir",
+    "about": "Uygulama Hakkında",
+    "about_description": "Uygulama Açıklaması",
+    "about_content": "Bu uygulama, ehliyet sınavına hazırlanan adaylar için kapsamlı bir çalışma platformu sunmaktadır. Trafik işaretleri, trafik kuralları, ilk yardım ve motor bilgisi konularında detaylı içerikler ve pratik sınavlar içerir.",
+    "features": "Özellikler",
+    "features_content": "• Detaylı konu anlatımları\n• Çoktan seçmeli sorular\n• Gerçek sınav formatında testler\n• İlerleme takibi ve istatistikler\n• Yanlış cevap analizi\n• Çevrimdışı çalışma imkanı",
+    "contact": "İletişim",
+    "contact_content": "Sorularınız ve önerileriniz için:\nE-posta: support@drivingexam.com\nWeb: www.drivingexam.com",
+    "copyright": "Tüm hakları saklıdır"
+  },
+  "navigation": {
+    "home": "Ana Sayfa",
+    "exams": "Sınavlar",
+    "topics": "Konular",
+    "stats": "İstatistikler",
+    "profile": "Profil"
+  },
+  "app_bar": {
+    "menu": "Menü",
+    "messages": "Mesajlar",
+    "notifications": "Bildirimler",
+    "search": "Konu ara...",
+    "back": "Geri"
+  },
+  "exam_list": {
+    "screen_title": "Sınav Listesi",
+    "active_exams": "Aktif Sınavlar",
+    "completed_exams": "Tamamlanan Sınavlar",
+    "duration": "Dakika",
+    "final_exam": "Final Sınavı",
+    "daily_quiz": "Günlük Quiz",
+    "japanese_literature": "Trafik İşaretleri",
+    "math": "Motor Bilgisi",
+    "chemistry": "İlk Yardım",
+    "literature": "Trafik Kuralları",
+    "physics": "Araç Tekniği",
+    "no_completed_exams": "Henüz tamamlanmış sınav bulunmuyor",
+    "minutes": "dakika",
+    "correct": "doğru"
+  },
+  "quiz": {
+    "screen_title": "Sınav",
+    "question_number": "Soru %d/%d",
+    "time_remaining": "Kalan Süre: %d sn",
+    "time_up": "Süre Doldu!",
+    "next_question": "Sonraki Soru",
+    "show_results": "Sonuçları Göster",
+    "question_list": "Soru Listesi",
+    "loading": "Sorular yükleniyor...",
+    "error": "Sorular yüklenirken bir hata oluştu",
+    "retry": "Tekrar Dene",
+    "navigation": {
+      "next": "İleri",
+      "prev": "Geri"
+    },
+    "time_warning": "Kalan süre: %d dakika",
+    "question_progress": "Soru %d/%d",
+    "mark_for_review": "İnceleme için işaretle",
+    "previous": "Önceki Soru",
+    "next": "Sonraki Soru",
+    "finish": "Sınavı Bitir"
+  },
+  "quiz_result": {
+    "screen_title": "Sınav Sonucu",
+    "completed_message": "Sınav Tamamlandı!",
+    "time_up_message": "Süre Doldu!",
+    "score_text": "Puanınız",
+    "correct_answers": "Doğru Cevaplar",
+    "time_taken": "Geçen Süre",
+    "minutes": "dakika",
+    "seconds": "saniye",
+    "review_wrong_answers": "Yanlış Cevapları İncele",
+    "back_to_home": "Ana Sayfaya Dön",
+    "your_answer": "Cevabınız",
+    "correct_answer": "Doğru Cevap",
+    "success": "Başarılı",
+    "fail": "Başarısız",
+    "no_answer": "Cevap verilmedi"
+  },
+  "exam_categories": {
+    "traffic_signs": "Trafik İşaretleri",
+    "traffic_rules": "Trafik Kuralları",
+    "first_aid": "İlk Yardım",
+    "vehicle_tech": "Motor ve Araç Tekniği"
+  },
+  "exam_types": {
+    "practice": "Alıştırma Sınavı",
+    "mock": "Deneme Sınavı",
+    "final": "Final Sınavı"
+  },
+  "difficulty_levels": {
+    "easy": "Kolay",
+    "medium": "Orta",
+    "hard": "Zor"
+  },
+  "topics": {
+    "screen_title": "Konu Anlatımları",
+    "subtitle": "Ehliyet sınavına hazırlık için gerekli tüm konular",
+    "subtopics": "alt konu",
+    "subtopics_list": "Alt Konular",
+    "images": "görsel",
+    "no_topics": "Henüz konu bulunmuyor",
+    "loading": "Konular yükleniyor...",
+    "error": "Konular yüklenirken bir hata oluştu",
+    "your_answer": "Sizin Cevabınız",
+    "correct_answer": "Doğru Cevap",
+    "no_answer": "Cevap verilmedi"
+  },
+  "bottom_nav": {
+    "home": "Anasayfa",
+    "topics": "Konular",
+    "statistics": "İstatistik",
+    "settings": "Ayarlar"
+  },
+  "leaderboard": {
+    "screen_title": "Liderlik Tablosu",
+    "no_data": "Henüz sıralama bulunmuyor",
+    "points": "puan",
+    "your_rank": "Sıralamanız",
+    "top_performers": "En İyi Performans",
+    "view_all": "Tümünü Gör",
+    "error_message": "Liderlik tablosu yüklenirken bir hata oluştu",
+    "refresh": "Yenile",
+    "rank": "Sıra",
+    "score": "Puan",
+    "user": "Kullanıcı"
+  },
+  "mock_exam": {
+    "select_difficulty": "Zorluk Seviyesi Seç",
+    "description": "Deneme sınavına başlamadan önce bir zorluk seviyesi seçin. Her seviye farklı zorlukta sorular içerir.",
+    "easy_description": "Temel seviye sorular. Sınava yeni başlayanlar için idealdir.",
+    "medium_description": "Orta seviye sorular. Temel konulara hakimseniz bu seviyeyi deneyin.",
+    "hard_description": "Zor seviye sorular. Gerçek sınav zorluğunda sorular içerir.",
+    "loading_error": "Sorular yüklenirken bir hata oluştu",
+    "loading": "Sorular yükleniyor...",
+    "start_exam": "Sınava Başla",
+    "question_count": "%d Soru",
+    "time_limit": "Süre: %d dakika",
+    "confirm_start": "Sınavı Başlat",
+    "confirm_description": "Sınavı başlatmak istediğinize emin misiniz? Başladıktan sonra ara veremezsiniz.",
+    "confirm_yes": "Evet, Başlat",
+    "confirm_no": "İptal"
+  },
+  "search": {
+    "hint": "Konu veya soru ara...",
+    "no_results": "Sonuç bulunamadı",
+    "recent_searches": "Son Aramalar",
+    "clear_history": "Geçmişi Temizle",
+    "categories": "Kategoriler",
+    "topics": "Konular",
+    "questions": "Sorular"
+  }
+} 

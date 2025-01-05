@@ -1,0 +1,279 @@
+{
+  "app_name": "Driving License",
+  "app_subtitle": "Driving License Exam Preparation",
+  "statistics": {
+    "screen_title": "Statistics",
+    "subtitle": "Performance Analysis",
+    "error_message": "An error occurred",
+    "cards": {
+      "overall_performance": {
+        "title": "Overall Performance",
+        "total_exams": "Total Exams",
+        "average_score": "Average Score",
+        "best_score": "Best Score"
+      },
+      "category_performance": {
+        "title": "Category Performance"
+      },
+      "recent_exams": {
+        "title": "Recent Exams",
+        "correct_answers_format": "%d/%d correct",
+        "duration_format": "%d minutes",
+        "correct_answers": "correct answers"
+      }
+    },
+    "correct_answers": "correct answers",
+    "wrong_answers": "wrong answers",
+    "empty_answers": "empty answers",
+    "success_rate": "success rate",
+    "total_exams": "total exams",
+    "total_questions": "total questions"
+  },
+  "common": {
+    "language": "Language",
+    "settings": "Settings",
+    "home": "Home",
+    "exams": "Exams",
+    "profile": "Profile",
+    "stats": "Statistics",
+    "search": "Search Exam",
+    "back": "Back",
+    "no_data": "No data found",
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "clear": "Clear",
+    "save": "Save",
+    "error": "An error occurred",
+    "retry": "Try Again"
+  },
+  "home": {
+    "welcome": "Welcome",
+    "progress_subtitle": "Your Progress Last Week",
+    "progress_card": {
+      "beat_percentage": "You performed better than 95% of other candidates",
+      "read_more": "Read More"
+    },
+    "today_tests": {
+      "title": "Today's Exams",
+      "subtitle": "Your exam list for today",
+      "math_final": "Traffic Signs\nExam",
+      "biology_quiz": "First Aid\nQuiz",
+      "chemistry_final": "Engine Knowledge\nExam",
+      "duration_45": "45 Minutes",
+      "duration_30": "30 Minutes",
+      "duration_60": "60 Minutes"
+    },
+    "last_exam": {
+      "title": "Last Completed Exam",
+      "physics_quiz": "Traffic Rules Quiz",
+      "duration": "45 Minutes"
+    },
+    "today_exams": "Today's Exams",
+    "notifications": "Notifications",
+    "messages": "Messages",
+    "menu": "Menu",
+    "search": "Search exam...",
+    "view_all": "View All",
+    "continue_exam": "Continue",
+    "start_exam": "Start Exam",
+    "exam_progress": "Exam Progress",
+    "completed": "Completed",
+    "upcoming_exams": "Upcoming Exams",
+    "recent_activities": "Recent Activities",
+    "welcome_name": "Hi, %s",
+    "motivation_message": "Are you ready to learn new topics today?",
+    "quick_start": "Quick Start",
+    "practice_exam": "Start Practice\nExam",
+    "mock_exam": "Start Mock\nExam",
+    "random_questions": "Random Questions",
+    "your_progress": "Your Progress",
+    "success_rate": "Success Rate",
+    "completed_tests": "Completed Tests",
+    "weak_topics": "Weak Topics",
+    "daily_tip": "Daily Tip",
+    "tip_content": "Remember to give way to pedestrians when turning right. This is an important part of traffic rules.",
+    "exam_reminder": "Upcoming Exam",
+    "exam_date": "March 15, 2024, 10:00"
+  },
+  "exam": {
+    "all_exams": "All Exams",
+    "class_info": "Driver's License Exam",
+    "start_exam": "Start Exam",
+    "exam_info": "Exam Information",
+    "no_exams": "No exams yet",
+    "exam_completed": "Exam Completed"
+  },
+  "profile": {
+    "title": "Profile",
+    "edit_name": "Edit Name",
+    "enter_name": "Enter your name",
+    "save": "Save",
+    "name_updated": "Name updated successfully",
+    "name_update_error": "An error occurred while updating name",
+    "appearance": "Appearance",
+    "language": "Language",
+    "dark_mode": "Dark Mode",
+    "notifications": "Notifications",
+    "push_notifications": "Push Notifications",
+    "data_storage": "Data & Storage",
+    "clear_data": "Clear Data",
+    "clear_data_confirmation": "All exam results and statistics will be deleted. This action cannot be undone. Do you want to continue?",
+    "data_cleared": "Data cleared successfully",
+    "data_clear_error": "An error occurred while clearing data",
+    "app": "Application",
+    "share_app": "Share App",
+    "share_message": "Great app for preparing for the driving license exam! https://play.google.com/store/apps/details?id=com.yourapp",
+    "share_subject": "Driving License Exam Preparation App",
+    "rate_app": "Rate Us",
+    "about": "About App",
+    "about_description": "App Description",
+    "about_content": "This application provides a comprehensive study platform for candidates preparing for the driving license exam. It includes detailed content and practical exams on traffic signs, traffic rules, first aid, and engine knowledge.",
+    "features": "Features",
+    "features_content": "• Detailed topic explanations\n• Multiple choice questions\n• Tests in real exam format\n• Progress tracking and statistics\n• Wrong answer analysis\n• Offline study capability",
+    "contact": "Contact",
+    "contact_content": "For questions and suggestions:\nEmail: support@drivingexam.com\nWeb: www.drivingexam.com",
+    "copyright": "All rights reserved"
+  },
+  "navigation": {
+    "home": "Home",
+    "exams": "Exams",
+    "topics": "Topics",
+    "stats": "Statistics",
+    "profile": "Profile"
+  },
+  "app_bar": {
+    "menu": "Menu",
+    "messages": "Messages",
+    "notifications": "Notifications",
+    "search": "Search topics...",
+    "back": "Back"
+  },
+  "exam_list": {
+    "screen_title": "Exam List",
+    "active_exams": "Active Exams",
+    "completed_exams": "Completed Exams",
+    "duration": "Minutes",
+    "final_exam": "Final Exam",
+    "daily_quiz": "Daily Quiz",
+    "japanese_literature": "Traffic Signs",
+    "math": "Engine Knowledge",
+    "chemistry": "First Aid",
+    "literature": "Traffic Rules",
+    "physics": "Vehicle Technique",
+    "no_completed_exams": "No completed exams yet",
+    "minutes": "minutes",
+    "correct": "correct"
+  },
+  "quiz": {
+    "screen_title": "Exam",
+    "question_number": "Question %d/%d",
+    "time_remaining": "Time Remaining: %d sec",
+    "time_up": "Time's Up!",
+    "next_question": "Next Question",
+    "show_results": "Show Results",
+    "question_list": "Question List",
+    "loading": "Loading questions...",
+    "error": "An error occurred while loading questions",
+    "retry": "Try Again",
+    "navigation": {
+      "next": "Next",
+      "prev": "Previous"
+    },
+    "time_warning": "Time remaining: %d minutes",
+    "question_progress": "Question %d/%d",
+    "mark_for_review": "Mark for review",
+    "previous": "Previous Question",
+    "next": "Next Question",
+    "finish": "Finish Exam"
+  },
+  "quiz_result": {
+    "screen_title": "Exam Result",
+    "completed_message": "Exam Completed!",
+    "time_up_message": "Time's Up!",
+    "score_text": "Your Score",
+    "correct_answers": "Correct Answers",
+    "time_taken": "Time Taken",
+    "minutes": "minutes",
+    "seconds": "seconds",
+    "review_wrong_answers": "Review Wrong Answers",
+    "back_to_home": "Back to Home",
+    "your_answer": "Your Answer",
+    "correct_answer": "Correct Answer",
+    "success": "Success",
+    "fail": "Failed",
+    "no_answer": "No answer"
+  },
+  "exam_categories": {
+    "traffic_signs": "Traffic Signs",
+    "traffic_rules": "Traffic Rules",
+    "first_aid": "First Aid",
+    "vehicle_tech": "Engine and Vehicle Technique"
+  },
+  "exam_types": {
+    "practice": "Practice Exam",
+    "mock": "Mock Exam",
+    "final": "Final Exam"
+  },
+  "difficulty_levels": {
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard"
+  },
+  "topics": {
+    "screen_title": "Topics",
+    "subtitle": "All necessary topics for driver's license exam preparation",
+    "subtopics": "subtopic",
+    "subtopics_list": "Subtopics",
+    "images": "image",
+    "no_topics": "No topics yet",
+    "loading": "Loading topics...",
+    "error": "An error occurred while loading topics",
+    "your_answer": "Your Answer",
+    "correct_answer": "Correct Answer",
+    "no_answer": "No answer"
+  },
+  "bottom_nav": {
+    "home": "Home",
+    "topics": "Topics",
+    "statistics": "Statistics",
+    "settings": "Settings"
+  },
+  "leaderboard": {
+    "screen_title": "Leaderboard",
+    "no_data": "No rankings available yet",
+    "points": "points",
+    "your_rank": "Your Rank",
+    "top_performers": "Top Performers",
+    "view_all": "View All",
+    "error_message": "An error occurred while loading the leaderboard",
+    "refresh": "Refresh",
+    "rank": "Rank",
+    "score": "Score",
+    "user": "User"
+  },
+  "mock_exam": {
+    "select_difficulty": "Select Difficulty Level",
+    "description": "Choose a difficulty level before starting the mock exam. Each level contains questions of different difficulty.",
+    "easy_description": "Basic level questions. Ideal for beginners.",
+    "medium_description": "Intermediate level questions. Try this level if you're familiar with the basics.",
+    "hard_description": "Hard level questions. Contains questions at real exam difficulty.",
+    "loading_error": "Error loading questions",
+    "loading": "Loading questions...",
+    "start_exam": "Start Exam",
+    "question_count": "%d Questions",
+    "time_limit": "Time: %d minutes",
+    "confirm_start": "Start Exam",
+    "confirm_description": "Are you sure you want to start the exam? You cannot pause once started.",
+    "confirm_yes": "Yes, Start",
+    "confirm_no": "Cancel"
+  },
+  "search": {
+    "hint": "Search topics or questions...",
+    "no_results": "No results found",
+    "recent_searches": "Recent Searches",
+    "clear_history": "Clear History",
+    "categories": "Categories",
+    "topics": "Topics",
+    "questions": "Questions"
+  }
+} 
