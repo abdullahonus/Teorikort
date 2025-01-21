@@ -6,9 +6,25 @@ import 'package:driving_license_exam/features/splash/presentation/splash_screen.
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:driving_license_exam/core/localization/app_localization.dart';
 import 'package:driving_license_exam/core/providers/locale_provider.dart';
+import 'package:driving_license_exam/core/providers/auth_provider.dart';
 
-void main() {
-  runApp(const ProviderScope(child: MyApp()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Sistem dilini al
+  final systemLocale = WidgetsBinding.instance.window.locale;
+  final initialLocale = systemLocale.languageCode == 'tr' ? 'tr' : 'en';
+
+  // Locale provider'ı başlat
+  final container = ProviderContainer();
+  container.read(localeProvider.notifier).setLocale(initialLocale);
+
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends ConsumerWidget {
@@ -16,16 +32,17 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(localeProvider);
     final themeMode = ref.watch(themeProvider);
+    final locale = ref.watch(localeProvider);
+    final authState = ref.watch(authProvider);
 
     return MaterialApp(
-      title: 'Ehliyet Sınavı',
+      title: 'Driving License Exam',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
-      locale: currentLocale,
+      locale: locale,
       supportedLocales: const [
         Locale('tr', 'TR'),
         Locale('en', 'US'),

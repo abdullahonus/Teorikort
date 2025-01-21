@@ -6,15 +6,18 @@ import 'package:driving_license_exam/features/profile/presentation/profile_scree
 import 'package:driving_license_exam/features/statistics/presentation/screens/statistics_screen.dart';
 import 'package:driving_license_exam/features/topics/presentation/topics_screen.dart';
 import 'package:driving_license_exam/features/search/presentation/search_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/providers/auth_provider.dart';
+import '../../../features/auth/presentation/screens/sign_in_screen.dart';
 
-class AppScaffold extends StatefulWidget {
+class AppScaffold extends ConsumerStatefulWidget {
   const AppScaffold({super.key});
 
   @override
-  State<AppScaffold> createState() => _AppScaffoldState();
+  ConsumerState<AppScaffold> createState() => _AppScaffoldState();
 }
 
-class _AppScaffoldState extends State<AppScaffold> {
+class _AppScaffoldState extends ConsumerState<AppScaffold> {
   int _currentIndex = 0;
 
   late final List<Widget> _screens = [
@@ -24,7 +27,38 @@ class _AppScaffoldState extends State<AppScaffold> {
     const ProfileTab(),
   ];
 
-  PreferredSizeWidget _buildAppBar() {
+  void _handleLogout(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalization.of(context).translate('auth.logout_title')),
+        content: Text(
+            AppLocalization.of(context).translate('auth.logout_confirmation')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(AppLocalization.of(context).translate('common.cancel')),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(AppLocalization.of(context).translate('auth.logout')),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await ref.read(authProvider.notifier).signOut();
+      if (!mounted) return;
+
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const SignInScreen()),
+        (route) => false,
+      );
+    }
+  }
+
+  PreferredSizeWidget _buildAppBar(BuildContext context, WidgetRef ref) {
     if (_currentIndex == 0) {
       return AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -62,9 +96,6 @@ class _AppScaffoldState extends State<AppScaffold> {
                   ),
                   Row(
                     children: [
-                      Icon(Icons.mail_outlined,
-                          color: Theme.of(context).colorScheme.primary),
-                      const SizedBox(width: 16),
                       Icon(Icons.notifications_none_outlined,
                           color: Theme.of(context).colorScheme.primary),
                     ],
@@ -156,6 +187,10 @@ class _AppScaffoldState extends State<AppScaffold> {
               );
             },
           ),
+        /*   IconButton(
+          icon: const Icon(Icons.logout),
+          onPressed: () => _handleLogout(context, ref),
+        ), */
       ],
     );
   }
@@ -177,7 +212,7 @@ class _AppScaffoldState extends State<AppScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context, ref),
       body: _screens[_currentIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,

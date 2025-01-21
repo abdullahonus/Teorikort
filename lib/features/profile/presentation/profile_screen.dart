@@ -9,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:driving_license_exam/core/services/user_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:driving_license_exam/features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:driving_license_exam/core/providers/auth_provider.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
@@ -173,6 +175,7 @@ class _ProfileTabState extends State<ProfileTab> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const SizedBox(width: 50),
                   Text(
                     _userService.currentUserName,
                     style: TextStyle(
@@ -302,6 +305,64 @@ class _ProfileTabState extends State<ProfileTab> {
             ),
           ],
         ),
+
+        // Uygulama Bilgileri kartı sonrası
+        const SizedBox(height: 48), // Biraz daha boşluk ekleyelim
+
+        // Logout Butonu
+        Consumer(
+          builder: (context, ref, child) => ElevatedButton(
+            onPressed: () async {
+              final confirmed = await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text(AppLocalization.of(context)
+                      .translate('auth.logout_title')),
+                  content: Text(AppLocalization.of(context)
+                      .translate('auth.logout_confirmation')),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: Text(AppLocalization.of(context)
+                          .translate('common.cancel')),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: Text(
+                          AppLocalization.of(context).translate('auth.logout')),
+                    ),
+                  ],
+                ),
+              );
+
+              if (confirmed == true && mounted) {
+                await ref.read(authProvider.notifier).signOut();
+                if (mounted) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => const SignInScreen()),
+                    (route) => false,
+                  );
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: colorScheme.error,
+              foregroundColor: colorScheme.onError,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Text(
+              AppLocalization.of(context).translate('auth.logout'),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 24), // En altta biraz boşluk
       ],
     );
   }
