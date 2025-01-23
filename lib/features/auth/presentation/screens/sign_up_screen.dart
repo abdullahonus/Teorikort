@@ -79,7 +79,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 const SizedBox(height: 32),
                 AuthTextField(
                   controller: _nameController,
-                  hintText: AppLocalization.of(context).translate('auth.name'),
+                  hintText:
+                      AppLocalization.of(context).translate('Kullanıcı Adı'),
                   prefixIcon: Icons.person_outline,
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
@@ -114,8 +115,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 const SizedBox(height: 16),
                 AuthTextField(
                   controller: _passwordController,
-                  hintText:
-                      AppLocalization.of(context).translate('auth.password'),
+                  hintText: AppLocalization.of(context).translate('Şifre'),
                   obscureText: !_isPasswordVisible,
                   prefixIcon: Icons.lock_outline,
                   suffixIcon: IconButton(

@@ -86,7 +86,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     onPressed: () => setState(
                         () => _isPasswordVisible = !_isPasswordVisible),
                   ),
-                  onChanged: _validatePassword,
+                  onChanged: (value) => _validatePassword(value),
                   validator: _passwordValidator,
                 ),
                 // Şifre Gücü Göstergesi
@@ -160,7 +160,6 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
     setState(() {
       _passwordStrength = state.strength;
     });
-    return;
   }
 
   String? _passwordValidator(String? value) {
@@ -224,6 +223,5 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
         );
       }
     }
-    return;
   }
 }

@@ -4,37 +4,35 @@ import '../../data/models/reset_password_state.dart';
 import '../../../../core/providers/auth_provider.dart';
 
 class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
-  final AuthService _authService;
+  ResetPasswordNotifier() : super(const ResetPasswordState());
 
-  ResetPasswordNotifier(this._authService)
-      : super(const ResetPasswordState.initial());
-
-  Future<void> validatePassword(String password) async {
+  Future<void> resetPassword(String email, String otp, String password) async {
+    state = state.copyWith(isLoading: true, error: null);
     try {
-      final response = await _authService.validatePassword(password);
-      state = ResetPasswordState(
-        isValid: response.isValid,
-        strength: response.strength,
-        validationErrors: response.validationErrors,
-      );
+      // API çağrısı burada
+      await Future.delayed(const Duration(seconds: 2)); // Örnek gecikme
+      state = state.copyWith(isLoading: false);
     } catch (e) {
-      state = ResetPasswordState(error: e.toString());
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      );
     }
   }
 
-  Future<void> resetPassword(String email, String otp, String password) async {
-    try {
-      state = const ResetPasswordState.loading();
-      await _authService.resetPassword(email, otp, password);
-      state = const ResetPasswordState.success();
-    } catch (e) {
-      state = ResetPasswordState(error: e.toString());
-    }
-    return;
+  Future<void> validatePassword(String password) async {
+    // Şifre gücü hesaplama mantığı
+    int strength = calculatePasswordStrength(password);
+    state = state.copyWith(strength: strength);
+  }
+
+  int calculatePasswordStrength(String password) {
+    // Şifre gücü hesaplama mantığı burada
+    return 0; // Örnek dönüş
   }
 }
 
 final resetPasswordProvider =
     StateNotifierProvider<ResetPasswordNotifier, ResetPasswordState>((ref) {
-  return ResetPasswordNotifier(ref.read(authServiceProvider));
+  return ResetPasswordNotifier();
 });
