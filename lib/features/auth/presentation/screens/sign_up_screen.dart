@@ -63,7 +63,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  AppLocalization.of(context).translate('auth.create_account'),
+                  AppLocalization.of(context).translate('Hesap Oluştur'),
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: colorScheme.primary,
@@ -71,7 +71,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  AppLocalization.of(context).translate('auth.sign_up_desc'),
+                  AppLocalization.of(context).translate(
+                      'Hesap oluşturmak için lütfen bilgilerinizi giriniz.'),
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: colorScheme.onSurface.withOpacity(0.7),
                       ),
@@ -85,7 +86,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
                       return AppLocalization.of(context)
-                          .translate('auth.name_required');
+                          .translate('Kullanıcı adı boş olamaz');
                     }
                     return null;
                   },
@@ -94,20 +95,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 AuthTextField(
                   controller: _emailController,
                   hintText:
-                      AppLocalization.of(context).translate('auth.email_hint'),
+                      AppLocalization.of(context).translate('E-Posta Adresi'),
                   keyboardType: TextInputType.emailAddress,
                   prefixIcon: Icons.email_outlined,
                   onChanged: (_) {},
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
                       return AppLocalization.of(context)
-                          .translate('auth.email_required');
+                          .translate('E-Posta adresi boş olamaz');
                     }
                     final emailRegex =
                         RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
                     if (!emailRegex.hasMatch(value!)) {
                       return AppLocalization.of(context)
-                          .translate('auth.invalid_email');
+                          .translate('Geçersiz e-posta adresi');
                     }
                     return null;
                   },
@@ -133,11 +134,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
                       return AppLocalization.of(context)
-                          .translate('auth.password_required');
+                          .translate('Şifre boş olamaz');
                     }
                     if (value!.length < 6) {
                       return AppLocalization.of(context)
-                          .translate('auth.password_length');
+                          .translate('Şifre en az 6 karakter olmalıdır');
                     }
                     return null;
                   },
@@ -145,8 +146,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 const SizedBox(height: 16),
                 AuthTextField(
                   controller: _confirmPasswordController,
-                  hintText: AppLocalization.of(context)
-                      .translate('auth.confirm_password'),
+                  hintText:
+                      AppLocalization.of(context).translate('Şifre Tekrarı'),
                   obscureText: !_isConfirmPasswordVisible,
                   prefixIcon: Icons.lock_outline,
                   suffixIcon: IconButton(
@@ -164,11 +165,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
                       return AppLocalization.of(context)
-                          .translate('auth.confirm_password_required');
+                          .translate('Şifre tekrarı boş olamaz');
                     }
                     if (value != _passwordController.text) {
                       return AppLocalization.of(context)
-                          .translate('auth.passwords_not_match');
+                          .translate('Şifreler eşleşmiyor');
                     }
                     return null;
                   },
@@ -177,7 +178,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 AuthButton(
                   onPressed: state.isLoading ? null : _signUp,
                   isLoading: state.isLoading,
-                  text: AppLocalization.of(context).translate('auth.sign_up'),
+                  text: AppLocalization.of(context).translate('Hesap Oluştur'),
                 ),
                 if (state.error != null) ...[
                   const SizedBox(height: 16),
@@ -193,12 +194,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   children: [
                     Text(
                       AppLocalization.of(context)
-                          .translate('auth.have_account'),
+                          .translate('Hesabınız var mı?'),
                     ),
                     TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: Text(
-                        AppLocalization.of(context).translate('auth.sign_in'),
+                        AppLocalization.of(context).translate('Giriş Yap'),
                       ),
                     ),
                   ],
