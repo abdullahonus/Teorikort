@@ -1,3 +1,4 @@
+import 'package:driving_license_exam/core/presentation/widgets/app_scaffold.dart';
 import 'package:driving_license_exam/features/quiz/presentation/wrong_answers_review_screen.dart';
 import 'package:flutter/material.dart';
 import '../data/models/quiz_data.dart';
@@ -184,10 +185,10 @@ class QuizResultScreen extends StatelessWidget {
                       const SizedBox(height: 32),
                       OutlinedButton.icon(
                         onPressed: () {
-                          Navigator.popUntil(
-                            context,
-                            (route) => route.isFirst,
-                          );
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (_) => const AppScaffold()),
+                              (route) => false);
                         },
                         icon: const Icon(Icons.home),
                         label: Text(
