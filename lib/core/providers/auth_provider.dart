@@ -24,7 +24,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     if (isAuthenticated) {
       // TODO: Fetch user data from API
       state = AuthState.authenticated(AuthUser(
-        id: '1',
         email: 'test@example.com',
         name: 'Test User',
         createdAt: null,
@@ -56,7 +55,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       LoggerService.info('User logged in successfully: $email');
       await _authService.saveTokens(tokens);
       state = AuthState.authenticated(AuthUser(
-        id: '1',
         email: email,
         name: 'Test User',
         createdAt: null,

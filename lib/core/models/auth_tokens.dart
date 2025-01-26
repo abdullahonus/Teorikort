@@ -1,10 +1,10 @@
 class AuthTokens {
   final String accessToken;
-  final String refreshToken;
+  final String? refreshToken;
 
   AuthTokens({
     required this.accessToken,
-    required this.refreshToken,
+     this.refreshToken,
   });
 
   factory AuthTokens.fromJson(Map<String, dynamic> json) {

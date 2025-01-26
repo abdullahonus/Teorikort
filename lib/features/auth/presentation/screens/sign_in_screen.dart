@@ -1,15 +1,14 @@
+import 'dart:developer';
+
 import 'package:driving_license_exam/core/presentation/widgets/app_scaffold.dart';
-import 'package:driving_license_exam/core/providers/auth_provider.dart';
+import '../../presentation/providers/auth_provider.dart';
 import 'package:driving_license_exam/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/auth_provider.dart';
 import '../../../../core/localization/app_localization.dart';
 import '../../../../core/widgets/auth_text_field.dart';
 import '../../../../core/widgets/auth_button.dart';
 import 'forgot_password_screen.dart';
-import '../../../../core/widgets/custom_alert_dialog.dart';
-import '../../../../core/services/logger_service.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
@@ -33,38 +32,57 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
   Future<void> _signIn() async {
     if (_formKey.currentState?.validate() ?? false) {
-      await ref.read(authProvider.notifier).signIn(
-            _emailController.text,
-            _passwordController.text,
-          );
+      try {
+        await ref.read(authStateProvider.notifier).signIn(
+              _emailController.text,
+              _passwordController.text,
+            );
 
-      final state = ref.read(authProvider);
-      if (state.error != null && mounted) {
-        showDialog(
-          context: context,
-          builder: (context) => CustomAlertDialog(
-            title: 'Login Failed',
-            message: state.error!,
-            primaryButtonText: 'Try Again',
-            icon: Icon(
-              Icons.error_outline,
-              color: Theme.of(context).colorScheme.error,
-              size: 32,
-            ),
-          ),
-        );
-      } else if (state.user != null && mounted) {
-        LoggerService.info('Navigating to home screen');
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const AppScaffold()),
-        );
+        if (!mounted) return;
+
+        final state = ref.read(authStateProvider);
+
+        // Başarılı giriş durumu - hem token hem error kontrolü
+        if (state.user != null && state.token != null && state.error == null) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const AppScaffold()),
+            (route) => false,
+          );
+        } else if (state.error != null) {
+          log(state.error.toString());
+        }
+      } catch (e) {
+        if (!mounted) return;
+        log(e.toString());
       }
+    }
+  }
+
+  Future<void> _signOut() async {
+    try {
+      await ref.read(authStateProvider.notifier).logout();
+
+      if (!mounted) return;
+
+      // Giriş sayfasına yönlendir
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const SignInScreen()),
+        (route) => false,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(authProvider);
+    final state = ref.watch(authStateProvider);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
