@@ -1,21 +1,40 @@
-import 'package:logger/logger.dart';
+import 'dart:developer' as developer;
 
 class LoggerService {
-  static final Logger _logger = Logger(
-    printer: PrettyPrinter(
-      methodCount: 0,
-      errorMethodCount: 8,
-      lineLength: 120,
-      colors: true,
-      printEmojis: true,
-      printTime: true,
-    ),
-  );
+  static void info(String message, [dynamic data]) {
+    developer.log(
+      '💡 $message ${data != null ? '\nData: $data' : ''}',
+      name: 'INFO',
+      time: DateTime.now(),
+    );
+  }
 
-  static void debug(String message) => _logger.d(message);
-  static void info(String message, [Map<String, dynamic>? data]) =>
-      _logger.i(data != null ? '$message: $data' : message);
-  static void warning(String message) => _logger.w(message);
-  static void error(String message, [dynamic error, StackTrace? stackTrace]) =>
-      _logger.e(message, error: error, stackTrace: stackTrace);
+  static void error(String message, [dynamic error, StackTrace? stackTrace]) {
+    developer.log(
+      '⛔ $message ${error != null ? '\nError: $error' : ''} ${stackTrace != null ? '\nStackTrace: $stackTrace' : ''}',
+      name: 'ERROR',
+      time: DateTime.now(),
+      error: error,
+      stackTrace: stackTrace,
+    );
+  }
+
+  static void debug(String message, [dynamic data]) {
+    developer.log(
+      '🐛 $message ${data != null ? '\nData: $data' : ''}',
+      name: 'DEBUG',
+      time: DateTime.now(),
+    );
+  }
+
+  static void api(String type, String endpoint, dynamic data,
+      [int? statusCode]) {
+    developer.log(
+      '🌐 API $type: $endpoint\n'
+      '${statusCode != null ? 'Status: $statusCode\n' : ''}'
+      'Data: $data',
+      name: 'API',
+      time: DateTime.now(),
+    );
+  }
 }

@@ -1,3 +1,5 @@
+import 'package:driving_license_exam/features/auth/presentation/providers/auth_provider.dart';
+import 'package:driving_license_exam/features/home/presentation/providers/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:driving_license_exam/core/localization/app_localization.dart';
 import 'package:driving_license_exam/features/home/presentation/home_screen.dart';
@@ -7,8 +9,7 @@ import 'package:driving_license_exam/features/statistics/presentation/screens/st
 import 'package:driving_license_exam/features/topics/presentation/topics_screen.dart';
 import 'package:driving_license_exam/features/search/presentation/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/providers/auth_provider.dart';
-import '../../../features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:driving_license_exam/features/user/presentation/providers/user_provider.dart';
 
 class AppScaffold extends ConsumerStatefulWidget {
   const AppScaffold({super.key});
@@ -19,6 +20,7 @@ class AppScaffold extends ConsumerStatefulWidget {
 
 class _AppScaffoldState extends ConsumerState<AppScaffold> {
   int _currentIndex = 0;
+  final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   late final List<Widget> _screens = [
     const HomeScreen(),
@@ -27,38 +29,24 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
     const ProfileTab(),
   ];
 
-  void _handleLogout(BuildContext context, WidgetRef ref) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(AppLocalization.of(context).translate('auth.logout_title')),
-        content: Text(
-            AppLocalization.of(context).translate('auth.logout_confirmation')),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(AppLocalization.of(context).translate('common.cancel')),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(AppLocalization.of(context).translate('auth.logout')),
-          ),
-        ],
-      ),
-    );
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeData();
+    });
+  }
 
-    if (confirmed == true) {
-      await ref.read(authProvider.notifier).signOut();
-      if (!mounted) return;
-
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const SignInScreen()),
-        (route) => false,
-      );
+  Future<void> _initializeData() async {
+    final token = ref.read(authStateProvider).token;
+    if (token != null) {
+      await ref.read(homeStateProvider.notifier).fetchWelcomeMessage(token);
     }
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context, WidgetRef ref) {
+    final userState = ref.watch(userStateProvider);
+
     if (_currentIndex == 0) {
       return AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -76,7 +64,8 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
                     children: [
                       const SizedBox(height: 20),
                       Text(
-                        AppLocalization.of(context).translate("app_name"),
+                        userState.profile?.fullName ??
+                            AppLocalization.of(context).translate("app_name"),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).colorScheme.primary,
@@ -210,10 +199,38 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    final homeState = ref.watch(homeStateProvider);
+    final userState = ref.watch(userStateProvider);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: _buildAppBar(context, ref),
-      body: _screens[_currentIndex],
+      body: Column(
+        children: [
+          if (homeState.isLoading) const LinearProgressIndicator(),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              homeState.welcomeMessage?.message ?? "Welcome to the App",
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ),
+          Expanded(
+            child: RefreshIndicator(
+              key: _refreshKey,
+              onRefresh: () async {
+                final token = ref.read(authStateProvider).token;
+                if (token != null) {
+                  await ref
+                      .read(homeStateProvider.notifier)
+                      .fetchWelcomeMessage(token);
+                }
+              },
+              child: _screens[_currentIndex],
+            ),
+          ),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (index) {
