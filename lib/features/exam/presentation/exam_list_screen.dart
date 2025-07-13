@@ -265,6 +265,8 @@ class _ExamItem extends StatelessWidget {
                           fontSize: 16,
                           color: colorScheme.onSurface,
                         ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
                       const SizedBox(height: 4),
                       Row(
@@ -275,11 +277,14 @@ class _ExamItem extends StatelessWidget {
                             color: colorScheme.onSurface.withOpacity(0.6),
                           ),
                           const SizedBox(width: 4),
-                          Text(
-                            duration,
-                            style: TextStyle(
-                              color: colorScheme.onSurface.withOpacity(0.6),
-                              fontSize: 14,
+                          Expanded(
+                            child: Text(
+                              duration,
+                              style: TextStyle(
+                                color: colorScheme.onSurface.withOpacity(0.6),
+                                fontSize: 14,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],

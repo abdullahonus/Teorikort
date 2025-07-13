@@ -1,4 +1,5 @@
 import 'package:driving_license_exam/core/presentation/widgets/app_scaffold.dart';
+import 'package:driving_license_exam/core/localization/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
@@ -61,7 +62,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Kayıt Ol')),
+      appBar: AppBar(
+          title: Text(
+              AppLocalization.of(context).translate('auth.sign_up_title'))),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -71,13 +74,15 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Ad',
-                  prefixIcon: Icon(Icons.person),
+                decoration: InputDecoration(
+                  labelText:
+                      AppLocalization.of(context).translate('auth.first_name'),
+                  prefixIcon: const Icon(Icons.person),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Ad alanı zorunludur';
+                    return AppLocalization.of(context)
+                        .translate('auth.first_name_required');
                   }
                   return null;
                 },
@@ -85,13 +90,15 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _lastnameController,
-                decoration: const InputDecoration(
-                  labelText: 'Soyad',
-                  prefixIcon: Icon(Icons.person_outline),
+                decoration: InputDecoration(
+                  labelText:
+                      AppLocalization.of(context).translate('auth.last_name'),
+                  prefixIcon: const Icon(Icons.person_outline),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Soyad alanı zorunludur';
+                    return AppLocalization.of(context)
+                        .translate('auth.last_name_required');
                   }
                   return null;
                 },
@@ -100,16 +107,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'E-posta',
-                  prefixIcon: Icon(Icons.email),
+                decoration: InputDecoration(
+                  labelText:
+                      AppLocalization.of(context).translate('auth.email_hint'),
+                  prefixIcon: const Icon(Icons.email),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'E-posta alanı zorunludur';
+                    return AppLocalization.of(context)
+                        .translate('auth.email_required');
                   }
                   if (!value.contains('@') || !value.contains('.')) {
-                    return 'Geçerli bir e-posta adresi giriniz';
+                    return AppLocalization.of(context)
+                        .translate('auth.email_invalid');
                   }
                   return null;
                 },
@@ -118,17 +128,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               TextFormField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                  labelText: 'Telefon',
-                  prefixIcon: Icon(Icons.phone),
+                decoration: InputDecoration(
+                  labelText:
+                      AppLocalization.of(context).translate('auth.phone'),
+                  prefixIcon: const Icon(Icons.phone),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Telefon alanı zorunludur';
+                    return AppLocalization.of(context)
+                        .translate('auth.phone_required');
                   }
                   // Basit telefon numarası validasyonu
                   if (value.length < 10) {
-                    return 'Geçerli bir telefon numarası giriniz';
+                    return AppLocalization.of(context)
+                        .translate('auth.phone_invalid');
                   }
                   return null;
                 },
@@ -138,7 +151,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 controller: _passwordController,
                 obscureText: !_isPasswordVisible,
                 decoration: InputDecoration(
-                  labelText: 'Şifre',
+                  labelText: AppLocalization.of(context)
+                      .translate('auth.password_hint'),
                   prefixIcon: const Icon(Icons.lock),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -155,10 +169,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Şifre alanı zorunludur';
+                    return AppLocalization.of(context)
+                        .translate('auth.password_required');
                   }
                   if (value.length < 6) {
-                    return 'Şifre en az 6 karakter olmalıdır';
+                    return AppLocalization.of(context)
+                        .translate('auth.password_length');
                   }
                   return null;
                 },
@@ -172,7 +188,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
                 child: state.isLoading
                     ? const CircularProgressIndicator()
-                    : const Text('Kayıt Ol'),
+                    : Text(
+                        AppLocalization.of(context).translate('auth.sign_up')),
               ),
               if (state.error != null)
                 Padding(
@@ -186,7 +203,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               TextButton(
                 onPressed: () =>
                     Navigator.of(context).pushReplacementNamed('/signin'),
-                child: const Text('Zaten hesabın var mı? Giriş yap'),
+                child: Text(AppLocalization.of(context)
+                    .translate('auth.already_have_account')),
               ),
             ],
           ),

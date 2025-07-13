@@ -82,6 +82,7 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: const Color(0xFF121212),
       appBarTheme: const AppBarTheme(
+        iconTheme: IconThemeData(color: Colors.white),
         elevation: 0,
         centerTitle: false,
       ),

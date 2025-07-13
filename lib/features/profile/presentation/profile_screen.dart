@@ -228,14 +228,16 @@ class _ProfileTabState extends State<ProfileTab> {
                   return DropdownButton<String>(
                     value: currentLocale.languageCode,
                     underline: const SizedBox(),
-                    items: const [
+                    items: [
                       DropdownMenuItem(
                         value: 'tr',
-                        child: Text('Türkçe'),
+                        child: Text(AppLocalization.of(context)
+                            .translate('common.languages.turkish')),
                       ),
                       DropdownMenuItem(
                         value: 'en',
-                        child: Text('English'),
+                        child: Text(AppLocalization.of(context)
+                            .translate('common.languages.english')),
                       ),
                     ],
                     onChanged: (value) {

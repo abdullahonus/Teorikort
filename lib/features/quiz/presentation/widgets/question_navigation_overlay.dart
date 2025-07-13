@@ -93,68 +93,73 @@ class _QuestionNavigationOverlayState extends State<QuestionNavigationOverlay> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 6,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 1,
-        ),
-        itemCount: widget.totalQuestions,
-        itemBuilder: (context, index) {
-          final questionNumber = index + 1;
-          final isCurrentQuestion = questionNumber == widget.currentQuestion;
-          final isAnswered = widget.answeredQuestions[index];
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 6,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 1,
+            ),
+            itemCount: widget.totalQuestions,
+            itemBuilder: (context, index) {
+              final questionNumber = index + 1;
+              final isCurrentQuestion = questionNumber == widget.currentQuestion;
+              final isAnswered = widget.answeredQuestions[index];
 
-          return InkWell(
-            onTap: () => widget.onQuestionSelected(questionNumber),
-            child: Container(
-              decoration: BoxDecoration(
-                color: isAnswered || isCurrentQuestion
-                    ? const Color(0xFF1A237E)
-                    : Colors.white,
-                border: Border.all(
-                  color: const Color(0xFF1A237E),
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Stack(
-                children: [
-                  Center(
-                    child: Text(
-                      questionNumber < 10
-                          ? '0$questionNumber'
-                          : '$questionNumber',
-                      style: TextStyle(
-                        color: isAnswered || isCurrentQuestion
-                            ? Colors.white
-                            : const Color(0xFF1A237E),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+              return InkWell(
+                onTap: () => widget.onQuestionSelected(questionNumber),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: isAnswered || isCurrentQuestion
+                        ? const Color(0xFF1A237E)
+                        : Colors.white,
+                    border: Border.all(
+                      color: const Color(0xFF1A237E),
+                      width: 2,
                     ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  if (isCurrentQuestion)
-                    Positioned(
-                      top: 4,
-                      right: 4,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: Text(
+                          questionNumber < 10
+                              ? '0$questionNumber'
+                              : '$questionNumber',
+                          style: TextStyle(
+                            color: isAnswered || isCurrentQuestion
+                                ? Colors.white
+                                : const Color(0xFF1A237E),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
                       ),
-                    ),
-                ],
-              ),
-            ),
-          );
-        },
+                      if (isCurrentQuestion)
+                        Positioned(
+                          top: 4,
+                          right: 4,
+                          child: Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }

@@ -44,7 +44,11 @@
     "clear": "Temizle",
     "save": "Kaydet",
     "error": "Bir hata oluştu",
-    "retry": "Tekrar Dene"
+    "retry": "Tekrar Dene",
+    "languages": {
+      "turkish": "Türkçe",
+      "english": "English"
+    }
   },
   "home": {
     "welcome": "Hoş Geldiniz",
@@ -170,6 +174,10 @@
     "time_warning": "Kalan süre: %d dakika",
     "question_progress": "Soru %d/%d",
     "mark_for_review": "İnceleme için işaretle",
+    "add_to_favorites": "Favorilere Ekle",
+    "remove_from_favorites": "Favorilerden Çıkar",
+    "favorites_added": "Soru favorilere eklendi",
+    "favorites_removed": "Soru favorilerden çıkarıldı",
     "previous": "Önceki Soru",
     "next": "Sonraki Soru",
     "finish": "Sınavı Bitir"
@@ -262,7 +270,13 @@
     "clear_history": "Geçmişi Temizle",
     "categories": "Kategoriler",
     "topics": "Konular",
-    "questions": "Sorular"
+    "questions": "Sorular",
+    "exam_categories": {
+      "traffic_signs": "Trafik İşaretleri",
+      "traffic_rules": "Trafik Kuralları", 
+      "first_aid": "İlk Yardım",
+      "vehicle_technology": "Motor ve Araç Tekniği"
+    }
   },
   "auth": {
     "welcome": "Tekrar Hoşgeldiniz",
@@ -299,6 +313,15 @@
     "password_medium": "Orta",
     "password_strong": "Güçlü",
     "reset_success": "Şifreniz başarıyla değiştirildi",
-    "reset_error": "Şifre değiştirme başarısız"
+    "reset_error": "Şifre değiştirme başarısız",
+    "sign_up_title": "Kayıt Ol",
+    "first_name": "Ad",
+    "last_name": "Soyad",
+    "phone": "Telefon",
+    "first_name_required": "Ad alanı zorunludur",
+    "last_name_required": "Soyad alanı zorunludur",
+    "phone_required": "Telefon alanı zorunludur",
+    "phone_invalid": "Geçerli bir telefon numarası giriniz",
+    "already_have_account": "Zaten hesabın var mı? Giriş yap"
   }
 } 

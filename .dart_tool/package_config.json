@@ -1226,10 +1226,10 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2025-01-25T17:48:57.222939Z",
+  "generated": "2025-07-13T15:39:23.040068Z",
   "generator": "pub",
-  "generatorVersion": "3.6.1",
+  "generatorVersion": "3.6.0",
   "flutterRoot": "file:///Users/abdullahonus/development/flutter",
-  "flutterVersion": "3.27.3",
+  "flutterVersion": "3.27.0",
   "pubCache": "file:///Users/abdullahonus/.pub-cache"
 }

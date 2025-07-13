@@ -37,7 +37,8 @@ class _TopicsScreenState extends State<TopicsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Konular yüklenirken bir hata oluştu: $e'),
+            content:
+                Text(AppLocalization.of(context).translate('topics.error')),
             backgroundColor: Colors.red,
           ),
         );

@@ -20,10 +20,14 @@ class _SearchScreenState extends State<SearchScreen> {
       _searchResults = query.isEmpty
           ? []
           : [
-              'Trafik İşaretleri',
-              'Trafik Kuralları',
-              'İlk Yardım',
-              'Motor ve Araç Tekniği',
+              AppLocalization.of(context)
+                  .translate('search.exam_categories.traffic_signs'),
+              AppLocalization.of(context)
+                  .translate('search.exam_categories.traffic_rules'),
+              AppLocalization.of(context)
+                  .translate('search.exam_categories.first_aid'),
+              AppLocalization.of(context)
+                  .translate('search.exam_categories.vehicle_technology'),
             ]
               .where((item) => item.toLowerCase().contains(query.toLowerCase()))
               .toList();
@@ -41,7 +45,8 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back,
+              color: Theme.of(context).colorScheme.primary),
           onPressed: () => Navigator.pop(context),
         ),
         title: TextField(
@@ -104,12 +109,13 @@ class _SearchScreenState extends State<SearchScreen> {
             runSpacing: 8,
             children: [
               _buildCategoryChip(
-                  'exam_categories.traffic_signs', Icons.traffic),
-              _buildCategoryChip('exam_categories.traffic_rules', Icons.rule),
+                  'search.exam_categories.traffic_signs', Icons.traffic),
               _buildCategoryChip(
-                  'exam_categories.first_aid', Icons.medical_services),
+                  'search.exam_categories.traffic_rules', Icons.rule),
               _buildCategoryChip(
-                  'exam_categories.vehicle_tech', Icons.car_repair),
+                  'search.exam_categories.first_aid', Icons.medical_services),
+              _buildCategoryChip('search.exam_categories.vehicle_technology',
+                  Icons.car_repair),
             ],
           ),
         ],

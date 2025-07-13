@@ -51,96 +51,114 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
       return AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        toolbarHeight: 160,
-        flexibleSpace: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        toolbarHeight: 180,
+        flexibleSpace: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(height: 20),
-                      Text(
-                        userState.profile?.fullName ??
-                            AppLocalization.of(context).translate("app_name"),
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.primary,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 10),
+                            Text(
+                              userState.profile?.fullName ??
+                                  AppLocalization.of(context)
+                                      .translate("app_name"),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        AppLocalization.of(context).translate("app_subtitle"),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withOpacity(0.7),
+                            const SizedBox(height: 4),
+                            Text(
+                              AppLocalization.of(context)
+                                  .translate("app_subtitle"),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withOpacity(0.7),
+                                  ),
+                              overflow: TextOverflow.ellipsis,
                             ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
+                      const SizedBox(width: 8),
                       Icon(Icons.notifications_none_outlined,
                           color: Theme.of(context).colorScheme.primary),
                     ],
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SearchScreen()),
-                  );
-                },
-                child: Container(
+                ),
+                const SizedBox(height: 12),
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color:
-                          Theme.of(context).colorScheme.outline.withAlpha(60),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.search,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SearchScreen()),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
                           color: Theme.of(context)
                               .colorScheme
-                              .onSurface
-                              .withOpacity(0.5)),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          AppLocalization.of(context)
-                              .translate('app_bar.search'),
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withOpacity(0.5),
-                            fontSize: 16,
-                          ),
+                              .outline
+                              .withAlpha(60),
                         ),
                       ),
-                    ],
+                      child: Row(
+                        children: [
+                          Icon(Icons.search,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.5)),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              AppLocalization.of(context)
+                                  .translate('app_bar.search'),
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.5),
+                                fontSize: 16,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                const SizedBox(height: 8),
+              ],
             ),
-          ],
+          ),
         ),
       );
     }

@@ -48,62 +48,66 @@ class _SubtopicDetailScreenState extends State<SubtopicDetailScreen> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          widget.subTopic.title,
-          style: theme.textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.subTopic.title,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 3,
           ),
-        ),
-        const SizedBox(height: 16),
-        Html(
-          data: widget.subTopic.content,
-          style: {
-            "body": Style(
-              fontSize: FontSize(16),
-              lineHeight: const LineHeight(1.6),
-              color: colorScheme.onSurface.withOpacity(0.8),
-              margin: Margins.zero,
-              padding: HtmlPaddings.zero,
-            ),
-            "h3": Style(
-              fontSize: FontSize(20),
-              fontWeight: FontWeight.bold,
-              margin: Margins.only(bottom: 12),
-            ),
-            "h4": Style(
-              fontSize: FontSize(18),
-              fontWeight: FontWeight.bold,
-              margin: Margins.only(bottom: 8, top: 16),
-            ),
-            "p": Style(
-              margin: Margins.only(bottom: 12),
-            ),
-            "ul": Style(
-              margin: Margins.only(bottom: 16, left: 20),
-            ),
-            "li": Style(
-              margin: Margins.only(bottom: 8),
-            ),
-            ".image-container": Style(
-              alignment: Alignment.center,
-              margin: Margins.symmetric(vertical: 16),
-            ),
-            "img": Style(
-              alignment: Alignment.center,
-              width: Width(300),
-              backgroundColor: Colors.transparent,
-            ),
-          },
-          onLinkTap: (url, _, __) {
-            if (url != null) {
-              debugPrint('Tapped url: $url');
-            }
-          },
-        ),
-      ],
+          const SizedBox(height: 16),
+          Html(
+            data: widget.subTopic.content,
+            style: {
+              "body": Style(
+                fontSize: FontSize(16),
+                lineHeight: const LineHeight(1.6),
+                color: colorScheme.onSurface.withOpacity(0.8),
+                margin: Margins.zero,
+                padding: HtmlPaddings.zero,
+              ),
+              "h3": Style(
+                fontSize: FontSize(20),
+                fontWeight: FontWeight.bold,
+                margin: Margins.only(bottom: 12),
+              ),
+              "h4": Style(
+                fontSize: FontSize(18),
+                fontWeight: FontWeight.bold,
+                margin: Margins.only(bottom: 8, top: 16),
+              ),
+              "p": Style(
+                margin: Margins.only(bottom: 12),
+              ),
+              "ul": Style(
+                margin: Margins.only(bottom: 16, left: 20),
+              ),
+              "li": Style(
+                margin: Margins.only(bottom: 8),
+              ),
+              ".image-container": Style(
+                alignment: Alignment.center,
+                margin: Margins.symmetric(vertical: 16),
+              ),
+              "img": Style(
+                alignment: Alignment.center,
+                width: Width(300),
+                backgroundColor: Colors.transparent,
+              ),
+            },
+            onLinkTap: (url, _, __) {
+              if (url != null) {
+                debugPrint('Tapped url: $url');
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

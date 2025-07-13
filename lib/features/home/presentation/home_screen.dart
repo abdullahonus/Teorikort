@@ -243,7 +243,8 @@ class HomeScreen extends StatelessWidget {
           _buildProgressItem(
             context,
             'home.weak_topics',
-            'Trafik İşaretleri',
+            AppLocalization.of(context)
+                .translate('search.exam_categories.traffic_signs'),
             Icons.warning,
             Colors.orange,
           ),
@@ -300,9 +301,9 @@ class HomeScreen extends StatelessWidget {
         final tip = snapshot.data ??
             DailyTip(
               id: 1,
-              title: 'Güvenli Sürüş',
+              title: AppLocalization.of(context).translate('home.daily_tip'),
               content:
-                  'Her zaman trafik kurallarına uyun ve güvenli sürüş yapın.',
+                  AppLocalization.of(context).translate('home.tip_content'),
               category: 'safety',
               icon: 'safety',
             );

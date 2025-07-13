@@ -44,7 +44,11 @@
     "clear": "Clear",
     "save": "Save",
     "error": "An error occurred",
-    "retry": "Try Again"
+    "retry": "Try Again",
+    "languages": {
+      "turkish": "Türkçe",
+      "english": "English"
+    }
   },
   "home": {
     "welcome": "Welcome",
@@ -182,6 +186,10 @@
     "time_warning": "Time remaining: %d minutes",
     "question_progress": "Question %d/%d",
     "mark_for_review": "Mark for review",
+    "add_to_favorites": "Add to Favorites",
+    "remove_from_favorites": "Remove from Favorites",
+    "favorites_added": "Question added to favorites",
+    "favorites_removed": "Question removed from favorites",
     "previous": "Previous Question",
     "next": "Next Question",
     "finish": "Finish Exam"
@@ -274,7 +282,13 @@
     "clear_history": "Clear History",
     "categories": "Categories",
     "topics": "Topics",
-    "questions": "Questions"
+    "questions": "Questions",
+    "exam_categories": {
+      "traffic_signs": "Traffic Signs",
+      "traffic_rules": "Traffic Rules", 
+      "first_aid": "First Aid",
+      "vehicle_technology": "Vehicle Technology"
+    }
   },
   "auth": {
     "welcome": "Welcome Back",
@@ -298,6 +312,15 @@
     "otp_title": "Verification Code",
     "otp_desc": "Enter the 6-digit code sent to %s",
     "verify_code": "Verify",
-    "resend_code": "Resend Code"
+    "resend_code": "Resend Code",
+    "sign_up_title": "Sign Up",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "phone": "Phone",
+    "first_name_required": "First name is required",
+    "last_name_required": "Last name is required",
+    "phone_required": "Phone is required",
+    "phone_invalid": "Please enter a valid phone number",
+    "already_have_account": "Already have an account? Sign In"
   }
 } 
