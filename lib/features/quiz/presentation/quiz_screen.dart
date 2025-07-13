@@ -329,7 +329,9 @@ class _QuizScreenState extends State<QuizScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      'Soru ${currentQuestionIndex + 1}',
+                      AppLocalization.of(context)
+                          .translate('quiz.question_badge')
+                          .replaceFirst('%d', '${currentQuestionIndex + 1}'),
                       style: theme.textTheme.labelMedium?.copyWith(
                         color: colorScheme.onPrimaryContainer,
                         fontWeight: FontWeight.w600,
@@ -386,7 +388,8 @@ class _QuizScreenState extends State<QuizScreen> {
                         }
                       : null,
                   icon: const Icon(Icons.arrow_back),
-                  label: const Text('Önceki'),
+                  label: Text(AppLocalization.of(context)
+                      .translate('quiz.buttons.previous')),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.surfaceVariant,
                     foregroundColor: colorScheme.onSurfaceVariant,
@@ -414,14 +417,17 @@ class _QuizScreenState extends State<QuizScreen> {
                   icon: Icon(currentQuestionIndex == questions.length - 1
                       ? Icons.check
                       : Icons.arrow_forward),
-                  label: Text(currentQuestionIndex == questions.length - 1
-                      ? 'Bitir'
-                      : 'Sonraki'),
+                  label: Text(
+                    currentQuestionIndex == questions.length - 1
+                        ? AppLocalization.of(context)
+                            .translate('quiz.buttons.finish')
+                        : AppLocalization.of(context)
+                            .translate('quiz.buttons.next'),
+                    textAlign: TextAlign.center,
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.primary,
                     foregroundColor: colorScheme.onPrimary,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

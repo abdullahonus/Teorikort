@@ -185,6 +185,12 @@
       "completed": "Tamamlandı",
       "questions_remaining": "soru kaldı",
       "question_counter": "Soru %d/%d"
+    },
+    "question_badge": "Soru %d",
+    "buttons": {
+      "previous": "Önceki",
+      "next": "Sonraki", 
+      "finish": "Bitir"
     }
   },
   "quiz_result": {

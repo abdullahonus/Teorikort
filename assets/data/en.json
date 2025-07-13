@@ -197,6 +197,12 @@
       "completed": "Completed",
       "questions_remaining": "questions remaining",
       "question_counter": "Question %d/%d"
+    },
+    "question_badge": "Question %d",
+    "buttons": {
+      "previous": "Previous",
+      "next": "Next",
+      "finish": "Finish"
     }
   },
   "quiz_result": {
