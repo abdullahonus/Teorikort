@@ -63,6 +63,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
     return Scaffold(
       appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.surface,
           title: Text(
               AppLocalization.of(context).translate('auth.sign_up_title'))),
       body: SingleChildScrollView(
