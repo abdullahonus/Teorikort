@@ -1,7 +1,7 @@
 class AppConfig {
   // Environment Configuration
-  static const bool isDevelopment = false; // ✅ Development mode
-  static const bool isProduction = true; // ❌ Production mode
+  static const bool isDevelopment = true; // ✅ Development mode
+  static const bool isProduction = false; // ❌ Production mode
 
   // Mock Fallback Configuration
   // Development'da mock fallback var, Production'da yok
