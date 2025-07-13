@@ -291,22 +291,123 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildDailyTipSection(BuildContext context) {
-    return FutureBuilder<DailyTip>(
+    return FutureBuilder<DailyTip?>(
       future: DailyTipService().getDailyTip(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.secondary.withOpacity(0.3),
+              ),
+            ),
+            child: const Center(child: CircularProgressIndicator()),
+          );
         }
 
-        final tip = snapshot.data ??
-            DailyTip(
-              id: 1,
-              title: AppLocalization.of(context).translate('home.daily_tip'),
-              content:
-                  AppLocalization.of(context).translate('home.tip_content'),
-              category: 'safety',
-              icon: 'safety',
-            );
+        if (snapshot.hasError) {
+          return Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.error.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.error.withOpacity(0.3),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.error,
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      AppLocalization.of(context)
+                              .translate('home.daily_tip_error') ??
+                          'Daily Tip Error',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  AppLocalization.of(context)
+                          .translate('home.tip_load_error') ??
+                      'Unable to load daily tip. Please try again later.',
+                  style: TextStyle(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.7),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        final tip = snapshot.data;
+        if (tip == null) {
+          return Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.secondary.withOpacity(0.3),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.lightbulb,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      AppLocalization.of(context).translate('home.daily_tip') ??
+                          'Daily Tip',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  AppLocalization.of(context)
+                          .translate('home.no_tip_available') ??
+                      'No tip available today. Check back later!',
+                  style: TextStyle(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.7),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        final currentLanguage = AppLocalization.of(context).locale.languageCode;
+        final tipTitle = tip.getTitle(currentLanguage);
+        final tipContent = tip.getContent(currentLanguage);
 
         return Container(
           padding: const EdgeInsets.all(16),
@@ -327,18 +428,20 @@ class HomeScreen extends StatelessWidget {
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    tip.title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      tipTitle,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
-                tip.content,
+                tipContent,
                 style: TextStyle(
                   color:
                       Theme.of(context).colorScheme.onSurface.withOpacity(0.7),

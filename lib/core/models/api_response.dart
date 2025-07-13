@@ -3,12 +3,14 @@ class ApiResponse<T> {
   final String? message;
   final T? data;
   final int statusCode;
+  final Map<String, dynamic>? pagination;
 
   ApiResponse({
     required this.success,
     this.message,
     this.data,
     required this.statusCode,
+    this.pagination,
   });
 
   factory ApiResponse.fromJson(
@@ -23,8 +25,12 @@ class ApiResponse<T> {
       data:
           data != null && data is Map<String, dynamic> ? fromJson(data) : null,
       statusCode: statusCode,
+      pagination: json['pagination'] as Map<String, dynamic>?,
     );
   }
 
-  bool get isSuccess => success && statusCode == 200 && data != null;
+  bool get isSuccess =>
+      success &&
+      statusCode == 100 &&
+      data != null; // Updated to use 100 for backend compatibility
 }

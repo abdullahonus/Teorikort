@@ -12,7 +12,7 @@ class LeaderboardScreen extends StatefulWidget {
 
 class _LeaderboardScreenState extends State<LeaderboardScreen> {
   final LeaderboardService _leaderboardService = LeaderboardService();
-  late Future<List<LeaderboardEntry>> _leaderboardFuture;
+  late Future<List<LeaderboardEntry>?> _leaderboardFuture;
 
   @override
   void initState() {
@@ -22,7 +22,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
   void _loadLeaderboard() {
     setState(() {
-      _leaderboardFuture = _leaderboardService.getLeaderboard();
+      _leaderboardFuture = _leaderboardService
+          .getLeaderboard()
+          .then((response) => response.data?.leaderboard);
     });
   }
 
@@ -52,7 +54,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           ),
         ],
       ),
-      body: FutureBuilder<List<LeaderboardEntry>>(
+      body: FutureBuilder<List<LeaderboardEntry>?>(
         future: _leaderboardFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -66,12 +68,21 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: colorScheme.error.withOpacity(0.5),
+                  ),
+                  const SizedBox(height: 16),
                   Text(
                     AppLocalization.of(context)
-                        .translate('leaderboard.error_message'),
+                            .translate('leaderboard.error_message') ??
+                        'Unable to load leaderboard',
                     style: TextStyle(
                       color: colorScheme.onSurface.withOpacity(0.6),
+                      fontSize: 16,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
                   TextButton.icon(
@@ -79,7 +90,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                     icon: Icon(Icons.refresh, color: colorScheme.primary),
                     label: Text(
                       AppLocalization.of(context)
-                          .translate('leaderboard.refresh'),
+                              .translate('leaderboard.refresh') ??
+                          'Refresh',
                       style: TextStyle(color: colorScheme.primary),
                     ),
                   ),
@@ -88,14 +100,40 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             );
           }
 
-          final entries = snapshot.data!;
-          if (entries.isEmpty) {
+          final entries = snapshot.data;
+          if (entries == null || entries.isEmpty) {
             return Center(
-              child: Text(
-                AppLocalization.of(context).translate('leaderboard.no_data'),
-                style: TextStyle(
-                  color: colorScheme.onSurface.withOpacity(0.6),
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.emoji_events_outlined,
+                    size: 64,
+                    color: colorScheme.onSurface.withOpacity(0.3),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    AppLocalization.of(context)
+                            .translate('leaderboard.no_data') ??
+                        'No leaderboard data available',
+                    style: TextStyle(
+                      color: colorScheme.onSurface.withOpacity(0.6),
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    AppLocalization.of(context)
+                            .translate('leaderboard.take_exams_first') ??
+                        'Take some exams to see rankings',
+                    style: TextStyle(
+                      color: colorScheme.onSurface.withOpacity(0.5),
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             );
           }

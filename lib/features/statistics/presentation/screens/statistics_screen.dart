@@ -13,7 +13,7 @@ class StatisticsScreen extends StatefulWidget {
 
 class StatisticsScreenState extends State<StatisticsScreen> {
   final StatisticsService _statisticsService = StatisticsService();
-  late Future<StatisticsData> _statisticsDataFuture;
+  late Future<StatisticsData?> _statisticsDataFuture;
   late Future<Map<String, dynamic>> _stringsDataFuture;
 
   @override
@@ -24,7 +24,9 @@ class StatisticsScreenState extends State<StatisticsScreen> {
 
   void loadData() {
     setState(() {
-      _statisticsDataFuture = _statisticsService.getStatisticsData();
+      _statisticsDataFuture = _statisticsService
+          .getStatisticsData()
+          .then((response) => response.data);
       _stringsDataFuture = StringsService.getStatisticsStrings();
     });
   }
@@ -54,19 +56,29 @@ class StatisticsScreenState extends State<StatisticsScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 64,
+                      color: colorScheme.error.withOpacity(0.5),
+                    ),
+                    const SizedBox(height: 16),
                     Text(
                       AppLocalization.of(context)
-                          .translate('statistics.error_message'),
+                              .translate('statistics.error_message') ??
+                          'Unable to load statistics',
                       style: TextStyle(
                         color: colorScheme.onSurface.withOpacity(0.6),
+                        fontSize: 16,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
                     TextButton.icon(
                       onPressed: loadData,
                       icon: Icon(Icons.refresh, color: colorScheme.primary),
                       label: Text(
-                        AppLocalization.of(context).translate('common.retry'),
+                        AppLocalization.of(context).translate('common.retry') ??
+                            'Retry',
                         style: TextStyle(color: colorScheme.primary),
                       ),
                     ),
@@ -75,8 +87,45 @@ class StatisticsScreenState extends State<StatisticsScreen> {
               );
             }
 
-            final statistics = snapshot.data![0] as StatisticsData;
+            final statistics = snapshot.data![0] as StatisticsData?;
             final strings = snapshot.data![1] as Map<String, dynamic>;
+
+            if (statistics == null) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.analytics_outlined,
+                      size: 64,
+                      color: colorScheme.onSurface.withOpacity(0.3),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      AppLocalization.of(context)
+                              .translate('statistics.no_data') ??
+                          'No statistics available',
+                      style: TextStyle(
+                        color: colorScheme.onSurface.withOpacity(0.6),
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      AppLocalization.of(context)
+                              .translate('statistics.take_exams_first') ??
+                          'Take some exams to see your statistics',
+                      style: TextStyle(
+                        color: colorScheme.onSurface.withOpacity(0.5),
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              );
+            }
 
             return ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),

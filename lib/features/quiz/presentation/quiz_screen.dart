@@ -69,16 +69,16 @@ class _QuizScreenState extends State<QuizScreen> {
       final convertedQuestions = widget.questions!.map((q) {
         return QuizQuestion(
           id: q['id'] as String,
-          question: q['question'] as String,
+          question: _convertToMultiLang(q['question']),
           imageUrl: q['image_url'] as String?,
           options: (q['options'] as List<dynamic>).asMap().entries.map((entry) {
             return Option(
               id: entry.key.toString(),
-              text: entry.value as String,
+              text: _convertToMultiLang(entry.value),
             );
           }).toList(),
           correctAnswer: q['correct_answer'].toString(),
-          explanation: q['explanation'] as String,
+          explanation: _convertToMultiLang(q['explanation']),
         );
       }).toList();
 
@@ -92,6 +92,22 @@ class _QuizScreenState extends State<QuizScreen> {
         isLoading = false;
       });
     }
+  }
+
+  // Helper method to convert string to multi-language map for compatibility
+  Map<String, String> _convertToMultiLang(dynamic field) {
+    if (field is Map<String, dynamic>) {
+      return field.map((key, value) => MapEntry(key, value?.toString() ?? ''));
+    } else if (field is String) {
+      return {'tr': field, 'en': field}; // Fallback for old format
+    }
+    return {'tr': field?.toString() ?? '', 'en': field?.toString() ?? ''};
+  }
+
+  // Helper method to get text in current language
+  String _getLocalizedText(Map<String, String> textMap) {
+    final currentLanguage = AppLocalization.of(context).locale.languageCode;
+    return textMap[currentLanguage] ?? textMap['tr'] ?? textMap.values.first;
   }
 
   @override
@@ -153,7 +169,7 @@ class _QuizScreenState extends State<QuizScreen> {
           await _quizService.loadQuizQuestions(widget.category);
       if (mounted) {
         setState(() {
-          questions = loadedQuestions;
+          questions = loadedQuestions.data ?? [];
           isLoading = false;
         });
       }
@@ -331,7 +347,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    currentQuestion.question,
+                    _getLocalizedText(currentQuestion.question),
                     style: theme.textTheme.titleMedium?.copyWith(
                       color: colorScheme.onSurface,
                       height: 1.5,
@@ -487,7 +503,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: Text(
-                    option.text,
+                    _getLocalizedText(option.text),
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: isSelected
                           ? colorScheme.onPrimary

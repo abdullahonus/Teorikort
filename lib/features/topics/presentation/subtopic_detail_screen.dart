@@ -18,6 +18,12 @@ class SubtopicDetailScreen extends StatefulWidget {
 }
 
 class _SubtopicDetailScreenState extends State<SubtopicDetailScreen> {
+  // Helper method to get text in current language
+  String _getLocalizedText(Map<String, String> textMap) {
+    final currentLanguage = AppLocalization.of(context).locale.languageCode;
+    return textMap[currentLanguage] ?? textMap['tr'] ?? textMap.values.first;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -33,7 +39,7 @@ class _SubtopicDetailScreenState extends State<SubtopicDetailScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          widget.subTopic.title,
+          _getLocalizedText(widget.subTopic.title),
           style: theme.textTheme.titleLarge,
         ),
       ),
@@ -53,7 +59,7 @@ class _SubtopicDetailScreenState extends State<SubtopicDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.subTopic.title,
+            _getLocalizedText(widget.subTopic.title),
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -62,7 +68,7 @@ class _SubtopicDetailScreenState extends State<SubtopicDetailScreen> {
           ),
           const SizedBox(height: 16),
           Html(
-            data: widget.subTopic.content,
+            data: _getLocalizedText(widget.subTopic.content),
             style: {
               "body": Style(
                 fontSize: FontSize(16),

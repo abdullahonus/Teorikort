@@ -12,6 +12,12 @@ class WrongAnswersReviewScreen extends StatelessWidget {
     required this.userAnswers,
   });
 
+  // Helper method to get text in current language
+  String _getLocalizedText(BuildContext context, Map<String, String> textMap) {
+    final currentLanguage = AppLocalization.of(context).locale.languageCode;
+    return textMap[currentLanguage] ?? textMap['tr'] ?? textMap.values.first;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -54,12 +60,21 @@ class WrongAnswersReviewScreen extends StatelessWidget {
                     (option) => option.id == userAnswerId,
                     orElse: () => Option(
                       id: '',
-                      text: AppLocalization.of(context)
-                          .translate('topics.no_answer'),
+                      text: {
+                        'tr': AppLocalization.of(context)
+                                .translate('topics.no_answer') ??
+                            'Cevap yok',
+                        'en': 'No answer'
+                      },
                     ),
                   )
                   .text
-              : AppLocalization.of(context).translate('topics.no_answer');
+              : {
+                  'tr': AppLocalization.of(context)
+                          .translate('topics.no_answer') ??
+                      'Cevap yok',
+                  'en': 'No answer'
+                };
 
           // Find the correct option text
           final correctAnswerText = question.options
@@ -130,7 +145,7 @@ class WrongAnswersReviewScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        question.question,
+                        _getLocalizedText(context, question.question),
                         style: theme.textTheme.titleMedium?.copyWith(
                           height: 1.5,
                         ),
@@ -140,7 +155,7 @@ class WrongAnswersReviewScreen extends StatelessWidget {
                         context,
                         AppLocalization.of(context)
                             .translate('topics.your_answer'),
-                        userAnswerText,
+                        _getLocalizedText(context, userAnswerText),
                         colorScheme.error,
                         Icons.close,
                       ),
@@ -149,7 +164,7 @@ class WrongAnswersReviewScreen extends StatelessWidget {
                         context,
                         AppLocalization.of(context)
                             .translate('topics.correct_answer'),
-                        correctAnswerText,
+                        _getLocalizedText(context, correctAnswerText),
                         colorScheme.primary,
                         Icons.check_circle,
                       ),

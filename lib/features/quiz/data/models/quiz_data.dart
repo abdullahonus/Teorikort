@@ -50,11 +50,12 @@ class ExamInfo {
 
 class QuizQuestion {
   final String id;
-  final String question;
+  final Map<String, String> question; // Multi-language support
   final String? imageUrl;
   final List<Option> options;
   final String correctAnswer;
-  final String explanation;
+  final Map<String, String> explanation; // Multi-language support
+  final String? difficulty;
 
   QuizQuestion({
     required this.id,
@@ -63,25 +64,49 @@ class QuizQuestion {
     required this.options,
     required this.correctAnswer,
     required this.explanation,
+    this.difficulty,
   });
 
   factory QuizQuestion.fromJson(Map<String, dynamic> json) {
     return QuizQuestion(
       id: json['id'] ?? '',
-      question: json['question'] ?? '',
+      question: _parseMultiLangField(json['question']),
       imageUrl: json['image_url'],
       options: (json['options'] as List? ?? [])
           .map((option) => Option.fromJson(option ?? {}))
           .toList(),
       correctAnswer: json['correct_answer'] ?? '',
-      explanation: json['explanation'] ?? '',
+      explanation: _parseMultiLangField(json['explanation']),
+      difficulty: json['difficulty'],
     );
+  }
+
+  // Helper method to get text in specific language
+  String getQuestion([String language = 'tr']) {
+    return question[language] ?? question['tr'] ?? question.values.first;
+  }
+
+  String getExplanation([String language = 'tr']) {
+    return explanation[language] ??
+        explanation['tr'] ??
+        explanation.values.first;
+  }
+
+  // Helper method to parse multi-language fields from API
+  static Map<String, String> _parseMultiLangField(dynamic field) {
+    if (field is Map<String, dynamic>) {
+      return field.map((key, value) => MapEntry(key, value?.toString() ?? ''));
+    } else if (field is String) {
+      // Fallback for single language (backwards compatibility)
+      return {'tr': field};
+    }
+    return {'tr': ''};
   }
 }
 
 class Option {
   final String id;
-  final String text;
+  final Map<String, String> text; // Multi-language support
   final String? imageUrl;
 
   Option({
@@ -93,8 +118,13 @@ class Option {
   factory Option.fromJson(Map<String, dynamic> json) {
     return Option(
       id: json['id'] ?? '',
-      text: json['text'] ?? '',
+      text: QuizQuestion._parseMultiLangField(json['text']),
       imageUrl: json['image_url'],
     );
+  }
+
+  // Helper method to get text in specific language
+  String getText([String language = 'tr']) {
+    return text[language] ?? text['tr'] ?? text.values.first;
   }
 }

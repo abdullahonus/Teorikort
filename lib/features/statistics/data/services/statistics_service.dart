@@ -1,157 +1,153 @@
-import 'package:driving_license_exam/core/services/json_service.dart';
-import 'package:driving_license_exam/features/exam/data/services/exam_result_service.dart';
-import 'package:driving_license_exam/features/exam/data/models/exam_result.dart';
-import '../models/statistics_data.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import '../../../../core/services/base_api_service.dart';
+import '../../../../core/constants/api_constants.dart';
+import '../../../../core/models/api_response.dart';
+import '../models/statistics_data.dart';
 
-class StatisticsService {
-  final ExamResultService _examResultService = ExamResultService();
-
-  Future<int> getTotalExamsCount() async {
+class StatisticsService extends BaseApiService {
+  // Get user statistics from API with fallback to mock data
+  Future<ApiResponse<StatisticsData>> getStatisticsData({
+    BuildContext? context,
+  }) async {
     try {
-      final Map<String, dynamic> data =
-          await JsonService.loadJson('exams_data.json');
-      final List<dynamic> categories = data['categories'];
+      final language = getCurrentLanguage(context);
 
-      int totalExams = 0;
-      for (var category in categories) {
-        final List<dynamic> exams = category['exams'];
-        totalExams += exams.length;
+      // Try API first
+      try {
+        final response = await handleResponse<StatisticsData>(
+          get(
+            ApiConstants.statistics,
+            language: language,
+          ),
+          StatisticsData.fromJson,
+        );
+
+        if (response.success && response.data != null) {
+          return response;
+        }
+      } catch (apiError) {
+        print(
+            'Statistics API çağrısı başarısız, mock verilere geçiliyor: $apiError');
       }
 
-      return totalExams;
+      // Fallback to mock data
+      return await _loadMockStatistics();
     } catch (e) {
-      print('Error getting total exams count: $e');
-      return 0;
+      return await _loadMockStatistics();
     }
   }
 
-  Future<StatisticsData> getStatisticsData() async {
+  // Load mock statistics from assets
+  Future<ApiResponse<StatisticsData>> _loadMockStatistics() async {
     try {
-      // Get all exam results
-      final examResults = await _examResultService.getExamResults();
-      final totalAvailableExams = await getTotalExamsCount();
+      final String jsonString =
+          await rootBundle.loadString('assets/data/statistics_data.json');
+      final Map<String, dynamic> jsonData = json.decode(jsonString);
 
-      if (examResults.isEmpty) {
-        // Varsayılan kategorileri oluştur
-        final defaultCategories = [
-          'traffic_signs',
-          'traffic_rules',
-          'first_aid',
-          'vehicle_tech'
-        ];
+      final statisticsData = StatisticsData.fromJson(jsonData);
 
-        final defaultCategoryPerformance = defaultCategories.map((categoryId) {
-          return CategoryPerformance(
-            categoryId: categoryId,
-            name: _getCategoryName(categoryId),
-            examsTaken: 0,
-            averageScore: 0,
-            bestScore: 0,
-            progress: 0,
-            weakAreas: [],
-            strongAreas: [],
-          );
-        }).toList();
-
-        return StatisticsData(
-          overallStats: OverallStats(
-            totalExamsTaken: 0,
-            totalAvailableExams: totalAvailableExams,
-            averageScore: 0,
-            bestScore: 0,
-            totalStudyTime: 0,
-            totalQuestionsAnswered: 0,
-            correctAnswersRate: 0,
-          ),
-          categoryPerformance: defaultCategoryPerformance,
-          recentExams: [],
-        );
-      }
-
-      // Calculate overall stats
-      final totalExams = examResults.length;
-      final totalQuestions = examResults.fold<int>(
-          0, (sum, result) => sum + result.totalQuestions);
-      final totalCorrect = examResults.fold<int>(
-          0, (sum, result) => sum + result.correctAnswers);
-      final totalTime = examResults.fold<Duration>(
-          Duration.zero, (sum, result) => sum + result.duration);
-
-      final averageScore = (examResults.fold<double>(
-                  0, (sum, result) => sum + result.scorePercentage) /
-              totalExams)
-          .round();
-
-      final bestScore = examResults
-          .map((result) => result.scorePercentage.round())
-          .reduce((max, score) => score > max ? score : max);
-
-      // Group results by category
-      final resultsByCategory = <String, List<ExamResult>>{};
-      for (final result in examResults) {
-        resultsByCategory.putIfAbsent(result.category, () => []).add(result);
-      }
-
-      // Calculate category performance
-      final categoryPerformance = resultsByCategory.entries.map((entry) {
-        final categoryResults = entry.value;
-        final categoryAverage = (categoryResults.fold<double>(
-                    0, (sum, result) => sum + result.scorePercentage) /
-                categoryResults.length)
-            .round();
-        final categoryBest = categoryResults
-            .map((result) => result.scorePercentage.round())
-            .reduce((max, score) => score > max ? score : max);
-
-        return CategoryPerformance(
-          categoryId: entry.key,
-          name: _getCategoryName(entry.key),
-          examsTaken: categoryResults.length,
-          averageScore: categoryAverage,
-          bestScore: categoryBest,
-          progress: categoryAverage,
-          weakAreas: [],
-          strongAreas: [],
-        );
-      }).toList();
-
-      // Get recent exams (last 5)
-      final recentExams = examResults.reversed.take(5).map((result) {
-        return RecentExam(
-          id: result.completedAt.millisecondsSinceEpoch.toString(),
-          title: _getCategoryName(result.category),
-          category: result.category,
-          completedAt: result.completedAt.toIso8601String(),
-          score: result.scorePercentage.round(),
-          durationMinutes: result.duration.inMinutes,
-          correctAnswers: result.correctAnswers,
-          totalQuestions: result.totalQuestions,
-          improvement: '',
-        );
-      }).toList();
-
-      return StatisticsData(
-        overallStats: OverallStats(
-          totalExamsTaken: totalExams,
-          totalAvailableExams: totalAvailableExams,
-          averageScore: averageScore,
-          bestScore: bestScore,
-          totalStudyTime: totalTime.inMinutes,
-          totalQuestionsAnswered: totalQuestions,
-          correctAnswersRate: totalQuestions > 0
-              ? ((totalCorrect / totalQuestions) * 100).round()
-              : 0,
-        ),
-        categoryPerformance: categoryPerformance,
-        recentExams: recentExams,
+      return ApiResponse<StatisticsData>(
+        success: true,
+        statusCode: 100,
+        message: 'Mock istatistikler başarıyla yüklendi',
+        data: statisticsData,
       );
     } catch (e) {
-      print('Error calculating statistics: $e');
-      rethrow;
+      // Create default empty statistics if mock data fails
+      final defaultStats = StatisticsData(
+        overallStats: OverallStats(
+          totalExamsTaken: 0,
+          totalAvailableExams: 12,
+          averageScore: 0,
+          bestScore: 0,
+          totalStudyTime: 0,
+          totalQuestionsAnswered: 0,
+          correctAnswersRate: 0,
+        ),
+        categoryPerformance: [],
+        recentExams: [],
+      );
+
+      return ApiResponse<StatisticsData>(
+        success: true,
+        statusCode: 100,
+        message: 'Varsayılan istatistikler yüklendi',
+        data: defaultStats,
+      );
     }
   }
 
+  // Get category statistics with fallback
+  Future<ApiResponse<CategoryStatistics>> getCategoryStatistics(
+    String categoryId, {
+    BuildContext? context,
+  }) async {
+    try {
+      final language = getCurrentLanguage(context);
+
+      // Try API first
+      try {
+        final response = await handleResponse<CategoryStatistics>(
+          get(
+            ApiConstants.categoryStatistics(categoryId),
+            language: language,
+          ),
+          CategoryStatistics.fromJson,
+        );
+
+        if (response.success && response.data != null) {
+          return response;
+        }
+      } catch (apiError) {
+        print(
+            'Category statistics API çağrısı başarısız, mock verilere geçiliyor: $apiError');
+      }
+
+      // Fallback to mock data
+      return await _loadMockCategoryStatistics(categoryId);
+    } catch (e) {
+      return await _loadMockCategoryStatistics(categoryId);
+    }
+  }
+
+  // Load mock category statistics
+  Future<ApiResponse<CategoryStatistics>> _loadMockCategoryStatistics(
+      String categoryId) async {
+    try {
+      // Create default category statistics
+      final defaultCategoryStats = CategoryStatistics(
+        categoryId: categoryId,
+        categoryName: _getCategoryName(categoryId),
+        totalQuestions: 20,
+        completedQuestions: 0,
+        correctAnswers: 0,
+        averageScore: 0,
+        bestScore: 0,
+        lastAttempt: null,
+        weakTopics: [],
+        strongTopics: [],
+        timeSpentMinutes: 0,
+        improvementTrend: 'stable',
+      );
+
+      return ApiResponse<CategoryStatistics>(
+        success: true,
+        statusCode: 100,
+        message: 'Varsayılan kategori istatistikleri yüklendi',
+        data: defaultCategoryStats,
+      );
+    } catch (e) {
+      return ApiResponse<CategoryStatistics>(
+        success: false,
+        statusCode: 500,
+        message: 'Kategori istatistikleri yüklenemedi: $e',
+      );
+    }
+  }
+
+  // Helper method to get category name
   String _getCategoryName(String categoryId) {
     switch (categoryId) {
       case 'traffic_signs':
@@ -163,7 +159,57 @@ class StatisticsService {
       case 'vehicle_tech':
         return 'Araç Tekniği';
       default:
-        return categoryId;
+        return 'Bilinmeyen Kategori';
     }
+  }
+}
+
+// Category statistics model (if not already defined)
+class CategoryStatistics {
+  final String categoryId;
+  final String categoryName;
+  final int totalQuestions;
+  final int completedQuestions;
+  final int correctAnswers;
+  final double averageScore;
+  final double bestScore;
+  final DateTime? lastAttempt;
+  final List<String> weakTopics;
+  final List<String> strongTopics;
+  final int timeSpentMinutes;
+  final String improvementTrend;
+
+  CategoryStatistics({
+    required this.categoryId,
+    required this.categoryName,
+    required this.totalQuestions,
+    required this.completedQuestions,
+    required this.correctAnswers,
+    required this.averageScore,
+    required this.bestScore,
+    this.lastAttempt,
+    required this.weakTopics,
+    required this.strongTopics,
+    required this.timeSpentMinutes,
+    required this.improvementTrend,
+  });
+
+  factory CategoryStatistics.fromJson(Map<String, dynamic> json) {
+    return CategoryStatistics(
+      categoryId: json['category_id'] ?? '',
+      categoryName: json['category_name'] ?? '',
+      totalQuestions: json['total_questions'] ?? 0,
+      completedQuestions: json['completed_questions'] ?? 0,
+      correctAnswers: json['correct_answers'] ?? 0,
+      averageScore: (json['average_score'] ?? 0).toDouble(),
+      bestScore: (json['best_score'] ?? 0).toDouble(),
+      lastAttempt: json['last_attempt'] != null
+          ? DateTime.parse(json['last_attempt'])
+          : null,
+      weakTopics: List<String>.from(json['weak_topics'] ?? []),
+      strongTopics: List<String>.from(json['strong_topics'] ?? []),
+      timeSpentMinutes: json['time_spent_minutes'] ?? 0,
+      improvementTrend: json['improvement_trend'] ?? 'stable',
+    );
   }
 }

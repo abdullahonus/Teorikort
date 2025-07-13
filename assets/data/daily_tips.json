@@ -2,71 +2,131 @@
   "tips": [
     {
       "id": 1,
-      "title": "Güvenli Takip Mesafesi",
-      "content": "Önünüzdeki araçla aranızda en az 3 saniyelik mesafe bırakın. Yağmurlu ve karlı havalarda bu mesafeyi 5 saniyeye çıkarın.",
+      "title": {
+        "tr": "Güvenli Takip Mesafesi",
+        "en": "Safe Following Distance"
+      },
+      "content": {
+        "tr": "Önünüzdeki araçla aranızda en az 3 saniyelik mesafe bırakın. Yağmurlu ve karlı havalarda bu mesafeyi 5 saniyeye çıkarın.",
+        "en": "Keep at least 3 seconds distance between you and the vehicle ahead. Increase this distance to 5 seconds in rainy and snowy weather."
+      },
       "category": "traffic_rules",
       "icon": "follow_distance"
     },
     {
       "id": 2,
-      "title": "Kör Nokta Kontrolü",
-      "content": "Şerit değiştirmeden önce dikiz aynalarından kontrol etmenin yanı sıra, omuz üstünden de kör nokta kontrolü yapın.",
+      "title": {
+        "tr": "Kör Nokta Kontrolü",
+        "en": "Blind Spot Check"
+      },
+      "content": {
+        "tr": "Şerit değiştirmeden önce dikiz aynalarından kontrol etmenin yanı sıra, omuz üstünden de kör nokta kontrolü yapın.",
+        "en": "Before changing lanes, check your rearview mirrors and also perform a blind spot check over your shoulder."
+      },
       "category": "safety",
       "icon": "blind_spot"
     },
     {
       "id": 3,
-      "title": "Yaya Geçidi Kuralı",
-      "content": "Yaya geçidine yaklaşırken hızınızı düşürün ve yayalara her zaman geçiş önceliği verin.",
+      "title": {
+        "tr": "Yaya Geçidi Kuralı",
+        "en": "Pedestrian Crossing Rule"
+      },
+      "content": {
+        "tr": "Yaya geçidine yaklaşırken hızınızı düşürün ve yayalara her zaman geçiş önceliği verin.",
+        "en": "Slow down when approaching pedestrian crossings and always give priority to pedestrians."
+      },
       "category": "traffic_rules",
       "icon": "pedestrian"
     },
     {
       "id": 4,
-      "title": "Sinyal Kullanımı",
-      "content": "Dönüşlerden en az 150 metre önce sinyal vermeye başlayın ve dönüşü tamamlayana kadar sinyali açık tutun.",
+      "title": {
+        "tr": "Sinyal Kullanımı",
+        "en": "Signal Usage"
+      },
+      "content": {
+        "tr": "Dönüşlerden en az 150 metre önce sinyal vermeye başlayın ve dönüşü tamamlayana kadar sinyali açık tutun.",
+        "en": "Start signaling at least 150 meters before turns and keep the signal on until the turn is completed."
+      },
       "category": "traffic_rules",
       "icon": "signal"
     },
     {
       "id": 5,
-      "title": "Lastik Kontrolü",
-      "content": "Lastik basıncını ayda bir kez kontrol edin. Doğru lastik basıncı yakıt tasarrufu sağlar ve güvenliği artırır.",
+      "title": {
+        "tr": "Lastik Kontrolü",
+        "en": "Tire Check"
+      },
+      "content": {
+        "tr": "Lastik basıncını ayda bir kez kontrol edin. Doğru lastik basıncı yakıt tasarrufu sağlar ve güvenliği artırır.",
+        "en": "Check tire pressure once a month. Proper tire pressure saves fuel and increases safety."
+      },
       "category": "maintenance",
       "icon": "tire"
     },
     {
       "id": 6,
-      "title": "Kavşak Yaklaşımı",
-      "content": "Kavşaklara yaklaşırken hızınızı düşürün ve sağınızı-solunuzu kontrol edin, gerektiğinde tamamen durun.",
+      "title": {
+        "tr": "Kavşak Yaklaşımı",
+        "en": "Intersection Approach"
+      },
+      "content": {
+        "tr": "Kavşaklara yaklaşırken hızınızı düşürün ve sağınızı-solunuzu kontrol edin, gerektiğinde tamamen durun.",
+        "en": "Slow down when approaching intersections and check left and right, come to a complete stop when necessary."
+      },
       "category": "traffic_rules",
       "icon": "intersection"
     },
     {
       "id": 7,
-      "title": "Gece Sürüşü",
-      "content": "Gece sürüşlerinde karşıdan gelen araç yoksa uzun farları kullanın, araç yaklaşınca kısa farlara geçin.",
+      "title": {
+        "tr": "Gece Sürüşü",
+        "en": "Night Driving"
+      },
+      "content": {
+        "tr": "Gece sürüşlerinde karşıdan gelen araç yoksa uzun farları kullanın, araç yaklaşınca kısa farlara geçin.",
+        "en": "Use high beams when driving at night if there are no oncoming vehicles, switch to low beams when vehicles approach."
+      },
       "category": "safety",
       "icon": "night_driving"
     },
     {
       "id": 8,
-      "title": "Park Etme",
-      "content": "Park ederken aracınızla kaldırım arasında en fazla 30 cm mesafe bırakın ve direksiyonu kaldırıma doğru kırın.",
+      "title": {
+        "tr": "Park Etme",
+        "en": "Parking"
+      },
+      "content": {
+        "tr": "Park ederken aracınızla kaldırım arasında en fazla 30 cm mesafe bırakın ve direksiyonu kaldırıma doğru kırın.",
+        "en": "When parking, leave a maximum of 30 cm distance between your vehicle and the curb and turn the steering wheel towards the curb."
+      },
       "category": "parking",
       "icon": "parking"
     },
     {
       "id": 9,
-      "title": "Hız Limitleri",
-      "content": "Şehir içinde azami hız 50 km/s, şehirlerarası yollarda 90 km/s, otoyollarda 120 km/s'dir.",
+      "title": {
+        "tr": "Hız Limitleri",
+        "en": "Speed Limits"
+      },
+      "content": {
+        "tr": "Şehir içinde azami hız 50 km/s, şehirlerarası yollarda 90 km/s, otoyollarda 120 km/s'dir.",
+        "en": "Maximum speed is 50 km/h in urban areas, 90 km/h on intercity roads, and 120 km/h on highways."
+      },
       "category": "traffic_rules",
       "icon": "speed_limit"
     },
     {
       "id": 10,
-      "title": "Emniyet Kemeri",
-      "content": "Emniyet kemerini sadece sürücü değil, araçtaki tüm yolcular takmalıdır. Bu bir zorunluluktur.",
+      "title": {
+        "tr": "Emniyet Kemeri",
+        "en": "Seat Belt"
+      },
+      "content": {
+        "tr": "Emniyet kemerini sadece sürücü değil, araçtaki tüm yolcular takmalıdır. Bu bir zorunluluktur.",
+        "en": "Not only the driver but all passengers in the vehicle must wear seat belts. This is mandatory."
+      },
       "category": "safety",
       "icon": "seat_belt"
     }

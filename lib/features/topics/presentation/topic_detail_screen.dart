@@ -23,7 +23,7 @@ class TopicDetailScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          topic.title ?? "",
+          topic.getTitle(AppLocalization.of(context).locale.languageCode),
           style: theme.textTheme.titleLarge,
         ),
       ),
@@ -46,21 +46,22 @@ class TopicDetailScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          topic.title ?? "",
+          topic.getTitle(AppLocalization.of(context).locale.languageCode),
           style: theme.textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: 8),
         Text(
-          topic.description ?? "",
+          topic.getDescription(AppLocalization.of(context).locale.languageCode),
           style: theme.textTheme.bodyLarge?.copyWith(
             color: colorScheme.onSurface.withOpacity(0.8),
           ),
         ),
         const SizedBox(height: 16),
         Text(
-          AppLocalization.of(context).translate('topics.subtopics_list'),
+          AppLocalization.of(context).translate('topics.subtopics_list') ??
+              'Subtopics',
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -70,6 +71,31 @@ class TopicDetailScreen extends StatelessWidget {
   }
 
   Widget _buildSubTopicsList(BuildContext context) {
+    if (topic.subTopics.isEmpty) {
+      return Center(
+        child: Column(
+          children: [
+            const SizedBox(height: 40),
+            Icon(
+              Icons.menu_book_outlined,
+              size: 64,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              AppLocalization.of(context).translate('topics.no_subtopics') ??
+                  'No subtopics available',
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    }
+
     return Column(
       children: topic.subTopics
           .map((subTopic) => _buildSubTopicCard(context, subTopic))
@@ -113,7 +139,8 @@ class TopicDetailScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      subTopic.title ?? "",
+                      subTopic.getTitle(
+                          AppLocalization.of(context).locale.languageCode),
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: colorScheme.primary,
                       ),
@@ -121,7 +148,7 @@ class TopicDetailScreen extends StatelessWidget {
                     if (subTopic.images.isNotEmpty) ...[
                       const SizedBox(height: 4),
                       Text(
-                        '${subTopic.images.length} ${AppLocalization.of(context).translate('topics.images')}',
+                        '${subTopic.images.length} ${AppLocalization.of(context).translate('topics.images') ?? 'images'}',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
