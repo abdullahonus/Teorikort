@@ -395,8 +395,6 @@ class _QuizScreenState extends State<QuizScreen> {
                     foregroundColor: colorScheme.onSurfaceVariant,
                     disabledBackgroundColor:
                         colorScheme.surfaceVariant.withOpacity(0.5),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -414,18 +412,22 @@ class _QuizScreenState extends State<QuizScreen> {
                       });
                     }
                   },
-                  icon: Icon(currentQuestionIndex == questions.length - 1
-                      ? Icons.check
-                      : Icons.arrow_forward),
+                  icon: Icon(
+                    currentQuestionIndex == questions.length - 1
+                        ? Icons.check
+                        : Icons.arrow_forward,
+                    color: colorScheme.onPrimary,
+                  ),
                   label: Text(
                     currentQuestionIndex == questions.length - 1
                         ? AppLocalization.of(context)
                             .translate('quiz.buttons.finish')
                         : AppLocalization.of(context)
                             .translate('quiz.buttons.next'),
-                    textAlign: TextAlign.center,
                   ),
                   style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
                     backgroundColor: colorScheme.primary,
                     foregroundColor: colorScheme.onPrimary,
                     shape: RoundedRectangleBorder(

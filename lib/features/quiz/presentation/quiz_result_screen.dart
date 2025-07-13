@@ -58,7 +58,7 @@ class QuizResultScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: colorScheme.primary,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close),
