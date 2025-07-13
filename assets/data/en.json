@@ -192,7 +192,12 @@
     "favorites_removed": "Question removed from favorites",
     "previous": "Previous Question",
     "next": "Next Question",
-    "finish": "Finish Exam"
+    "finish": "Finish Exam",
+    "progress": {
+      "completed": "Completed",
+      "questions_remaining": "questions remaining",
+      "question_counter": "Question %d/%d"
+    }
   },
   "quiz_result": {
     "screen_title": "Exam Result",
@@ -200,6 +205,10 @@
     "time_up_message": "Time's Up!",
     "score_text": "Your Score",
     "correct_answers": "Correct Answers",
+    "wrong_answers": "Wrong Answers",
+    "empty_answers": "Empty Answers",
+    "detailed_results": "Detailed Results",
+    "question_unit": "question",
     "time_taken": "Time Taken",
     "minutes": "minutes",
     "seconds": "seconds",

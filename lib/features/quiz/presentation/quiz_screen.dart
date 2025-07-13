@@ -1,6 +1,7 @@
 import 'package:driving_license_exam/features/quiz/data/models/quiz_data.dart';
 import 'package:driving_license_exam/features/quiz/data/services/quiz_service.dart';
 import 'package:driving_license_exam/features/quiz/presentation/quiz_result_screen.dart';
+import 'package:driving_license_exam/features/quiz/presentation/widgets/quiz_progress_widget.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:driving_license_exam/features/quiz/presentation/widgets/question_navigation_dialog.dart';
@@ -282,7 +283,7 @@ class _QuizScreenState extends State<QuizScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.grid_view, color: colorScheme.onPrimary),
+            icon: Icon(Icons.grid_view, color: colorScheme.onSurface),
             onPressed: () {
               QuestionNavigationDialog.show(
                 context,
@@ -301,35 +302,16 @@ class _QuizScreenState extends State<QuizScreen> {
       ),
       body: Column(
         children: [
+          // 🎯 NEW: Modern Progress Widget
           Container(
             color: colorScheme.surface,
-            padding: const EdgeInsets.only(top: 12),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.timer_outlined,
-                      size: 24,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      '${remainingSeconds ~/ 60}:${(remainingSeconds % 60).toString().padLeft(2, '0')}',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                LinearProgressIndicator(
-                  value: remainingSeconds /
-                      totalSeconds, // Süre göstergesini toplam süreye göre hesapla
-                  backgroundColor: colorScheme.onPrimary.withOpacity(0.2),
-                  minHeight: 6,
-                ),
-              ],
+            child: QuizProgressWidget(
+              currentQuestion: currentQuestionIndex + 1,
+              totalQuestions: questions.length,
+              timeRemaining: Duration(seconds: remainingSeconds),
+              showTimer: true,
+              progressColor: colorScheme.primary,
+              answeredQuestions: answeredQuestions,
             ),
           ),
           Expanded(
@@ -338,14 +320,23 @@ class _QuizScreenState extends State<QuizScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Soru ${currentQuestionIndex + 1}',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: colorScheme.primary,
-                      fontWeight: FontWeight.w600,
+                  // Question Number Badge
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primaryContainer,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      'Soru ${currentQuestionIndex + 1}',
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: colorScheme.onPrimaryContainer,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 16),
                   Text(
                     _getLocalizedText(currentQuestion.question),
                     style: theme.textTheme.titleMedium?.copyWith(
@@ -369,11 +360,23 @@ class _QuizScreenState extends State<QuizScreen> {
               ),
             ),
           ),
-          Padding(
+          // Navigation Buttons
+          Container(
             padding: const EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // Previous Button
                 ElevatedButton.icon(
                   onPressed: currentQuestionIndex > 0
                       ? () {
@@ -382,28 +385,22 @@ class _QuizScreenState extends State<QuizScreen> {
                           });
                         }
                       : null,
-                  icon: Icon(Icons.arrow_back, color: colorScheme.onPrimary),
-                  label: Text(
-                    'Prev',
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      color: colorScheme.onPrimary,
-                    ),
-                  ),
+                  icon: const Icon(Icons.arrow_back),
+                  label: const Text('Önceki'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: colorScheme.primary,
-                    foregroundColor: colorScheme.onPrimary,
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
+                    backgroundColor: colorScheme.surfaceVariant,
+                    foregroundColor: colorScheme.onSurfaceVariant,
                     disabledBackgroundColor:
-                        colorScheme.surfaceContainerHighest,
+                        colorScheme.surfaceVariant.withOpacity(0.5),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
+
+                // Next/Finish Button
                 ElevatedButton.icon(
                   onPressed: () {
                     if (currentQuestionIndex == questions.length - 1) {
@@ -414,23 +411,19 @@ class _QuizScreenState extends State<QuizScreen> {
                       });
                     }
                   },
-                  label: Text(
-                    'Next',
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      color: colorScheme.onPrimary,
-                    ),
-                  ),
-                  icon: Icon(Icons.arrow_forward, color: colorScheme.onPrimary),
+                  icon: Icon(currentQuestionIndex == questions.length - 1
+                      ? Icons.check
+                      : Icons.arrow_forward),
+                  label: Text(currentQuestionIndex == questions.length - 1
+                      ? 'Bitir'
+                      : 'Sonraki'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.primary,
                     foregroundColor: colorScheme.onPrimary,
-                    elevation: 0,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
-                    ),
+                        horizontal: 20, vertical: 12),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                 ),

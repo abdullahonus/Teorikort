@@ -180,7 +180,12 @@
     "favorites_removed": "Soru favorilerden çıkarıldı",
     "previous": "Önceki Soru",
     "next": "Sonraki Soru",
-    "finish": "Sınavı Bitir"
+    "finish": "Sınavı Bitir",
+    "progress": {
+      "completed": "Tamamlandı",
+      "questions_remaining": "soru kaldı",
+      "question_counter": "Soru %d/%d"
+    }
   },
   "quiz_result": {
     "screen_title": "Sınav Sonucu",
@@ -188,6 +193,10 @@
     "time_up_message": "Süre Doldu!",
     "score_text": "Puanınız",
     "correct_answers": "Doğru Cevaplar",
+    "wrong_answers": "Yanlış Cevaplar",
+    "empty_answers": "Boş Bırakılan",
+    "detailed_results": "Detaylı Sonuçlar",
+    "question_unit": "soru",
     "time_taken": "Geçen Süre",
     "minutes": "dakika",
     "seconds": "saniye",

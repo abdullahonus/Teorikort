@@ -36,9 +36,22 @@ class QuizResultScreen extends StatelessWidget {
     }
   }
 
+  int _getEmptyAnswersCount() {
+    int emptyCount = 0;
+    for (int i = 0; i < totalQuestions; i++) {
+      if (!userAnswers.containsKey(i) || userAnswers[i] == null) {
+        emptyCount++;
+      }
+    }
+    return emptyCount;
+  }
+
   @override
   Widget build(BuildContext context) {
     final percentage = (correctAnswers / totalQuestions * 100).round();
+    final wrongAnswers =
+        totalQuestions - correctAnswers - _getEmptyAnswersCount();
+    final emptyAnswers = _getEmptyAnswersCount();
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -123,24 +136,74 @@ class QuizResultScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 32),
-                      _buildResultItem(
-                        context,
-                        AppLocalization.of(context)
-                            .translate('quiz_result.correct_answers'),
-                        '$correctAnswers/$totalQuestions',
-                        Icons.check_circle,
-                        percentage >= 70
-                            ? colorScheme.primary
-                            : colorScheme.error,
-                      ),
-                      const SizedBox(height: 16),
-                      _buildResultItem(
-                        context,
-                        AppLocalization.of(context)
-                            .translate('quiz_result.time_taken'),
-                        _formatDuration(context, totalTime),
-                        Icons.timer,
-                        colorScheme.primary,
+
+                      // Detailed Results Section
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: colorScheme.surfaceVariant.withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              AppLocalization.of(context)
+                                  .translate('quiz_result.detailed_results'),
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: colorScheme.onSurface,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+
+                            // Correct Answers
+                            _buildResultItem(
+                              context,
+                              AppLocalization.of(context)
+                                  .translate('quiz_result.correct_answers'),
+                              '$correctAnswers ${AppLocalization.of(context).translate('quiz_result.question_unit')}',
+                              Icons.check_circle,
+                              Colors.green,
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Wrong Answers
+                            if (wrongAnswers > 0) ...[
+                              _buildResultItem(
+                                context,
+                                AppLocalization.of(context)
+                                    .translate('quiz_result.wrong_answers'),
+                                '$wrongAnswers ${AppLocalization.of(context).translate('quiz_result.question_unit')}',
+                                Icons.cancel,
+                                Colors.red,
+                              ),
+                              const SizedBox(height: 12),
+                            ],
+
+                            // Empty Answers
+                            if (emptyAnswers > 0) ...[
+                              _buildResultItem(
+                                context,
+                                AppLocalization.of(context)
+                                    .translate('quiz_result.empty_answers'),
+                                '$emptyAnswers ${AppLocalization.of(context).translate('quiz_result.question_unit')}',
+                                Icons.radio_button_unchecked,
+                                Colors.orange,
+                              ),
+                              const SizedBox(height: 12),
+                            ],
+
+                            // Time Taken
+                            _buildResultItem(
+                              context,
+                              AppLocalization.of(context)
+                                  .translate('quiz_result.time_taken'),
+                              _formatDuration(context, totalTime),
+                              Icons.timer,
+                              colorScheme.primary,
+                            ),
+                          ],
+                        ),
                       ),
                       if (isTimeOut) ...[
                         const SizedBox(height: 16),
