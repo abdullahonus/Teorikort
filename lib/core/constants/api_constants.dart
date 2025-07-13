@@ -1,5 +1,7 @@
+import 'app_config.dart';
+
 class ApiConstants {
-  static const String baseUrl = 'https://api.teorikort.se/api/v1';
+  static String get baseUrl => AppConfig.baseUrl;
 
   // Authentication Endpoints
   static const String login = '/auth/login';

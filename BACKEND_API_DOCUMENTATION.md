@@ -1166,3 +1166,348 @@ Tüm API'lerde hata durumlarında aşağıdaki format kullanılır:
 3. Pagination için `limit` ve `page` parametreleri kullanılır
 4. Çoklu dil desteği için `language` parametresi (tr/en)
 5. Token süreleri: 24 saat (refresh token ile yenilenebilir) 
+
+## 🔄 API'ler Hazır Olduğunda Geçiş Süreci:
+
+### **1. API Base URL Güncelleme**
+```dart
+// lib/core/constants/api_constants.dart
+class ApiConstants {
+  // Şu an test için:
+  static const String baseUrl = 'https://test-api.example.com/v1';
+  
+  // API'ler hazır olduğunda:
+  static const String baseUrl = 'https://api.yourdomain.com/v1'; // ✅ Gerçek URL
+}
+```
+
+### **2. Otomatik Geçiş Testi**
+API'ler hazır olduğunda sistem otomatik olarak geçiş yapacak:
+
+```dart
+// QuizService örneği:
+Future<List<QuizQuestion>> loadQuizQuestions() async {
+  try {
+    // 1. Önce API'yi dene
+    final response = await _apiService.get('/quiz/questions');
+    
+    if (response.isSuccess) {
+      // ✅ API çalışıyor - Backend'den data geldi
+      return _parseApiQuestions(response.data);
+    }
+  } catch (e) {
+    // ❌ API hata verdi - Mock data'ya geç
+    Logger.warning('API failed, using mock data: $e');
+  }
+  
+  // Mock data'ya geç
+  return _loadMockQuestions();
+}
+```
+
+### **3. Geçiş Durumunu Kontrol Etme**
+```dart
+// Test için bir method ekleyebiliriz:
+Future<bool> checkApiStatus() async {
+  try {
+    final response = await _apiService.get('/health');
+    return response.isSuccess;
+  } catch (e) {
+    return false;
+  }
+}
+```
+
+### **4. Debug Kontrol**
+```dart
+// Hangi data source'un kullanıldığını görmek için:
+Future<List<QuizQuestion>> loadQuizQuestions() async {
+  try {
+    final response = await _apiService.get('/quiz/questions');
+    
+    if (response.isSuccess) {
+      Logger.info('✅ Using API data'); // Backend'den geldi
+      return _parseApiQuestions(response.data);
+    }
+  } catch (e) {
+    Logger.info('❌ Using mock data'); // Mock'tan geldi
+  }
+  
+  return _loadMockQuestions();
+}
+```
+
+## 🎯 Pratik Geçiş Adımları:
+
+### **Adım 1: API URL'ini Güncelle**
+```dart
+// api_constants.dart
+static const String baseUrl = 'https://your-real-api.com/v1';
+```
+
+### **Adım 2: Uygulamayı Yeniden Başlat**
+```bash
+flutter clean
+flutter pub get
+flutter run
+```
+
+### **Adım 3: Logları Kontrol Et**
+```dart
+// Console'da göreceksin:
+// ✅ Using API data - Bu API'den geldi
+// ❌ Using mock data - Bu mock'tan geldi
+```
+
+### **Adım 4: Test Et**
+- Login yap
+- Ana sayfaya bak (API'den mi geliyor?)
+- Quiz'e gir (Sorular API'den mi?)
+- İstatistiklere bak (API'den mi?)
+
+## 🚨 Dikkat Edilecek Noktalar:
+
+### **1. Token Kontrolü**
+```dart
+// Auth token'ın çalıştığından emin ol
+final token = await _authService.getToken();
+if (token != null) {
+  // API çağrıları token ile yapılacak
+}
+```
+
+### **2. Response Format Kontrolü**
+```dart
+// API response'un doğru formatta olduğunu kontrol et:
+{
+  "statuscode": 100,  // ✅ Bu olmalı
+  "description": "Başarılı",
+  "data": {
+    // Gerçek veri
+  }
+}
+```
+
+### **3. Error Handling**
+```dart
+// Eğer API format hatası varsa:
+if (response.statusCode == 100) {
+  // ✅ Success - API data kullan
+} else {
+  // ❌ Error - Mock data'ya geç
+}
+```
+
+## 📊 Geçiş Durumunu Takip Etme:
+
+```dart
+// Hangi servislerin API'den geldiğini görmek için:
+class ApiStatusChecker {
+  static Future<Map<String, bool>> checkAllServices() async {
+    return {
+      'auth': await AuthService().checkApiStatus(),
+      'quiz': await QuizService().checkApiStatus(),
+      'home': await HomeService().checkApiStatus(),
+      'statistics': await StatisticsService().checkApiStatus(),
+      'leaderboard': await LeaderboardService().checkApiStatus(),
+      'topics': await TopicsService().checkApiStatus(),
+    };
+  }
+}
+```
+
+## 🎉 Sonuç:
+
+**API'ler hazır olduğunda sadece URL'yi değiştirip uygulamayı yeniden başlatman yeterli!** 
+
+- ✅ API çalışıyor → Backend'den data gelir
+- ❌ API çalışmıyor → Mock data'dan devam eder
+- 🔄 Geçiş tamamen otomatik
+- 📱 Kullanıcı hiçbir fark etmez
+
+**Hybrid sistem sayesinde 0 kod değişikliği ile production'a geçiş yapabilirsin!** 🚀
+
+## 📱 **Development/Test Aşaması** (Şu anki durum):
+```dart
+// API hata alırsa → Mock data'ya geç, kullanıcı fark etmez
+Future<List<QuizQuestion>> loadQuizQuestions() async {
+  try {
+    final response = await _apiService.get('/quiz/questions');
+    if (response.isSuccess) {
+      return _parseApiQuestions(response.data); // ✅ API'den geldi
+    }
+  } catch (e) {
+    Logger.warning('API failed, using mock data: $e');
+  }
+  
+  return _loadMockQuestions(); // ❌ Mock data'ya geç
+}
+```
+
+## 🚀 **Production Aşaması** (API'ler hazır olduğunda):
+```dart
+// API hata alırsa → Kullanıcıya hata mesajı göster
+Future<List<QuizQuestion>> loadQuizQuestions() async {
+  try {
+    final response = await _apiService.get('/quiz/questions');
+    if (response.isSuccess) {
+      return _parseApiQuestions(response.data); // ✅ API'den geldi
+    } else {
+      // ❌ API hata verdi - Kullanıcıya göster
+      throw ApiException('Sorular yüklenemedi. Lütfen tekrar deneyin.');
+    }
+  } catch (e) {
+    // ❌ Network hatası - Kullanıcıya göster
+    throw ApiException('İnternet bağlantınızı kontrol edin.');
+  }
+}
+```
+
+## 🔧 **Configuration ile Kontrol:**
+
+### **1. Environment Configuration**
+```dart
+// lib/core/constants/app_config.dart
+class AppConfig {
+  static const bool isDevelopment = true; // ✅ Development
+  static const bool isProduction = false; // ❌ Production
+  
+  // Development'da mock fallback var, Production'da yok
+  static const bool enableMockFallback = isDevelopment;
+}
+```
+
+### **2. Smart Service Logic**
+```dart
+// lib/core/services/base_api_service.dart
+Future<ApiResponse<T>> get<T>(String endpoint) async {
+  try {
+    final response = await _makeRequest(endpoint);
+    
+    if (response.isSuccess) {
+      return response; // ✅ Success
+    } else {
+      // API hata verdi
+      if (AppConfig.enableMockFallback) {
+        // Development: Mock data'ya geç
+        Logger.warning('API failed, using mock data');
+        return _getMockData<T>(endpoint);
+      } else {
+        // Production: Hata fırlat
+        throw ApiException(_getErrorMessage(response.statusCode));
+      }
+    }
+  } catch (e) {
+    // Network hatası
+    if (AppConfig.enableMockFallback) {
+      // Development: Mock data'ya geç
+      return _getMockData<T>(endpoint);
+    } else {
+      // Production: Hata fırlat
+      throw ApiException('İnternet bağlantınızı kontrol edin.');
+    }
+  }
+}
+```
+
+### **3. Screen'de Hata Handling**
+```dart
+// lib/features/quiz/presentation/quiz_screen.dart
+class QuizScreen extends StatefulWidget {
+  @override
+  _QuizScreenState createState() => _QuizScreenState();
+}
+
+class _QuizScreenState extends State<QuizScreen> {
+  bool _isLoading = true;
+  String? _errorMessage;
+  List<QuizQuestion> _questions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadQuestions();
+  }
+
+  Future<void> _loadQuestions() async {
+    try {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+      
+      final questions = await QuizService().loadQuizQuestions();
+      
+      setState(() {
+        _questions = questions;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = e.toString(); // ❌ Hata mesajını göster
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+    
+    if (_errorMessage != null) {
+      // ❌ Hata durumunu göster
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: Colors.red),
+            SizedBox(height: 16),
+            Text(
+              _errorMessage!,
+              style: TextStyle(fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _loadQuestions, // 🔄 Tekrar dene
+              child: Text('Tekrar Dene'),
+            ),
+          ],
+        ),
+      );
+    }
+    
+    // ✅ Normal quiz ekranı
+    return QuizWidget(questions: _questions);
+  }
+}
+```
+
+## 🎯 **Production'a Geçiş Adımları:**
+
+### **Adım 1: Config'i Değiştir**
+```dart
+// app_config.dart
+static const bool isDevelopment = false; // ❌ Development
+static const bool isProduction = true;   // ✅ Production
+static const bool enableMockFallback = false; // ❌ Mock fallback kapat
+```
+
+### **Adım 2: URL'yi Güncelle**
+```dart
+// api_constants.dart
+static const String baseUrl = 'https://your-real-api.com/v1';
+```
+
+### **Adım 3: Test Et**
+- API çalışıyor mu? → ✅ Normal ekran
+- API hata veriyor mu? → ❌ Hata ekranı + "Tekrar Dene" butonu
+
+## 🚨 **Sonuç:**
+
+**Development:** API hata verirse → Mock data (kullanıcı fark etmez)
+**Production:** API hata verirse → Hata mesajı + "Tekrar Dene" butonu
+
+**Yani evet, production'da backend'den hata alırsan kullanıcıya hata mesajı gösterilecek!** 🎯
