@@ -1,4 +1,4 @@
-import 'package:driving_license_exam/features/auth/data/models/auth_user.dart';
+import 'package:teorikort/features/auth/data/models/auth_user.dart';
 
 class UserModel {
   final String email;

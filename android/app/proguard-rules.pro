@@ -18,4 +18,4 @@
 }
 
 # Application classes that will be serialized/deserialized over Gson
--keep class com.drivingLicenseExam.** { *; } 
+-keep class com.teorikort.** { *; } 

@@ -1,128 +1,137 @@
-class StatisticsData {
-  final OverallStats overallStats;
-  final List<CategoryPerformance> categoryPerformance;
-  final List<RecentExam> recentExams;
+// ─── /statistics/analytics ─────────────────────────────────────────────────
 
-  StatisticsData({
-    required this.overallStats,
-    required this.categoryPerformance,
-    required this.recentExams,
+class AppAnalyticsData {
+  final int totalUsers;
+  final int totalExams;
+  final int totalCategories;
+  final double averageScore;
+
+  AppAnalyticsData({
+    required this.totalUsers,
+    required this.totalExams,
+    required this.totalCategories,
+    required this.averageScore,
   });
 
-  factory StatisticsData.fromJson(Map<String, dynamic> json) {
-    return StatisticsData(
-      overallStats: OverallStats.fromJson(json['overall_stats']),
-      categoryPerformance: (json['category_performance'] as List)
-          .map((category) => CategoryPerformance.fromJson(category))
-          .toList(),
-      recentExams: (json['recent_exams'] as List)
-          .map((exam) => RecentExam.fromJson(exam))
-          .toList(),
+  factory AppAnalyticsData.fromJson(Map<String, dynamic> json) {
+    return AppAnalyticsData(
+      totalUsers: json['total_users'] ?? 0,
+      totalExams: json['total_exams'] ?? 0,
+      totalCategories: json['total_categories'] ?? 0,
+      averageScore: (json['average_score'] ?? 0).toDouble(),
     );
   }
 }
 
-class OverallStats {
-  final int totalExamsTaken;
-  final int totalAvailableExams;
-  final int averageScore;
-  final int bestScore;
-  final int totalStudyTime;
-  final int totalQuestionsAnswered;
-  final int correctAnswersRate;
+// ─── /statistics ────────────────────────────────────────────────────────────
 
-  OverallStats({
-    required this.totalExamsTaken,
-    required this.totalAvailableExams,
+class StatisticsData {
+  final int totalExams;
+  final double averageScore;
+  final double highestScore;
+  final List<CategoryPerformance> categoryPerformance;
+
+  StatisticsData({
+    required this.totalExams,
     required this.averageScore,
-    required this.bestScore,
-    required this.totalStudyTime,
-    required this.totalQuestionsAnswered,
-    required this.correctAnswersRate,
+    required this.highestScore,
+    required this.categoryPerformance,
   });
 
-  factory OverallStats.fromJson(Map<String, dynamic> json) {
-    return OverallStats(
-      totalExamsTaken: json['total_exams_taken'],
-      totalAvailableExams: json['total_available_exams'],
-      averageScore: json['average_score'],
-      bestScore: json['best_score'],
-      totalStudyTime: json['total_study_time'],
-      totalQuestionsAnswered: json['total_questions_answered'],
-      correctAnswersRate: json['correct_answers_rate'],
+  factory StatisticsData.fromJson(Map<String, dynamic> json) {
+    return StatisticsData(
+      totalExams: json['total_exams'] ?? 0,
+      averageScore: (json['average_score'] ?? 0).toDouble(),
+      highestScore: (json['highest_score'] ?? 0).toDouble(),
+      categoryPerformance: (json['category_performance'] as List? ?? [])
+          .map((c) => CategoryPerformance.fromJson(c as Map<String, dynamic>))
+          .toList(),
     );
   }
 }
 
 class CategoryPerformance {
-  final String categoryId;
-  final String name;
-  final int examsTaken;
-  final int averageScore;
-  final int bestScore;
-  final int progress;
-  final List<String> weakAreas;
-  final List<String> strongAreas;
+  final int categoryId;
+  final String categoryName;
+  final double averageScore;
+  final int totalExams;
 
   CategoryPerformance({
     required this.categoryId,
-    required this.name,
-    required this.examsTaken,
+    required this.categoryName,
     required this.averageScore,
-    required this.bestScore,
-    required this.progress,
-    required this.weakAreas,
-    required this.strongAreas,
+    required this.totalExams,
   });
 
   factory CategoryPerformance.fromJson(Map<String, dynamic> json) {
     return CategoryPerformance(
-      categoryId: json['category_id'],
-      name: json['name'],
-      examsTaken: json['exams_taken'],
-      averageScore: json['average_score'],
-      bestScore: json['best_score'],
-      progress: json['progress'],
-      weakAreas: List<String>.from(json['weak_areas']),
-      strongAreas: List<String>.from(json['strong_areas']),
+      categoryId: json['category_id'] is int
+          ? json['category_id']
+          : int.tryParse(json['category_id']?.toString() ?? '0') ?? 0,
+      categoryName: json['category_name'] ?? '',
+      averageScore: (json['average_score'] ?? 0).toDouble(),
+      totalExams: json['total_exams'] ?? 0,
     );
   }
 }
 
-class RecentExam {
-  final String id;
-  final String title;
-  final String category;
-  final String completedAt;
-  final int score;
-  final int durationMinutes;
-  final int correctAnswers;
-  final int totalQuestions;
-  final String improvement;
+// ─── /statistics/categories/{id} ───────────────────────────────────────────
 
-  RecentExam({
+class RecentExamResult {
+  final int id;
+  final double point;
+  final DateTime createdAt;
+
+  RecentExamResult({
     required this.id,
-    required this.title,
-    required this.category,
-    required this.completedAt,
-    required this.score,
-    required this.durationMinutes,
-    required this.correctAnswers,
-    required this.totalQuestions,
-    required this.improvement,
+    required this.point,
+    required this.createdAt,
   });
 
-  factory RecentExam.fromJson(Map<String, dynamic> json) {
-    return RecentExam(
-      id: json['id'],
-      title: json['title'],
-      category: json['category'],
-      completedAt: json['completed_at'],
-      score: json['score'],
-      durationMinutes: json['duration_minutes'],
-      correctAnswers: json['correct_answers'],
-      totalQuestions: json['total_questions'],
-      improvement: json['improvement'],
+  factory RecentExamResult.fromJson(Map<String, dynamic> json) {
+    return RecentExamResult(
+      id: json['id'] is int
+          ? json['id']
+          : int.tryParse(json['id']?.toString() ?? '0') ?? 0,
+      point: (json['point'] ?? 0).toDouble(),
+      createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
+    );
+  }
+}
+
+class CategoryStatisticsData {
+  final int categoryId;
+  final String categoryTitle;
+  final int totalExams;
+  final double averageScore;
+  final double highestScore;
+  final double lowestScore;
+  final List<RecentExamResult> recentExams;
+
+  CategoryStatisticsData({
+    required this.categoryId,
+    required this.categoryTitle,
+    required this.totalExams,
+    required this.averageScore,
+    required this.highestScore,
+    required this.lowestScore,
+    required this.recentExams,
+  });
+
+  factory CategoryStatisticsData.fromJson(Map<String, dynamic> json) {
+    final cat = json['category'] as Map<String, dynamic>? ?? {};
+    return CategoryStatisticsData(
+      categoryId: cat['id'] is int
+          ? cat['id']
+          : int.tryParse(cat['id']?.toString() ?? '0') ?? 0,
+      categoryTitle: cat['title'] ?? '',
+      totalExams: json['total_exams'] ?? 0,
+      averageScore: (json['average_score'] ?? 0).toDouble(),
+      highestScore: (json['highest_score'] ?? 0).toDouble(),
+      lowestScore: (json['lowest_score'] ?? 0).toDouble(),
+      recentExams: (json['recent_exams'] as List? ?? [])
+          .map((e) => RecentExamResult.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }

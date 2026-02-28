@@ -1,9 +1,12 @@
+import 'package:teorikort/core/constants/api_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/auth_service.dart';
 import '../models/auth_tokens.dart';
 import '../../features/auth/data/models/auth_user.dart';
 import '../services/logger_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../services/user_service.dart';
+import '../../features/user/domain/models/user_profile.dart';
 
 part 'auth_provider.g.dart';
 
@@ -22,13 +25,29 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = const AuthState.loading();
     final isAuthenticated = await _authService.isAuthenticated();
     if (isAuthenticated) {
-      // TODO: Fetch user data from API
-      state = AuthState.authenticated(AuthUser(
-        email: 'test@example.com',
-        name: 'Test User',
-        createdAt: null,
-        isEmailVerified: true,
-      ));
+      try {
+        // fetch current user info from actual /me endpoint
+        final apiResponse = await _authService.smartGet(
+          ApiConstants.me,
+          (json) => AuthUser.fromJson(json),
+        );
+        if (apiResponse.success && apiResponse.data != null) {
+          final authUser = apiResponse.data!;
+          await UserService().updateUserFromApi(UserProfile(
+            id: authUser.id.toString(),
+            name: authUser.name,
+            email: authUser.email,
+            lastname: authUser.lastname,
+            phone: authUser.phone,
+            createdAt: authUser.createdAt?.toIso8601String(),
+          ));
+          state = AuthState.authenticated(authUser);
+        } else {
+          state = const AuthState.unauthenticated();
+        }
+      } catch (e) {
+        state = const AuthState.unauthenticated();
+      }
     } else {
       state = const AuthState.unauthenticated();
     }
@@ -37,48 +56,53 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> signIn(String email, String password) async {
     try {
       state = const AuthState.loading();
-      // TODO: Call actual API
-      await Future.delayed(const Duration(seconds: 2));
+      final apiResponse = await _authService.login(email, password);
 
-      // Simüle edilmiş hata durumları
-      if (email == 'timeout@test.com') {
-        throw TimeoutException();
-      } else if (email == 'server@test.com') {
-        throw ServerException();
+      if (apiResponse.success && apiResponse.data != null) {
+        final userData = apiResponse.data!.user;
+        final token = apiResponse.data!.token;
+
+        await _authService.saveTokens(AuthTokens(accessToken: token));
+
+        state = AuthState.authenticated(AuthUser(
+          id: userData.id,
+          email: userData.email,
+          name: userData.name,
+          lastname: userData.lastname,
+          phone: userData.phone,
+          isEmailVerified: userData.isEmailVerified,
+          createdAt: userData.createdAt != null
+              ? DateTime.parse(userData.createdAt!)
+              : null,
+          token: token,
+        ));
+        
+        await UserService().updateUserFromApi(UserProfile(
+          id: userData.id.toString(),
+          name: userData.name,
+          email: userData.email,
+          lastname: userData.lastname,
+          phone: userData.phone,
+          createdAt: userData.createdAt,
+        ));
+        
+        LoggerService.info('User logged in successfully: $email');
+      } else {
+        throw apiResponse.message ?? 'Giriş başarısız';
       }
-
-      final tokens = AuthTokens(
-        accessToken: 'fake_access_token',
-        refreshToken: 'fake_refresh_token',
-      );
-
-      LoggerService.info('User logged in successfully: $email');
-      await _authService.saveTokens(tokens);
-      state = AuthState.authenticated(AuthUser(
-        email: email,
-        name: 'Test User',
-        createdAt: null,
-        isEmailVerified: true,
-      ));
     } catch (e) {
       LoggerService.error('Login failed', e);
-      String errorMessage;
-
-      if (e is TimeoutException) {
-        errorMessage = 'Connection timeout. Please try again.';
-      } else if (e is ServerException) {
-        errorMessage = 'Server error occurred. Please try again later.';
-      } else {
-        errorMessage = 'An unexpected error occurred.';
-      }
-
-      state = AuthState.error(errorMessage);
+      state = AuthState.error(e.toString());
     }
   }
 
   Future<void> signOut() async {
-    await _authService.deleteTokens();
-    state = const AuthState.unauthenticated();
+    try {
+      await _authService.logout();
+    } finally {
+      await UserService().clearUserData();
+      state = const AuthState.unauthenticated();
+    }
   }
 
   Future<void> sendOTP(String email) async {

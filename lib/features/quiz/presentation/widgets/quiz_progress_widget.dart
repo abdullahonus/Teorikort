@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:driving_license_exam/core/localization/app_localization.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
 
 class QuizProgressWidget extends StatelessWidget {
   final int currentQuestion;
@@ -164,76 +164,81 @@ class QuizProgressWidget extends StatelessWidget {
   }
 
   Widget _buildStepIndicators(ThemeData theme) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(
-        totalQuestions > 10 ? 10 : totalQuestions,
-        (index) {
-          final stepNumber = totalQuestions > 10
-              ? ((index + 1) * totalQuestions / 10).round()
-              : index + 1;
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: List.generate(
+            totalQuestions,
+            (index) {
+              final stepNumber = index + 1;
 
-          final isCompleted = currentQuestion > stepNumber;
-          final isCurrent = currentQuestion == stepNumber;
+              final isCompleted = currentQuestion > stepNumber;
+              final isCurrent = currentQuestion == stepNumber;
 
-          // Check if this question is answered
-          bool isAnswered = false;
-          if (answeredQuestions != null &&
-              stepNumber <= answeredQuestions!.length) {
-            isAnswered = answeredQuestions![stepNumber - 1];
-          }
+              // Check if this question is answered
+              bool isAnswered = false;
+              if (answeredQuestions != null &&
+                  stepNumber <= answeredQuestions!.length) {
+                isAnswered = answeredQuestions![stepNumber - 1];
+              }
 
-          Color backgroundColor;
-          Color textColor;
-          Widget? icon;
+              Color backgroundColor;
+              Color textColor;
+              Widget? icon;
 
-          if (isCompleted && isAnswered) {
-            // Completed and answered - Green
-            backgroundColor = Colors.green;
-            textColor = Colors.white;
-            icon = const Icon(Icons.check, size: 14, color: Colors.white);
-          } else if (isCompleted && !isAnswered) {
-            // Completed but not answered - Orange
-            backgroundColor = Colors.orange;
-            textColor = Colors.white;
-            icon = const Icon(Icons.remove, size: 14, color: Colors.white);
-          } else if (isCurrent) {
-            // Current question - Primary color
-            backgroundColor =
-                (progressColor ?? theme.colorScheme.primary).withOpacity(0.3);
-            textColor = progressColor ?? theme.colorScheme.primary;
-          } else {
-            // Not reached yet - Grey
-            backgroundColor = theme.colorScheme.surfaceVariant;
-            textColor = theme.colorScheme.onSurfaceVariant;
-          }
+              if (isCompleted && isAnswered) {
+                // Completed and answered - Green
+                backgroundColor = Colors.green;
+                textColor = Colors.white;
+                icon = const Icon(Icons.check, size: 14, color: Colors.white);
+              } else if (isCompleted && !isAnswered) {
+                // Completed but not answered - Orange
+                backgroundColor = Colors.orange;
+                textColor = Colors.white;
+                icon = const Icon(Icons.remove, size: 14, color: Colors.white);
+              } else if (isCurrent) {
+                // Current question - Primary color
+                backgroundColor =
+                    (progressColor ?? theme.colorScheme.primary).withOpacity(0.3);
+                textColor = progressColor ?? theme.colorScheme.primary;
+              } else {
+                // Not reached yet - Grey
+                backgroundColor = theme.colorScheme.surfaceVariant;
+                textColor = theme.colorScheme.onSurfaceVariant;
+              }
 
-          return Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              shape: BoxShape.circle,
-              border: isCurrent
-                  ? Border.all(
-                      color: progressColor ?? theme.colorScheme.primary,
-                      width: 2,
-                    )
-                  : null,
-            ),
-            child: Center(
-              child: icon ??
-                  Text(
-                    stepNumber.toString(),
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: textColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 10,
-                    ),
-                  ),
-            ),
-          );
-        },
+              return Container(
+                width: 28,
+                height: 28,
+                margin: const EdgeInsets.only(right: 8),
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  shape: BoxShape.circle,
+                  border: isCurrent
+                      ? Border.all(
+                          color: progressColor ?? theme.colorScheme.primary,
+                          width: 2,
+                        )
+                      : null,
+                ),
+                child: Center(
+                  child: icon ??
+                      Text(
+                        stepNumber.toString(),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: textColor,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 11,
+                        ),
+                      ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }

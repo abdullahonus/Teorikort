@@ -1,4 +1,4 @@
-import 'package:driving_license_exam/core/providers/auth_provider.dart';
+import 'package:teorikort/core/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/localization/app_localization.dart';

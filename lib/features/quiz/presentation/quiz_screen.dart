@@ -1,25 +1,35 @@
-import 'package:driving_license_exam/features/quiz/data/models/quiz_data.dart';
-import 'package:driving_license_exam/features/quiz/data/services/quiz_service.dart';
-import 'package:driving_license_exam/features/quiz/presentation/quiz_result_screen.dart';
-import 'package:driving_license_exam/features/quiz/presentation/widgets/quiz_progress_widget.dart';
+import 'package:teorikort/features/quiz/data/models/quiz_data.dart';
+import 'package:teorikort/features/quiz/data/services/quiz_service.dart' hide ExamCategory;
+import 'package:teorikort/features/quiz/presentation/quiz_result_screen.dart';
+import 'package:teorikort/features/quiz/presentation/widgets/quiz_progress_widget.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:driving_license_exam/features/quiz/presentation/widgets/question_navigation_dialog.dart';
-import 'package:driving_license_exam/features/exam/data/models/exam_result.dart';
-import 'package:driving_license_exam/features/exam/data/services/exam_result_service.dart';
-import 'package:driving_license_exam/core/localization/app_localization.dart';
-import 'package:driving_license_exam/core/services/user_service.dart';
+import 'dart:convert';
+import 'package:teorikort/features/quiz/presentation/widgets/question_navigation_dialog.dart';
+import 'package:teorikort/features/exam/data/models/exam_result.dart';
+import 'package:teorikort/features/exam/data/services/exam_result_service.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/services/user_service.dart';
+
+import 'package:teorikort/features/exam/data/services/exam_service.dart';
+import 'package:teorikort/features/reports/data/services/report_service.dart';
 
 class QuizScreen extends StatefulWidget {
   final String examTitle;
   final List<Map<String, dynamic>>? questions;
+  final List<QuizQuestion>? quizQuestions;
   final String category;
+  final String? difficulty;
+  final String? examType;
 
   const QuizScreen({
     super.key,
     required this.examTitle,
     this.questions,
-    this.category = 'traffic_signs',
+    this.quizQuestions,
+    this.category = '1',
+    this.difficulty,
+    this.examType,
   });
 
   @override
@@ -28,11 +38,12 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   final QuizService _quizService = QuizService();
+  final ExamService _examService = ExamService();
   List<QuizQuestion> questions = [];
   int currentQuestionIndex = 0;
   String? selectedAnswer;
   bool isLoading = true;
-  late int remainingSeconds; // Her soru için 2 dakika
+  int remainingSeconds = 1800; // API'den gelene kadar varsayılan 30dk
 
   late Timer _timer;
 
@@ -52,63 +63,19 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.questions != null) {
-      // Mock sınavından gelen soruları kullan
-      _convertAndLoadQuestions();
-      // Her soru için 2 dakika süre ver
-      remainingSeconds = widget.questions!.length * 10;
+    if (widget.quizQuestions != null) {
+      questions = widget.quizQuestions!;
+      isLoading = false;
+      _startTimer();
+    } else if (widget.questions != null) {
+      questions = widget.questions!
+          .map((q) => QuizQuestion.fromJson(q))
+          .toList();
+      isLoading = false;
+      _startTimer();
     } else {
-      // Normal quiz soruları için QuizService'i kullan
       _loadQuestions();
-      remainingSeconds = 60; // Varsayılan süre
     }
-    _startTimer();
-  }
-
-  void _convertAndLoadQuestions() {
-    try {
-      final convertedQuestions = widget.questions!.map((q) {
-        return QuizQuestion(
-          id: q['id'] as String,
-          question: _convertToMultiLang(q['question']),
-          imageUrl: q['image_url'] as String?,
-          options: (q['options'] as List<dynamic>).asMap().entries.map((entry) {
-            return Option(
-              id: entry.key.toString(),
-              text: _convertToMultiLang(entry.value),
-            );
-          }).toList(),
-          correctAnswer: q['correct_answer'].toString(),
-          explanation: _convertToMultiLang(q['explanation']),
-        );
-      }).toList();
-
-      setState(() {
-        questions = convertedQuestions;
-        isLoading = false;
-      });
-    } catch (e) {
-      print('Error converting questions: $e');
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  // Helper method to convert string to multi-language map for compatibility
-  Map<String, String> _convertToMultiLang(dynamic field) {
-    if (field is Map<String, dynamic>) {
-      return field.map((key, value) => MapEntry(key, value?.toString() ?? ''));
-    } else if (field is String) {
-      return {'tr': field, 'en': field}; // Fallback for old format
-    }
-    return {'tr': field?.toString() ?? '', 'en': field?.toString() ?? ''};
-  }
-
-  // Helper method to get text in current language
-  String _getLocalizedText(Map<String, String> textMap) {
-    final currentLanguage = AppLocalization.of(context).locale.languageCode;
-    return textMap[currentLanguage] ?? textMap['tr'] ?? textMap.values.first;
   }
 
   @override
@@ -119,6 +86,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
       setState(() {
         if (remainingSeconds > 0) {
           remainingSeconds--;
@@ -130,37 +98,11 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
-  void _moveToNextQuestion() {
-    if (currentQuestionIndex < questions.length - 1) {
-      setState(() {
-        currentQuestionIndex++;
-        selectedAnswer = null;
-      });
-    } else {
-      _calculateFinalScore();
-    }
-  }
 
   void _selectAnswer(String optionId) {
     setState(() {
       selectedAnswer = optionId;
-      // Store the selected answer
       userAnswers[currentQuestionIndex] = optionId;
-
-      // Check if the answer is correct
-      final currentQuestion = questions[currentQuestionIndex];
-      final isCorrect = optionId == currentQuestion.correctAnswer;
-
-      if (isCorrect) {
-        correctAnswers++;
-      } else {
-        wrongAnswers++;
-      }
-
-      print(
-          'Answer selected for question ${currentQuestionIndex + 1}: $optionId');
-      print('Correct answer: ${currentQuestion.correctAnswer}');
-      print('Is correct: $isCorrect');
     });
   }
 
@@ -172,6 +114,7 @@ class _QuizScreenState extends State<QuizScreen> {
         setState(() {
           questions = loadedQuestions.data ?? [];
           isLoading = false;
+          _startTimer();
         });
       }
     } catch (e) {
@@ -184,56 +127,93 @@ class _QuizScreenState extends State<QuizScreen> {
     }
   }
 
-  // Final score calculation
-  void _calculateFinalScore() {
-    correctAnswers = 0;
-    wrongAnswers = 0;
 
-    // Check all answers
-    for (int i = 0; i < questions.length; i++) {
-      final userAnswer = userAnswers[i];
-      if (userAnswer != null) {
-        if (userAnswer == questions[i].correctAnswer) {
-          correctAnswers++;
-        } else {
-          wrongAnswers++;
-        }
-      }
+  String _getLocalizedText(dynamic field) {
+    if (field is Map<String, dynamic>) {
+      final lang = AppLocalization.of(context).locale.languageCode;
+      return field[lang] ?? field['tr'] ?? field['en'] ?? '';
     }
-
-    print('Final Score:');
-    print('Total Questions: ${questions.length}');
-    print('Correct Answers: $correctAnswers');
-    print('Wrong Answers: $wrongAnswers');
-
-    _showResults();
+    return field?.toString() ?? '';
   }
 
   void _showResults({bool isTimeOut = false}) {
     _timer.cancel();
-    final duration = DateTime.now().difference(startTime);
 
-    // Sonucu kaydet
+    int finalCorrect = 0;
+    int finalWrong = 0;
+    for (int i = 0; i < questions.length; i++) {
+      final userAnswer = userAnswers[i];
+      if (userAnswer != null) {
+        if (userAnswer == questions[i].correctAnswer) {
+          finalCorrect++;
+        } else {
+          finalWrong++;
+        }
+      }
+    }
+
+    setState(() {
+      correctAnswers = finalCorrect;
+      wrongAnswers = finalWrong;
+    });
+
+    final duration = DateTime.now().difference(startTime);
+    final now = DateTime.now();
+    final totalQ = questions.length;
+    final empty = totalQ - finalCorrect - finalWrong;
+    final score = totalQ > 0 ? (finalCorrect / totalQ) * 100 : 0.0;
+
     final userService = UserService();
     final examResult = ExamResult(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      id: now.millisecondsSinceEpoch.toString(),
       userId: userService.currentUserId,
       userName: userService.currentUserName,
       category: widget.category,
-      totalQuestions: questions.length,
-      correctAnswers: correctAnswers,
-      scorePercentage: (correctAnswers / questions.length) * 100,
+      totalQuestions: totalQ,
+      correctAnswers: finalCorrect,
+      scorePercentage: score,
       duration: duration,
-      completedAt: DateTime.now(),
+      completedAt: now,
     );
 
+    final List<Map<String, dynamic>> detailedAnswers = [];
+    for (int i = 0; i < questions.length; i++) {
+      final userAnswer = userAnswers[i];
+      detailedAnswers.add({
+        'question_id': questions[i].id,
+        'selected_answer': userAnswer ?? '',
+        'correct_answer': questions[i].correctAnswer,
+        'is_correct': userAnswer == questions[i].correctAnswer,
+      });
+    }
+
+    final durationSeconds = duration.inSeconds;
+
+    _quizService.submitExamResult(
+      category: widget.category,
+      correctAnswers: finalCorrect,
+      wrongAnswers: finalWrong,
+      emptyAnswers: empty,
+      scorePercentage: score,
+      completedAt: now,
+      examType: widget.examType ?? (widget.examTitle.toLowerCase().contains('mock') || widget.examTitle.contains('Deneme') ? 'mock' : 'category'),
+      difficulty: widget.difficulty ?? 'medium',
+      durationSeconds: durationSeconds,
+      answers: detailedAnswers,
+    ).then((res) {
+      if (!res.success) {
+        print('Exam result submit failed: ${res.message}');
+      }
+    });
+
     ExamResultService().saveExamResult(examResult).then((_) {
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => QuizResultScreen(
-            totalQuestions: questions.length,
-            correctAnswers: correctAnswers,
+            totalQuestions: totalQ,
+            correctAnswers: finalCorrect,
             totalTime: duration,
             isTimeOut: isTimeOut,
             questions: questions,
@@ -242,6 +222,64 @@ class _QuizScreenState extends State<QuizScreen> {
         ),
       );
     });
+  }
+
+  Future<void> _showReportDialog(String questionId) async {
+    final TextEditingController reportController = TextEditingController();
+    final l10n = AppLocalization.of(context);
+    final reportService = ReportService();
+
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.translate('report.title')),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.translate('report.description')),
+            const SizedBox(height: 16),
+            TextField(
+              controller: reportController,
+              maxLines: 3,
+              decoration: InputDecoration(
+                hintText: l10n.translate('report.hint'),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.translate('report.cancel')),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (reportController.text.trim().isEmpty) return;
+              
+              final response = await reportService.reportQuestion(
+                questionId: questionId,
+                description: reportController.text.trim(),
+                context: context,
+              );
+
+              if (mounted) {
+                Navigator.pop(context);
+                if (response.success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.translate('report.success'))),
+                  );
+                }
+              }
+            },
+            child: Text(l10n.translate('report.submit')),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -261,10 +299,6 @@ class _QuizScreenState extends State<QuizScreen> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    // Toplam süreyi hesapla (başlangıçtaki süre)
-    final totalSeconds =
-        widget.questions != null ? widget.questions!.length * 10 : 60;
-
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -282,6 +316,10 @@ class _QuizScreenState extends State<QuizScreen> {
         ),
         centerTitle: true,
         actions: [
+          IconButton(
+            icon: Icon(Icons.report_gmailerrorred, color: colorScheme.error),
+            onPressed: () => _showReportDialog(currentQuestion.id),
+          ),
           IconButton(
             icon: Icon(Icons.grid_view, color: colorScheme.onSurface),
             onPressed: () {
@@ -302,7 +340,6 @@ class _QuizScreenState extends State<QuizScreen> {
       ),
       body: Column(
         children: [
-          // 🎯 NEW: Modern Progress Widget
           Container(
             color: colorScheme.surface,
             child: QuizProgressWidget(
@@ -320,7 +357,6 @@ class _QuizScreenState extends State<QuizScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Question Number Badge
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -362,7 +398,6 @@ class _QuizScreenState extends State<QuizScreen> {
               ),
             ),
           ),
-          // Navigation Buttons
           Container(
             padding: const EdgeInsets.all(20.0),
             decoration: BoxDecoration(
@@ -378,7 +413,6 @@ class _QuizScreenState extends State<QuizScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Previous Button
                 ElevatedButton.icon(
                   onPressed: currentQuestionIndex > 0
                       ? () {
@@ -393,19 +427,15 @@ class _QuizScreenState extends State<QuizScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.surfaceVariant,
                     foregroundColor: colorScheme.onSurfaceVariant,
-                    disabledBackgroundColor:
-                        colorScheme.surfaceVariant.withOpacity(0.5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                 ),
-
-                // Next/Finish Button
                 ElevatedButton.icon(
                   onPressed: () {
                     if (currentQuestionIndex == questions.length - 1) {
-                      _showResults(isTimeOut: false);
+                      _showResults();
                     } else {
                       setState(() {
                         currentQuestionIndex++;

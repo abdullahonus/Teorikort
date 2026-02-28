@@ -1,6 +1,6 @@
 {
-  "app_name": "Driving License",
-  "app_subtitle": "Driving License Exam Preparation",
+  "app_name": "Teorikort",
+  "app_subtitle": "Teorikort - Ehliyet Teorik Sınav Hazırlık",
   "statistics": {
     "screen_title": "Statistics",
     "subtitle": "Performance Analysis",
@@ -93,6 +93,7 @@
     "your_progress": "Your Progress",
     "success_rate": "Success Rate",
     "completed_tests": "Completed Tests",
+    "completed_categories": "Completed Categories",
     "weak_topics": "Weak Topics",
     "daily_tip": "Daily Tip",
     "tip_content": "Remember to give way to pedestrians when turning right. This is an important part of traffic rules.",
@@ -124,14 +125,15 @@
     "clear_data_confirmation": "All exam results and statistics will be deleted. This action cannot be undone. Do you want to continue?",
     "data_cleared": "Data cleared successfully",
     "data_clear_error": "An error occurred while clearing data",
-    "app": "Application",
+    "app": "App Information",
+    "debug": "Debug Settings",
     "share_app": "Share App",
-    "share_message": "Great app for preparing for the driving license exam! https://play.google.com/store/apps/details?id=com.yourapp",
-    "share_subject": "Driving License Exam Preparation App",
+    "share_message": "Teorikort ile ehliyet teorik sınavına hazırlanın! https://play.google.com/store/apps/details?id=com.teorikort",
+    "share_subject": "Teorikort - Ehliyet Teorik Sınav Hazırlık Uygulaması",
     "rate_app": "Rate Us",
     "about": "About App",
     "about_description": "App Description",
-    "about_content": "This application provides a comprehensive study platform for candidates preparing for the driving license exam. It includes detailed content and practical exams on traffic signs, traffic rules, first aid, and engine knowledge.",
+    "about_content": "Teorikort, ehliyet teorik sınavına hazırlanan adaylar için kapsamlı bir çalışma platformu sunar. Trafik işaretleri, trafik kuralları, ilk yardım ve motor bilgisi konularında detaylı içerikler ve pratik sınavlar içerir.",
     "features": "Features",
     "features_content": "• Detailed topic explanations\n• Multiple choice questions\n• Tests in real exam format\n• Progress tracking and statistics\n• Wrong answer analysis\n• Offline study capability",
     "contact": "Contact",
@@ -300,7 +302,7 @@
     "questions": "Questions",
     "exam_categories": {
       "traffic_signs": "Traffic Signs",
-      "traffic_rules": "Traffic Rules", 
+      "traffic_rules": "Traffic Rules",
       "first_aid": "First Aid",
       "vehicle_technology": "Vehicle Technology"
     }
@@ -337,5 +339,31 @@
     "phone_required": "Phone is required",
     "phone_invalid": "Please enter a valid phone number",
     "already_have_account": "Already have an account? Sign In"
+  },
+  "workbook": {
+    "title": "Workbook",
+    "completed": "Completed",
+    "in_progress": "In Progress",
+    "no_workbooks": "You don't have any workbooks yet.",
+    "minutes": "min"
+  },
+  "report": {
+    "title": "Report Question",
+    "description": "Is there an error in the question? Please let us know.",
+    "hint": "Enter error description here...",
+    "success": "Your report has been sent successfully. Thank you.",
+    "submit": "Submit",
+    "cancel": "Cancel"
+  },
+  "packages": {
+    "title": "Packages",
+    "select": "Select Package",
+    "features": "Features",
+    "purchase": "Purchase",
+    "free": "Free"
+  },
+  "signs": {
+    "title": "Traffic Signs",
+    "no_data": "No traffic signs found."
   }
-} 
+}

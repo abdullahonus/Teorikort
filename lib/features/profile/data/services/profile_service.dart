@@ -1,4 +1,4 @@
-import 'package:driving_license_exam/core/services/json_service.dart';
+import 'package:teorikort/core/services/json_service.dart';
 import '../models/profile_data.dart';
 
 class ProfileService {

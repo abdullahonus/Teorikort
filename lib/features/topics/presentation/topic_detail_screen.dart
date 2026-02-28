@@ -1,167 +1,230 @@
 import 'package:flutter/material.dart';
 import '../data/models/topic.dart';
-import 'subtopic_detail_screen.dart';
-import 'package:driving_license_exam/core/localization/app_localization.dart';
+import '../data/services/topic_service.dart';
+import '../../workbook/data/services/workbook_service.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
 
-class TopicDetailScreen extends StatelessWidget {
+class TopicDetailScreen extends StatefulWidget {
   final Topic topic;
 
   const TopicDetailScreen({super.key, required this.topic});
+
+  @override
+  State<TopicDetailScreen> createState() => _TopicDetailScreenState();
+}
+
+class _TopicDetailScreenState extends State<TopicDetailScreen> {
+  final TopicService _service = TopicService();
+  final WorkbookService _workbookService = WorkbookService();
+  late Topic _topic;
+  List<dynamic> _questions = [];
+  bool _isLoading = true;
+  bool _isSaving = false;
+  late Stopwatch _studyTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _topic = widget.topic;
+    _studyTimer = Stopwatch()..start();
+    _loadDetail();
+  }
+
+  @override
+  void dispose() {
+    _studyTimer.stop();
+    super.dispose();
+  }
+
+  Future<void> _loadDetail() async {
+    try {
+      final response = await _service.getTopicById(_topic.id.toString(), context: context);
+      if (mounted && response.data != null) {
+        setState(() {
+          _topic = response.data!.course;
+          _questions = response.data!.questions;
+          _isLoading = false;
+        });
+      } else {
+        setState(() => _isLoading = false);
+      }
+    } catch (e) {
+      debugPrint('Error loading topic detail: $e');
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _saveStudyProgress() async {
+    if (_isSaving) return;
+
+    setState(() => _isSaving = true);
+    try {
+      final studySeconds = _studyTimer.elapsed.inSeconds;
+      await _workbookService.saveWorkbook(
+        courseId: _topic.id,
+        detail: 'Konu çalışma oturumu tamamlandı.',
+        passed: true,
+        time: studySeconds,
+        context: context,
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Çalışma ilerlemeniz kaydedildi.')),
+        );
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      debugPrint('Error saving study progress: $e');
+      if (mounted) {
+        setState(() => _isSaving = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('İlerleme kaydedilirken bir hata oluştu.')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
+    return PopScope(
+      canPop: !_isSaving,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        // Optionally auto-save on back, but for now we have an explicit button
+        // and we prevent pop if saving.
+      },
+      child: Scaffold(
         backgroundColor: colorScheme.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 20),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          topic.getTitle(AppLocalization.of(context).locale.languageCode),
-          style: theme.textTheme.titleLarge,
-        ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _buildHeader(context),
-          const SizedBox(height: 20),
-          _buildSubTopicsList(context),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          topic.getTitle(AppLocalization.of(context).locale.languageCode),
-          style: theme.textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
+        appBar: AppBar(
+          backgroundColor: colorScheme.surface,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios, size: 20),
+            onPressed: () => Navigator.pop(context),
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          topic.getDescription(AppLocalization.of(context).locale.languageCode),
-          style: theme.textTheme.bodyLarge?.copyWith(
-            color: colorScheme.onSurface.withOpacity(0.8),
+          title: Text(
+            _topic.title,
+            style: theme.textTheme.titleLarge,
+            overflow: TextOverflow.ellipsis,
           ),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          AppLocalization.of(context).translate('topics.subtopics_list') ??
-              'Subtopics',
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSubTopicsList(BuildContext context) {
-    if (topic.subTopics.isEmpty) {
-      return Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-            Icon(
-              Icons.menu_book_outlined,
-              size: 64,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              AppLocalization.of(context).translate('topics.no_subtopics') ??
-                  'No subtopics available',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      );
-    }
-
-    return Column(
-      children: topic.subTopics
-          .map((subTopic) => _buildSubTopicCard(context, subTopic))
-          .toList(),
-    );
-  }
-
-  Widget _buildSubTopicCard(BuildContext context, SubTopic subTopic) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      elevation: 0,
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SubtopicDetailScreen(
-                topic: topic,
-                subTopic: subTopic,
-              ),
-            ),
-          );
-        },
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            border: Border.all(color: colorScheme.outline),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      subTopic.getTitle(
-                          AppLocalization.of(context).locale.languageCode),
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: colorScheme.primary,
-                      ),
-                    ),
-                    if (subTopic.images.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        '${subTopic.images.length} ${AppLocalization.of(context).translate('topics.images') ?? 'images'}',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ],
+          actions: [
+            if (_isLoading || _isSaving)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.only(right: 16),
+                  child: SizedBox(
+                      width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
                 ),
               ),
-              Icon(
-                Icons.chevron_right,
-                color: colorScheme.onSurfaceVariant,
-                size: 20,
+          ],
+        ),
+        body: RefreshIndicator(
+          onRefresh: _loadDetail,
+          child: ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              // Description badge
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: colorScheme.primary.withOpacity(0.15)),
+                ),
+                child: Text(
+                  _topic.description,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                    color: colorScheme.primary,
+                  ),
+                ),
               ),
+              const SizedBox(height: 20),
+
+              // Content
+              Text(
+                AppLocalization.of(context).translate('topics.content'),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                _topic.content,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: colorScheme.onSurface.withOpacity(0.85),
+                  height: 1.7,
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Date info
+              Row(
+                children: [
+                  Icon(Icons.calendar_today_outlined,
+                      size: 14, color: colorScheme.onSurface.withOpacity(0.4)),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${_topic.updatedAt.day}.${_topic.updatedAt.month}.${_topic.updatedAt.year}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: colorScheme.onSurface.withOpacity(0.4),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 32),
+
+              // Save Progress Button
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  onPressed: _isLoading || _isSaving ? null : _saveStudyProgress,
+                  icon: _isSaving
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        )
+                      : const Icon(Icons.check_circle_outline),
+                  label: const Text('Çalışmayı Tamamla ve Kaydet'),
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+              ),
+
+              // Related Questions section (if any)
+              if (_questions.isNotEmpty) ...[
+                const SizedBox(height: 32),
+                const Divider(),
+                const SizedBox(height: 16),
+                Text(
+                  'İlgili Sorular',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ..._questions.map((q) => ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(Icons.help_outline),
+                      title: Text(q['question']?.toString() ?? 'Soru'),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () {
+                        // Navigate to question detail if needed
+                      },
+                    )),
+              ],
+              const SizedBox(height: 40),
             ],
           ),
         ),

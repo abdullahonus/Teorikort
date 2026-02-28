@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/models/quiz_data.dart';
-import 'package:driving_license_exam/core/localization/app_localization.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/features/reports/data/services/report_service.dart';
 
 class WrongAnswersReviewScreen extends StatelessWidget {
   final List<QuizQuestion> questions;
@@ -16,6 +17,64 @@ class WrongAnswersReviewScreen extends StatelessWidget {
   String _getLocalizedText(BuildContext context, Map<String, String> textMap) {
     final currentLanguage = AppLocalization.of(context).locale.languageCode;
     return textMap[currentLanguage] ?? textMap['tr'] ?? textMap.values.first;
+  }
+
+  Future<void> _showReportDialog(BuildContext context, String questionId) async {
+    final TextEditingController reportController = TextEditingController();
+    final l10n = AppLocalization.of(context);
+    final reportService = ReportService();
+
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.translate('report.title')),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.translate('report.description')),
+            const SizedBox(height: 16),
+            TextField(
+              controller: reportController,
+              maxLines: 3,
+              decoration: InputDecoration(
+                hintText: l10n.translate('report.hint'),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.translate('report.cancel')),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (reportController.text.trim().isEmpty) return;
+
+              final response = await reportService.reportQuestion(
+                questionId: questionId,
+                description: reportController.text.trim(),
+                context: context,
+              );
+
+              if (context.mounted) {
+                Navigator.pop(context);
+                if (response.success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.translate('report.success'))),
+                  );
+                }
+              }
+            },
+            child: Text(l10n.translate('report.submit')),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -62,8 +121,7 @@ class WrongAnswersReviewScreen extends StatelessWidget {
                       id: '',
                       text: {
                         'tr': AppLocalization.of(context)
-                                .translate('topics.no_answer') ??
-                            'Cevap yok',
+                                .translate('topics.no_answer'),
                         'en': 'No answer'
                       },
                     ),
@@ -71,8 +129,7 @@ class WrongAnswersReviewScreen extends StatelessWidget {
                   .text
               : {
                   'tr': AppLocalization.of(context)
-                          .translate('topics.no_answer') ??
-                      'Cevap yok',
+                          .translate('topics.no_answer'),
                   'en': 'No answer'
                 };
 
@@ -131,6 +188,13 @@ class WrongAnswersReviewScreen extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        icon: Icon(Icons.report_gmailerrorred, color: colorScheme.error, size: 20),
+                        onPressed: () => _showReportDialog(context, question.id),
+                        constraints: const BoxConstraints(),
+                        padding: EdgeInsets.zero,
                       ),
                     ],
                   ),

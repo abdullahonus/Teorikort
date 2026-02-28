@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/providers/auth_provider.dart';
-import '../../auth/presentation/screens/sign_in_screen.dart';
+import '../../../feature/auth/provider/auth_provider.dart';
+import '../../../feature/auth/view/sign_in_view.dart';
 import '../../../core/presentation/widgets/app_scaffold.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -19,17 +19,18 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 
   Future<void> _checkAuth() async {
-    await Future.delayed(const Duration(seconds: 2)); // Splash gösterimi için
+    // Notifier'ın build() içindeki _checkAuthStatus() bitmesini bekle
+    await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
 
     final authState = ref.read(authProvider);
-    if (authState.user != null) {
+    if (authState.isAuthenticated) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const AppScaffold()),
       );
     } else {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const SignInScreen()),
+        MaterialPageRoute(builder: (_) => const SignInView()),
       );
     }
   }
@@ -41,11 +42,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Logo veya animasyon
             const CircularProgressIndicator(),
             const SizedBox(height: 16),
             Text(
-              'Driving License Exam',
+              'Teorikort',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],

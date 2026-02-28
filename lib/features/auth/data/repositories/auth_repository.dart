@@ -1,6 +1,6 @@
-import 'package:driving_license_exam/core/providers/auth_provider.dart';
-import 'package:driving_license_exam/core/services/auth_service.dart';
-import 'package:driving_license_exam/core/services/logger_service.dart';
+import 'package:teorikort/core/providers/auth_provider.dart';
+import 'package:teorikort/core/services/auth_service.dart';
+import 'package:teorikort/core/services/logger_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/auth_user.dart';
 
@@ -27,10 +27,13 @@ class AuthRepository {
 
       if (response.success && response.data != null) {
         final user = AuthUser.fromJson({
+          'id': response.data!.user.id,
           'email': response.data!.user.email,
           'name': response.data!.user.name,
           'lastname': response.data!.user.lastname,
           'phone': response.data!.user.phone,
+          'is_email_verified': response.data!.user.isEmailVerified,
+          'created_at': response.data!.user.createdAt,
           'token': response.data!.token,
         });
         return user;

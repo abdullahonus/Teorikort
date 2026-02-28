@@ -9,6 +9,8 @@ class ApiConstants {
   static const String sendOtp = '/auth/send-otp';
   static const String verifyOtp = '/auth/verify-otp';
   static const String resetPassword = '/auth/reset-password';
+  static const String me = '/auth/me';
+  static const String logout = '/auth/logout';
 
   // Home Screen Endpoints
   static const String home = '/home';
@@ -16,9 +18,13 @@ class ApiConstants {
 
   // Exam Categories & Questions Endpoints
   static const String examCategories = '/exam-categories';
+  static String examCategoryDetail(String categoryId) =>
+      '/exam-categories/$categoryId';
   static String examCategoryQuestions(String categoryId) =>
       '/exam-categories/$categoryId/questions';
-  static const String mockExamQuestions = '/mock-exams/questions';
+  /// API: GET /exam-categories/{id}/mock-exam?count=20
+  static String mockExamQuestions(String categoryId) =>
+      '/exam-categories/$categoryId/mock-exam';
 
   // Exam Results Endpoints
   static const String examResults = '/exam-results';
@@ -39,15 +45,28 @@ class ApiConstants {
       '/topics/$topicId/subtopics/$subtopicId';
 
   // User Profile Endpoints
-  static const String userProfile = '/user/profile';
+  static const String userProfile = '/profile';
+  static const String userProfilePhoto = '/profile/photo';
   static const String userSettings = '/user/settings';
-  static const String userProfilePhoto = '/user/profile/photo';
 
   // Search Endpoints
   static const String searchQuestions = '/search/questions';
 
+  // Reports
+  static const String reports = '/reports';
+
+  // Workbooks
+  static const String workbooks = '/workbooks';
+
+  // Public Content
+  static const String packages = '/packages';
+  static String packageDetail(String packageId) => '/packages/$packageId';
+  static const String signs = '/signs';
+  static String signDetail(String signId) => '/signs/$signId';
+
   // Analytics Endpoints (Admin)
   static const String analyticsAppStats = '/analytics/app-stats';
+  static const String analyticsAppStatsOld = '/statistics/analytics';
 
   // API Headers
   static Map<String, String> headers = {
@@ -69,7 +88,7 @@ class ApiConstants {
       };
 
   // API Response Codes
-  static const int success = 200; // Backend uses 100 for success
+  static const int success = 100; // Backend uses 100 for success
   static const int badRequest = 400;
   static const int unauthorized = 401;
   static const int forbidden = 403;

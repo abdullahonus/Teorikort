@@ -1,6 +1,6 @@
 # 🌍 Localization (Dil Desteği) Kılavuzu
 
-Bu dokümanda **Driving License Exam** projesindeki dil desteği sisteminin nasıl çalıştığını ve yeni dil metinleri ekleme adımlarını bulabilirsiniz.
+Bu dokümanda **Teorikort** projesindeki dil desteği sisteminin nasıl çalıştığını ve yeni dil metinleri ekleme adımlarını bulabilirsiniz.
 
 ## 📁 Dosya Yapısı
 

@@ -9,10 +9,10 @@ class ExamData {
 
   factory ExamData.fromJson(Map<String, dynamic> json) {
     return ExamData(
-      categories: (json['categories'] as List)
+      categories: (json['categories'] as List? ?? [])
           .map((category) => ExamCategory.fromJson(category))
           .toList(),
-      completedExams: (json['completed_exams'] as List)
+      completedExams: (json['completed_exams'] as List? ?? [])
           .map((exam) => CompletedExam.fromJson(exam))
           .toList(),
     );
@@ -20,29 +20,63 @@ class ExamData {
 }
 
 class ExamCategory {
-  final String id;
+  final int id;
   final String title;
-  final String icon;
+  final int top;
+  final String description;
+  final int timeSecound;
+  final int successPint;
+  final String image;
+  final int content;
   final int totalQuestions;
-  final List<ExamItem> exams;
+  final String createdAt;
+  final String updatedAt;
 
   ExamCategory({
     required this.id,
     required this.title,
-    required this.icon,
+    required this.top,
+    required this.description,
+    required this.timeSecound,
+    required this.successPint,
+    required this.image,
+    required this.content,
     required this.totalQuestions,
-    required this.exams,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
+  String get icon => image; // fallback backward compat
+
+  static String _parseField(dynamic field) {
+    if (field is Map<String, dynamic>) {
+      return field['tr']?.toString() ??
+          field['en']?.toString() ??
+          (field.values.isNotEmpty ? field.values.first?.toString() ?? '' : '');
+    }
+    return field?.toString() ?? '';
+  }
+
   factory ExamCategory.fromJson(Map<String, dynamic> json) {
+    // If the data is nested under a 'category' key, use that
+    final data = json.containsKey('category')
+        ? json['category'] as Map<String, dynamic>
+        : json;
+
     return ExamCategory(
-      id: json['id'],
-      title: json['title'],
-      icon: json['icon'],
-      totalQuestions: json['total_questions'],
-      exams: (json['exams'] as List)
-          .map((exam) => ExamItem.fromJson(exam))
-          .toList(),
+      id: data['id'] is int
+          ? data['id']
+          : int.tryParse(data['id']?.toString() ?? '0') ?? 0,
+      title: _parseField(data['title']),
+      top: data['top'] ?? 0,
+      description: _parseField(data['description']),
+      timeSecound: data['time_secound'] ?? 2700,
+      successPint: data['success_pint'] ?? 70,
+      image: data['image'] ?? '',
+      content: data['content'] ?? 0,
+      totalQuestions: data['total_questions'] ?? 45,
+      createdAt: data['created_at'] ?? '',
+      updatedAt: data['updated_at'] ?? '',
     );
   }
 }

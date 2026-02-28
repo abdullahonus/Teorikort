@@ -68,14 +68,40 @@ class QuizQuestion {
   });
 
   factory QuizQuestion.fromJson(Map<String, dynamic> json) {
+    // Parse and filter options (drop entries with empty text)
+    final rawOptions = (json['options'] as List? ?? []);
+    final parsedOptions = rawOptions
+        .map((option) => Option.fromJson(option ?? {}))
+        .where((o) => o.getText().isNotEmpty)
+        .toList();
+
+    final correctAnswerRaw = json['correct_answer'];
+    String correctAnswer = '';
+    
+    // Try to get as int (either directly or parsing string)
+    int? correctIdx;
+    if (correctAnswerRaw is int) {
+      correctIdx = correctAnswerRaw;
+    } else if (correctAnswerRaw is String) {
+      correctIdx = int.tryParse(correctAnswerRaw);
+    }
+    
+    if (correctIdx != null) {
+      const letters = ['a', 'b', 'c', 'd', 'e'];
+      final idx = correctIdx - 1;
+      if (idx >= 0 && idx < letters.length) {
+        correctAnswer = letters[idx];
+      }
+    } else {
+      correctAnswer = correctAnswerRaw?.toString() ?? '';
+    }
+
     return QuizQuestion(
-      id: json['id'] ?? '',
+      id: json['id']?.toString() ?? '',
       question: _parseMultiLangField(json['question']),
-      imageUrl: json['image_url'],
-      options: (json['options'] as List? ?? [])
-          .map((option) => Option.fromJson(option ?? {}))
-          .toList(),
-      correctAnswer: json['correct_answer'] ?? '',
+      imageUrl: json['image_url']?.toString().isEmpty == true ? null : json['image_url'],
+      options: parsedOptions,
+      correctAnswer: correctAnswer,
       explanation: _parseMultiLangField(json['explanation']),
       difficulty: json['difficulty'],
     );
@@ -98,9 +124,9 @@ class QuizQuestion {
       return field.map((key, value) => MapEntry(key, value?.toString() ?? ''));
     } else if (field is String) {
       // Fallback for single language (backwards compatibility)
-      return {'tr': field};
+      return {'tr': field, 'en': field};
     }
-    return {'tr': ''};
+    return {'tr': '', 'en': ''};
   }
 }
 
@@ -117,9 +143,9 @@ class Option {
 
   factory Option.fromJson(Map<String, dynamic> json) {
     return Option(
-      id: json['id'] ?? '',
+      id: json['id']?.toString() ?? '',
       text: QuizQuestion._parseMultiLangField(json['text']),
-      imageUrl: json['image_url'],
+      imageUrl: json['image_url']?.toString(),
     );
   }
 

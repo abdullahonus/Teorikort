@@ -1,8 +1,8 @@
-import 'package:driving_license_exam/core/presentation/widgets/app_scaffold.dart';
-import 'package:driving_license_exam/features/quiz/presentation/wrong_answers_review_screen.dart';
+import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
+import 'package:teorikort/features/quiz/presentation/wrong_answers_review_screen.dart';
 import 'package:flutter/material.dart';
 import '../data/models/quiz_data.dart';
-import 'package:driving_license_exam/core/localization/app_localization.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
 
 class QuizResultScreen extends StatelessWidget {
   final int totalQuestions;

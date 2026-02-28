@@ -1,7 +1,4 @@
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/services/base_api_service.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/models/api_response.dart';
@@ -25,11 +22,11 @@ class DailyTip {
 
   factory DailyTip.fromJson(Map<String, dynamic> json) {
     return DailyTip(
-      id: json['id'] as int,
+      id: json['id'] as int? ?? 0,
       title: _parseMultiLangField(json['title']),
       content: _parseMultiLangField(json['content']),
-      category: json['category'] as String,
-      icon: json['icon'] as String,
+      category: json['category'] as String? ?? 'general',
+      icon: json['icon'] as String? ?? 'lightbulb',
       date: json['date'] as String?,
     );
   }
@@ -56,119 +53,40 @@ class DailyTip {
 }
 
 class DailyTipService extends BaseApiService {
-  // Get daily tip from API with fallback to mock data
+  // Get daily tip from API
   Future<DailyTip?> getDailyTip({BuildContext? context}) async {
+    final language = getCurrentLanguage(context);
+
     try {
-      final language = getCurrentLanguage(context);
+      final response = await handleResponse<DailyTip>(
+        get(
+          ApiConstants.dailyTips,
+          language: language,
+        ),
+        DailyTip.fromJson,
+      );
 
-      // Try API first
-      try {
-        final response = await handleResponse<DailyTip>(
-          get(
-            ApiConstants.dailyTips,
-            language: language,
-          ),
-          DailyTip.fromJson,
-        );
-
-        if (response.success && response.data != null) {
-          return response.data;
-        }
-      } catch (apiError) {
-        print(
-            'Daily tip API çağrısı başarısız, mock verilere geçiliyor: $apiError');
+      if (response.success && response.data != null) {
+        return response.data;
       }
-
-      // Fallback to mock data
-      return await _loadMockDailyTip();
     } catch (e) {
       print('Daily tip yükleme hatası: $e');
-      return await _loadMockDailyTip();
     }
+    return null;
   }
 
-  // Load mock daily tip from assets
-  Future<DailyTip?> _loadMockDailyTip() async {
-    try {
-      final String jsonString =
-          await rootBundle.loadString('assets/data/daily_tips.json');
-      final Map<String, dynamic> jsonData = json.decode(jsonString);
-
-      final List<dynamic> tips = jsonData['tips'] ?? [];
-      if (tips.isEmpty) return null;
-
-      // Get saved index or random
-      final prefs = await SharedPreferences.getInstance();
-      final today =
-          DateTime.now().toIso8601String().split('T')[0]; // YYYY-MM-DD
-      final savedDate = prefs.getString('daily_tip_date');
-
-      int tipIndex;
-      if (savedDate == today) {
-        // Same day, use saved index
-        tipIndex = prefs.getInt('daily_tip_index') ?? 0;
-      } else {
-        // New day, get random tip
-        tipIndex = DateTime.now().day % tips.length;
-        await prefs.setString('daily_tip_date', today);
-        await prefs.setInt('daily_tip_index', tipIndex);
-      }
-
-      final tipData = tips[tipIndex] as Map<String, dynamic>;
-      return DailyTip.fromJson(tipData);
-    } catch (e) {
-      print('Mock daily tip yükleme hatası: $e');
-      return null;
-    }
-  }
-
-  // Get daily tip from API (for direct API usage)
+  // Get daily tip from API
   Future<ApiResponse<DailyTip>> getDailyTipFromApi({
     BuildContext? context,
   }) async {
-    try {
-      final language = getCurrentLanguage(context);
+    final language = getCurrentLanguage(context);
 
-      // Try API first
-      try {
-        final response = await handleResponse<DailyTip>(
-          get(
-            ApiConstants.dailyTips,
-            language: language,
-          ),
-          DailyTip.fromJson,
-        );
-
-        if (response.success && response.data != null) {
-          return response;
-        }
-      } catch (apiError) {
-        print(
-            'Daily tip API çağrısı başarısız, mock verilere geçiliyor: $apiError');
-      }
-
-      // Fallback to mock data
-      final mockTip = await _loadMockDailyTip();
-      if (mockTip != null) {
-        return ApiResponse<DailyTip>(
-          success: true,
-          statusCode: 100,
-          message: 'Mock günlük ipucu yüklendi',
-          data: mockTip,
-        );
-      }
-
-      return ApiResponse<DailyTip>(
-        success: false,
-        statusCode: 404,
-        message: 'Günlük ipucu bulunamadı',
-      );
-    } catch (e) {
-      return ApiResponse<DailyTip>(
-        success: false,
-        statusCode: 500,
-        message: 'Günlük ipucu yüklenemedi: $e',
-      );
-    }
+    return await handleResponse<DailyTip>(
+      get(
+        ApiConstants.dailyTips,
+        language: language,
+      ),
+      DailyTip.fromJson,
+    );
   }
 }

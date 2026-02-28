@@ -35,5 +35,19 @@ class UserProfile {
     );
   }
 
-  String get fullName => lastname != null ? '$name $lastname' : name;
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'email': email,
+        'lastname': lastname,
+        'phone': phone,
+        'package': package,
+        'create_date': createDate,
+        'created_at': createdAt,
+        'updated_at': updatedAt,
+      };
+
+  String get fullName => lastname != null && lastname!.isNotEmpty
+      ? '$name $lastname'
+      : name;
 }

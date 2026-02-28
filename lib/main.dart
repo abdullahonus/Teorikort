@@ -1,22 +1,20 @@
-import 'package:driving_license_exam/core/providers/theme_provider.dart';
-import 'package:driving_license_exam/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:driving_license_exam/features/splash/presentation/splash_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:driving_license_exam/core/localization/app_localization.dart';
-import 'package:driving_license_exam/core/providers/locale_provider.dart';
-import 'package:driving_license_exam/core/providers/auth_provider.dart';
+import 'package:chucker_flutter/chucker_flutter.dart';
+
+import 'core/localization/app_localization.dart';
+import 'core/providers/locale_provider.dart';
+import 'core/providers/theme_provider.dart';
+import 'core/theme/app_theme.dart';
+import 'features/splash/presentation/splash_screen.dart';
+import 'product/init/app_bootstrap.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final container = await AppBootstrap.initialize();
 
-  // Sistem dilini al
-  final systemLocale = WidgetsBinding.instance.window.locale;
-  final initialLocale = systemLocale.languageCode == 'tr' ? 'tr' : 'en';
-
-  // Locale provider'ı başlat
-  final container = ProviderContainer();
+  // Başlangıç locale'ini çöz ve ayarla
+  final initialLocale = AppBootstrap.resolveInitialLocale();
   container.read(localeProvider.notifier).setLocale(initialLocale);
 
   runApp(
@@ -34,15 +32,15 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeProvider);
     final locale = ref.watch(localeProvider);
-    final authState = ref.watch(authProvider);
 
     return MaterialApp(
-      title: 'Driving License Exam',
+      title: 'Teorikort',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       locale: locale,
+      navigatorObservers: [ChuckerFlutter.navigatorObserver],
       supportedLocales: const [
         Locale('tr', 'TR'),
         Locale('en', 'US'),

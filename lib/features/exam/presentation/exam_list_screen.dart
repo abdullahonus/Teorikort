@@ -1,12 +1,12 @@
-import 'package:driving_license_exam/features/quiz/presentation/quiz_screen.dart';
+import 'package:teorikort/features/quiz/presentation/quiz_screen.dart';
 
 import 'package:flutter/material.dart';
-import 'package:driving_license_exam/core/theme/app_colors.dart';
-import 'package:driving_license_exam/features/exam/data/models/exam_result.dart';
-import 'package:driving_license_exam/features/exam/data/services/exam_result_service.dart';
 import 'package:collection/collection.dart';
-import 'package:driving_license_exam/core/localization/app_localization.dart';
-import 'package:driving_license_exam/features/exam/data/services/category_service.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/features/exam/data/services/exam_service.dart';
+import 'package:teorikort/features/exam/data/models/exam_data.dart';
+import 'package:teorikort/features/quiz/data/services/quiz_service.dart'
+    hide ExamCategory;
 
 class ExamListScreen extends StatefulWidget {
   const ExamListScreen({super.key});
@@ -16,10 +16,10 @@ class ExamListScreen extends StatefulWidget {
 }
 
 class _ExamListScreenState extends State<ExamListScreen> {
-  final ExamResultService _resultService = ExamResultService();
-  final CategoryService _categoryService = CategoryService();
-  Map<String, List<ExamResult>> _examResults = {};
-  Map<String, dynamic>? _categories;
+  final ExamService _examService = ExamService();
+  final QuizService _quizService = QuizService();
+  List<ExamCategory>? _categories;
+  List<ExamResultItem> _apiExamResults = [];
 
   @override
   void initState() {
@@ -29,26 +29,44 @@ class _ExamListScreenState extends State<ExamListScreen> {
   }
 
   Future<void> _loadExamResults() async {
-    final results = await _resultService.getExamResults();
-    setState(() {
-      _examResults = groupBy(results, (ExamResult r) => r.category);
-    });
+    try {
+      final response = await _quizService.getUserExamResults();
+      if (response.success && response.data != null) {
+        setState(() {
+          _apiExamResults = response.data!;
+        });
+      }
+    } catch (e) {
+      print('Sınav sonuçları yüklenemedi: $e');
+    }
   }
 
   Future<void> _loadCategories() async {
     try {
-      final categories = await _categoryService.getCategories();
-      setState(() {
-        _categories = categories;
-      });
+      final response = await _examService.getExamCategories(context: context);
+      if (mounted) {
+        setState(() {
+          if (response.success && response.data != null) {
+            _categories = response.data;
+          } else {
+            // If failed, set to empty list to stop loading but show "no data" if we want
+            // Or keep as null and show error UI. Let's use empty list for now to stop spinner.
+            _categories = [];
+          }
+        });
+      }
     } catch (e) {
       print('Kategoriler yüklenirken hata oluştu: $e');
+      if (mounted) {
+        setState(() {
+          _categories = [];
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
@@ -76,10 +94,11 @@ class _ExamListScreenState extends State<ExamListScreen> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 100, 20, 20),
               children: [
-                _buildExamSection(
-                    AppLocalization.of(context)
-                        .translate('exam_list.active_exams'),
-                    _buildActiveExams(context).sublist(1)),
+                if (_categories != null && _categories!.length > 1)
+                  _buildExamSection(
+                      AppLocalization.of(context)
+                          .translate('exam_list.active_exams'),
+                      _buildActiveExams(context).sublist(1)),
                 const SizedBox(height: 24),
                 _buildExamSection(
                     AppLocalization.of(context)
@@ -94,7 +113,15 @@ class _ExamListScreenState extends State<ExamListScreen> {
             right: 20,
             child: SizedBox(
                 height: 140,
-                child: Center(child: _buildActiveExams(context).first)),
+                child: Center(
+                  child: _categories == null
+                      ? CircularProgressIndicator(
+                          color: Theme.of(context).colorScheme.primary,
+                        )
+                      : (_categories!.isEmpty
+                          ? const Text('Kategori bulunamadı')
+                          : _buildActiveExams(context).first),
+                )),
           ),
         ],
       ),
@@ -120,50 +147,37 @@ class _ExamListScreenState extends State<ExamListScreen> {
   }
 
   List<Widget> _buildActiveExams(BuildContext context) {
-    if (_categories == null) {
-      return [
-        Center(
-            child: CircularProgressIndicator(
-          color: Theme.of(context).colorScheme.primary,
-        ))
-      ];
+    if (_categories == null || _categories!.isEmpty) {
+      return [];
     }
 
-    final List<Widget> examItems = _categories!.entries.map((entry) {
-      final categoryId = entry.key;
-      final categoryData = entry.value as Map<String, dynamic>;
-      final locale = AppLocalization.of(context).locale.languageCode;
+    final List<Widget> examItems = _categories!.map((category) {
+      final categoryId = category.id.toString();
 
       return _ExamItem(
-        title: categoryData[locale],
+        title: category.title,
         subtitle: AppLocalization.of(context).translate('exam_list.final_exam'),
         duration:
-            '45 ${AppLocalization.of(context).translate('exam_list.minutes')}',
-        iconUrl: categoryData['icon'],
+            '${category.timeSecound ~/ 60} ${AppLocalization.of(context).translate('exam_list.minutes')}',
+        iconUrl: category.icon, // or category.image if icon acts as fallback
         isActive: true,
-        examResults: _examResults[categoryId],
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => QuizScreen(
               category: categoryId,
-              examTitle: categoryData[locale],
+              examTitle: category.title,
             ),
           ),
         ),
       );
     }).toList();
 
-    if (examItems.isNotEmpty) {
-      final firstItem = examItems.removeAt(0);
-      return [firstItem, ...examItems];
-    }
-
     return examItems;
   }
 
   List<Widget> _buildCompletedExams() {
-    if (_examResults.isEmpty) {
+    if (_apiExamResults.isEmpty) {
       return [
         Center(
           child: Text(
@@ -178,23 +192,26 @@ class _ExamListScreenState extends State<ExamListScreen> {
       ];
     }
 
-    return _examResults.entries.map((entry) {
+    // Group by category, take the latest per category
+    final grouped =
+        groupBy(_apiExamResults, (ExamResultItem r) => r.catId.toString());
+
+    return grouped.entries.map((entry) {
       final categoryId = entry.key;
       final results = entry.value;
-      final latestResult = results.last;
-      final categoryData = _categories?[categoryId] as Map<String, dynamic>?;
-      final locale = AppLocalization.of(context).locale.languageCode;
+      // Sort by createdAt desc to get latest
+      results.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      final latest = results.first;
+      final categoryData =
+          _categories?.firstWhereOrNull((c) => c.id.toString() == categoryId);
 
       return _ExamItem(
-        title: categoryData?[locale] ?? '',
+        title: categoryData?.title ?? latest.categoryTitle,
         subtitle:
-            '${latestResult.correctAnswers}/${latestResult.totalQuestions} ${AppLocalization.of(context).translate('exam_list.correct')}',
-        duration: latestResult.duration.inMinutes > 0
-            ? '${latestResult.duration.inMinutes} ${AppLocalization.of(context).translate('exam_list.minutes')}'
-            : '${latestResult.duration.inSeconds} ${AppLocalization.of(context).translate('quiz_result.seconds')}',
-        iconUrl: categoryData?['icon'] ?? '',
+            '${latest.correctAnswers}/${latest.totalQuestions} ${AppLocalization.of(context).translate('exam_list.correct')}',
+        duration: '${latest.point.toStringAsFixed(0)}%',
+        iconUrl: categoryData?.icon ?? '',
         isCompleted: true,
-        examResults: results,
       );
     }).toList();
   }
@@ -208,8 +225,6 @@ class _ExamItem extends StatelessWidget {
   final bool isActive;
   final bool isCompleted;
   final VoidCallback? onTap;
-  final List<ExamResult>? examResults;
-
   const _ExamItem({
     required this.title,
     required this.subtitle,
@@ -218,7 +233,6 @@ class _ExamItem extends StatelessWidget {
     this.isActive = false,
     this.isCompleted = false,
     this.onTap,
-    this.examResults,
   });
 
   @override
@@ -326,49 +340,18 @@ class _ExamItem extends StatelessWidget {
 
   Widget _buildActionButton(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    if (examResults == null || examResults!.isEmpty) {
-      return Container(
-        width: 32,
-        height: 32,
-        decoration: BoxDecoration(
-          color: colorScheme.primary.withOpacity(0.1),
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          Icons.play_arrow,
-          color: colorScheme.primary,
-          size: 20,
-        ),
-      );
-    }
-
-    final latestResult = examResults!.last;
-    final percentage = latestResult.scorePercentage.round();
-
-    if (percentage <= 0) {
-      return const SizedBox.shrink();
-    }
-
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      width: 32,
+      height: 32,
       decoration: BoxDecoration(
-        color: _getScoreColor(percentage).withOpacity(0.1),
-        borderRadius: BorderRadius.circular(16),
+        color: colorScheme.primary.withOpacity(0.1),
+        shape: BoxShape.circle,
       ),
-      child: Text(
-        '$percentage%',
-        style: TextStyle(
-          color: _getScoreColor(percentage),
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-        ),
+      child: Icon(
+        isCompleted ? Icons.check : Icons.play_arrow,
+        color: colorScheme.primary,
+        size: 20,
       ),
     );
-  }
-
-  Color _getScoreColor(int percentage) {
-    if (percentage >= 80) return Colors.green;
-    if (percentage >= 60) return Colors.orange;
-    return Colors.red;
   }
 }

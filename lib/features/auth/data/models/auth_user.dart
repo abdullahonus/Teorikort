@@ -1,4 +1,5 @@
 class AuthUser {
+  final int id;
   final String email;
   final String name;
   final String? lastname;
@@ -9,6 +10,7 @@ class AuthUser {
   final String? token;
 
   AuthUser({
+    required this.id,
     required this.email,
     required this.name,
     this.lastname,
@@ -21,6 +23,7 @@ class AuthUser {
 
   factory AuthUser.fromJson(Map<String, dynamic> json) {
     return AuthUser(
+      id: json['id'] ?? 0,
       email: json['email'],
       name: json['name'],
       lastname: json['lastname'],
@@ -36,12 +39,13 @@ class AuthUser {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'email': email,
       'name': name,
       'lastname': lastname,
       'phone': phone,
       'photo_url': photoUrl,
-      'created_at': createdAt!.toIso8601String(),
+      'created_at': createdAt?.toIso8601String(),
       'is_email_verified': isEmailVerified,
       'token': token,
     };

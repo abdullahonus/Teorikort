@@ -1,10 +1,9 @@
-import 'package:driving_license_exam/core/constants/api_constants.dart';
-import 'package:driving_license_exam/core/models/api_response.dart';
-import 'package:driving_license_exam/core/models/auth_response.dart';
-import 'package:driving_license_exam/core/models/auth_tokens.dart';
-import 'package:driving_license_exam/core/models/password_validation_response.dart';
-import 'package:driving_license_exam/core/services/logger_service.dart';
-import 'package:driving_license_exam/core/services/base_api_service.dart';
+import 'package:teorikort/core/constants/api_constants.dart';
+import 'package:teorikort/core/models/api_response.dart';
+import 'package:teorikort/core/models/auth_response.dart';
+import 'package:teorikort/core/models/auth_tokens.dart';
+import 'package:teorikort/core/models/password_validation_response.dart';
+import 'package:teorikort/core/services/base_api_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthService extends BaseApiService {
@@ -110,6 +109,7 @@ class AuthService extends BaseApiService {
         data: {
           'email': email.trim(),
           'password': password,
+          'password_confirmation': password,
           'name': name.trim(),
           if (lastname?.isNotEmpty == true) 'lastname': lastname!.trim(),
           if (phone?.isNotEmpty == true) 'phone': phone!.trim(),
@@ -173,16 +173,8 @@ class AuthService extends BaseApiService {
   }
 
   Future<void> logout() async {
-    try {
-      // Optionally call logout endpoint
-      // await post(ApiConstants.logout);
-
-      // Always clear local tokens
-      await deleteTokens();
-    } catch (e) {
-      LoggerService.error('Logout error:', e);
-      // Still clear tokens even if API call fails
-      await deleteTokens();
-    }
+    // Clears local tokens. 
+    // Backend documentation does not specify a logout endpoint.
+    await deleteTokens();
   }
 }

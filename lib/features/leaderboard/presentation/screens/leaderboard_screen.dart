@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:driving_license_exam/core/localization/app_localization.dart';
-import 'package:driving_license_exam/features/leaderboard/data/models/leaderboard_entry.dart';
-import 'package:driving_license_exam/features/leaderboard/data/services/leaderboard_service.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/features/leaderboard/data/models/leaderboard_entry.dart';
+import 'package:teorikort/features/leaderboard/data/services/leaderboard_service.dart';
 
 class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key});
@@ -13,6 +13,7 @@ class LeaderboardScreen extends StatefulWidget {
 class _LeaderboardScreenState extends State<LeaderboardScreen> {
   final LeaderboardService _leaderboardService = LeaderboardService();
   late Future<List<LeaderboardEntry>?> _leaderboardFuture;
+  late Future<LeaderboardEntry?> _myRankFuture;
 
   @override
   void initState() {
@@ -23,15 +24,17 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   void _loadLeaderboard() {
     setState(() {
       _leaderboardFuture = _leaderboardService
-          .getLeaderboard()
-          .then((response) => response.data?.leaderboard);
+          .getLeaderboard(context: context)
+          .then((r) => r.data);
+      _myRankFuture = _leaderboardService
+          .getMyRank(context: context)
+          .then((r) => r.data);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -68,20 +71,16 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: colorScheme.error.withOpacity(0.5),
-                  ),
+                  Icon(Icons.error_outline,
+                      size: 64,
+                      color: colorScheme.error.withOpacity(0.5)),
                   const SizedBox(height: 16),
                   Text(
                     AppLocalization.of(context)
-                            .translate('leaderboard.error_message') ??
-                        'Unable to load leaderboard',
+                        .translate('leaderboard.error_message'),
                     style: TextStyle(
-                      color: colorScheme.onSurface.withOpacity(0.6),
-                      fontSize: 16,
-                    ),
+                        color: colorScheme.onSurface.withOpacity(0.6),
+                        fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
@@ -90,8 +89,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                     icon: Icon(Icons.refresh, color: colorScheme.primary),
                     label: Text(
                       AppLocalization.of(context)
-                              .translate('leaderboard.refresh') ??
-                          'Refresh',
+                          .translate('leaderboard.refresh'),
                       style: TextStyle(color: colorScheme.primary),
                     ),
                   ),
@@ -106,31 +104,25 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.emoji_events_outlined,
-                    size: 64,
-                    color: colorScheme.onSurface.withOpacity(0.3),
-                  ),
+                  Icon(Icons.emoji_events_outlined,
+                      size: 64,
+                      color: colorScheme.onSurface.withOpacity(0.3)),
                   const SizedBox(height: 16),
                   Text(
                     AppLocalization.of(context)
-                            .translate('leaderboard.no_data') ??
-                        'No leaderboard data available',
+                        .translate('leaderboard.no_data'),
                     style: TextStyle(
-                      color: colorScheme.onSurface.withOpacity(0.6),
-                      fontSize: 16,
-                    ),
+                        color: colorScheme.onSurface.withOpacity(0.6),
+                        fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     AppLocalization.of(context)
-                            .translate('leaderboard.take_exams_first') ??
-                        'Take some exams to see rankings',
+                        .translate('leaderboard.take_exams_first'),
                     style: TextStyle(
-                      color: colorScheme.onSurface.withOpacity(0.5),
-                      fontSize: 14,
-                    ),
+                        color: colorScheme.onSurface.withOpacity(0.5),
+                        fontSize: 14),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -138,74 +130,106 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             );
           }
 
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: entries.length + 1,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalization.of(context)
-                          .translate('leaderboard.top_performers'),
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            AppLocalization.of(context)
-                                .translate('leaderboard.rank'),
-                            style: TextStyle(
-                              color: colorScheme.onSurface.withOpacity(0.6),
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: Text(
-                            AppLocalization.of(context)
-                                .translate('leaderboard.user'),
-                            style: TextStyle(
-                              color: colorScheme.onSurface.withOpacity(0.6),
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          AppLocalization.of(context)
-                              .translate('leaderboard.score'),
-                          style: TextStyle(
-                            color: colorScheme.onSurface.withOpacity(0.6),
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                );
-              }
-              final entry = entries[index - 1];
-              return _buildLeaderboardItem(entry);
-            },
+          // My-rank banner — always from dedicated API, shown when rank > 3
+          return Column(
+            children: [
+              FutureBuilder<LeaderboardEntry?>(
+                future: _myRankFuture,
+                builder: (ctx, snap) {
+                  final myRank = snap.data;
+                  if (myRank == null || myRank.rank <= 3) {
+                    return const SizedBox.shrink();
+                  }
+                  return _buildCurrentUserBanner(myRank);
+                },
+              ),
+
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                  itemCount: entries.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) return _buildHeader();
+                    return _buildLeaderboardItem(entries[index - 1]);
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
     );
   }
 
+  Widget _buildHeader() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 40,
+            child: Text(
+              AppLocalization.of(context).translate('leaderboard.rank'),
+              style: TextStyle(
+                  color: colorScheme.onSurface.withOpacity(0.5), fontSize: 12),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              AppLocalization.of(context).translate('leaderboard.user'),
+              style: TextStyle(
+                  color: colorScheme.onSurface.withOpacity(0.5), fontSize: 12),
+            ),
+          ),
+          Text(
+            AppLocalization.of(context).translate('leaderboard.score'),
+            style: TextStyle(
+                color: colorScheme.onSurface.withOpacity(0.5), fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCurrentUserBanner(LeaderboardEntry entry) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: colorScheme.primary.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.primary.withOpacity(0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.person, color: colorScheme.primary, size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Sıralamanız: #${entry.rank}',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: colorScheme.primary,
+              ),
+            ),
+          ),
+          Text(
+            '${entry.score} puan',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              color: colorScheme.primary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildLeaderboardItem(LeaderboardEntry entry) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     Color getRankColor() {
       switch (entry.rank) {
@@ -216,96 +240,118 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         case 3:
           return const Color(0xFFCD7F32); // Bronze
         default:
-          return colorScheme.onSurface.withOpacity(0.6);
+          return colorScheme.onSurface.withOpacity(0.5);
       }
     }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: entry.isCurrentUser
-            ? colorScheme.primary.withOpacity(0.1)
+            ? colorScheme.primary.withOpacity(0.08)
             : colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: entry.isCurrentUser
-              ? colorScheme.primary.withOpacity(0.2)
-              : colorScheme.outline.withOpacity(0.2),
+              ? colorScheme.primary.withOpacity(0.25)
+              : colorScheme.outline.withOpacity(0.15),
+          width: entry.isCurrentUser ? 1.5 : 1,
         ),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            width: 32,
-            height: 32,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: entry.rank <= 3
-                  ? getRankColor().withOpacity(0.1)
-                  : colorScheme.primary.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
+          // Rank circle
+          SizedBox(
+            width: 40,
+            child: entry.rank <= 3
+                ? Icon(Icons.emoji_events,
+                    color: getRankColor(), size: 26)
+                : Container(
+                    width: 30,
+                    height: 30,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary.withOpacity(0.08),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '${entry.rank}',
+                      style: TextStyle(
+                        color: colorScheme.primary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+          ),
+          const SizedBox(width: 10),
+
+          // Avatar initials
+          CircleAvatar(
+            radius: 18,
+            backgroundColor: entry.isCurrentUser
+                ? colorScheme.primary
+                : colorScheme.primary.withOpacity(0.15),
             child: Text(
-              '${entry.rank}',
+              entry.name.isNotEmpty ? entry.name[0].toUpperCase() : '?',
               style: TextStyle(
-                color: entry.rank <= 3 ? getRankColor() : colorScheme.primary,
-                fontSize: 16,
+                color: entry.isCurrentUser
+                    ? colorScheme.onPrimary
+                    : colorScheme.primary,
                 fontWeight: FontWeight.bold,
+                fontSize: 14,
               ),
             ),
           ),
           const SizedBox(width: 12),
-          Container(
-            width: 32,
-            height: 32,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: ClipOval(
-              child: Image.network(
-                entry.photoUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Icon(
-                  Icons.person,
-                  color: colorScheme.primary,
-                  size: 20,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
+
+          // Name + stats
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   entry.name,
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    fontWeight: entry.isCurrentUser
+                        ? FontWeight.w700
+                        : FontWeight.w500,
                     color: colorScheme.onSurface,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
-                  '${entry.score} ${AppLocalization.of(context).translate('leaderboard.points')}',
+                  '${entry.totalExams} sınav  •  ort. %${entry.averageScore.toStringAsFixed(1)}',
                   style: TextStyle(
-                    fontSize: 14,
-                    color: colorScheme.onSurface.withOpacity(0.6),
+                    fontSize: 11,
+                    color: colorScheme.onSurface.withOpacity(0.5),
                   ),
                 ),
               ],
             ),
           ),
-          if (entry.rank <= 3)
-            Icon(
-              Icons.emoji_events,
-              color: getRankColor(),
-              size: 24,
+
+          // Score badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: entry.rank <= 3
+                  ? getRankColor().withOpacity(0.12)
+                  : colorScheme.primary.withOpacity(0.09),
+              borderRadius: BorderRadius.circular(20),
             ),
+            child: Text(
+              '${entry.score}',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: entry.rank <= 3 ? getRankColor() : colorScheme.primary,
+              ),
+            ),
+          ),
         ],
       ),
     );

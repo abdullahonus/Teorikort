@@ -1,12 +1,11 @@
-import 'package:dio/dio.dart';
-import 'package:driving_license_exam/core/services/logger_service.dart';
-import 'package:driving_license_exam/features/user/data/repositories/user_repository.dart';
-import 'package:driving_license_exam/features/user/domain/models/user_profile.dart';
+import 'package:teorikort/core/services/logger_service.dart';
+import 'package:teorikort/features/user/data/repositories/user_repository.dart';
+import 'package:teorikort/features/user/domain/models/user_profile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:driving_license_exam/core/services/user_service.dart';
+import 'package:teorikort/core/services/user_service.dart';
 
 final userRepositoryProvider = Provider<UserRepository>((ref) {
-  return UserRepository(Dio());
+  return UserRepository();
 });
 
 final userStateProvider = StateNotifierProvider<UserNotifier, UserState>((ref) {
@@ -43,13 +42,13 @@ class UserNotifier extends StateNotifier<UserState> {
 
   UserNotifier(this._repository) : super(const UserState());
 
-  Future<void> getUserProfile(String token) async {
+  Future<void> getUserProfile() async {
     try {
       LoggerService.debug(
-          'Fetching user profile...', 'Token: ${token.substring(0, 10)}...');
+          'Fetching user profile...', 'from api');
 
       state = state.copyWith(isLoading: true, error: null);
-      final response = await _repository.getUserProfile(token);
+      final response = await _repository.getUserProfile();
 
       if (response.success && response.data != null) {
         LoggerService.info(
@@ -85,6 +84,35 @@ class UserNotifier extends StateNotifier<UserState> {
         error: 'Failed to fetch user profile',
         isLoading: false,
       );
+    }
+  }
+
+  Future<bool> updateUserProfile(String name) async {
+    try {
+      state = state.copyWith(isLoading: true, error: null);
+      final response = await _repository.updateUserProfile(name);
+
+      if (response.success && response.data != null) {
+        await UserService().updateUserFromApi(response.data!);
+        state = state.copyWith(
+          profile: response.data,
+          isLoading: false,
+        );
+        return true;
+      } else {
+        state = state.copyWith(
+          error: response.message,
+          isLoading: false,
+        );
+        return false;
+      }
+    } catch (e) {
+      LoggerService.error('User Profile Update Error', e);
+      state = state.copyWith(
+        error: 'Failed to update user profile',
+        isLoading: false,
+      );
+      return false;
     }
   }
 }

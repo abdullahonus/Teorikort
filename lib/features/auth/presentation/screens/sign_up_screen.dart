@@ -1,5 +1,5 @@
-import 'package:driving_license_exam/core/presentation/widgets/app_scaffold.dart';
-import 'package:driving_license_exam/core/localization/app_localization.dart';
+import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';

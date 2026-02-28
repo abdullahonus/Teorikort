@@ -1,28 +1,15 @@
 import 'package:flutter/material.dart';
 import '../data/models/topic.dart';
-import 'package:driving_license_exam/core/localization/app_localization.dart';
-import 'package:flutter_html/flutter_html.dart';
 
-class SubtopicDetailScreen extends StatefulWidget {
-  final Topic topic;
+/// Used when a subtopic is fetched separately (e.g. /topics/{id}/subtopics/{sid}).
+/// Currently API only has flat topic content so this screen shows SubTopic.content.
+class SubtopicDetailScreen extends StatelessWidget {
   final SubTopic subTopic;
 
   const SubtopicDetailScreen({
     super.key,
-    required this.topic,
     required this.subTopic,
   });
-
-  @override
-  State<SubtopicDetailScreen> createState() => _SubtopicDetailScreenState();
-}
-
-class _SubtopicDetailScreenState extends State<SubtopicDetailScreen> {
-  // Helper method to get text in current language
-  String _getLocalizedText(Map<String, String> textMap) {
-    final currentLanguage = AppLocalization.of(context).locale.languageCode;
-    return textMap[currentLanguage] ?? textMap['tr'] ?? textMap.values.first;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +17,7 @@ class _SubtopicDetailScreenState extends State<SubtopicDetailScreen> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         backgroundColor: colorScheme.surface,
         elevation: 0,
@@ -39,80 +26,20 @@ class _SubtopicDetailScreenState extends State<SubtopicDetailScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          _getLocalizedText(widget.subTopic.title),
+          subTopic.title,
           style: theme.textTheme.titleLarge,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-        child: _buildContent(),
-      ),
-    );
-  }
-
-  Widget _buildContent() {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            _getLocalizedText(widget.subTopic.title),
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 3,
+        child: Text(
+          subTopic.content,
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: colorScheme.onSurface.withOpacity(0.85),
+            height: 1.7,
           ),
-          const SizedBox(height: 16),
-          Html(
-            data: _getLocalizedText(widget.subTopic.content),
-            style: {
-              "body": Style(
-                fontSize: FontSize(16),
-                lineHeight: const LineHeight(1.6),
-                color: colorScheme.onSurface.withOpacity(0.8),
-                margin: Margins.zero,
-                padding: HtmlPaddings.zero,
-              ),
-              "h3": Style(
-                fontSize: FontSize(20),
-                fontWeight: FontWeight.bold,
-                margin: Margins.only(bottom: 12),
-              ),
-              "h4": Style(
-                fontSize: FontSize(18),
-                fontWeight: FontWeight.bold,
-                margin: Margins.only(bottom: 8, top: 16),
-              ),
-              "p": Style(
-                margin: Margins.only(bottom: 12),
-              ),
-              "ul": Style(
-                margin: Margins.only(bottom: 16, left: 20),
-              ),
-              "li": Style(
-                margin: Margins.only(bottom: 8),
-              ),
-              ".image-container": Style(
-                alignment: Alignment.center,
-                margin: Margins.symmetric(vertical: 16),
-              ),
-              "img": Style(
-                alignment: Alignment.center,
-                width: Width(300),
-                backgroundColor: Colors.transparent,
-              ),
-            },
-            onLinkTap: (url, _, __) {
-              if (url != null) {
-                debugPrint('Tapped url: $url');
-              }
-            },
-          ),
-        ],
+        ),
       ),
     );
   }

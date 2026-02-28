@@ -1,4 +1,4 @@
-import 'package:driving_license_exam/core/localization/app_localization.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:flutter/material.dart';
 
 class QuestionNavigationDialog extends StatelessWidget {
@@ -63,19 +63,18 @@ class QuestionNavigationDialog extends StatelessWidget {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _buildHeader(context),
-          SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildQuestionGrid(context),
-                const SizedBox(height: 24),
-              ],
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildQuestionGrid(context),
+                  const SizedBox(height: 16),
+                ],
+              ),
             ),
           ),
         ],

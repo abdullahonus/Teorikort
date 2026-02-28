@@ -1,6 +1,6 @@
 {
-  "app_name": "Ehliyet Sınavı",
-  "app_subtitle": "Ehliyet Sınavına Hazırlık",
+  "app_name": "Teorikort",
+  "app_subtitle": "Teorikort - Ehliyet Teorik Sınav Hazırlık",
   "statistics": {
     "screen_title": "İstatistikler",
     "subtitle": "Performans Analizi",
@@ -81,6 +81,7 @@
     "your_progress": "İlerleme Durumun",
     "success_rate": "Başarı Oranı",
     "completed_tests": "Tamamlanan Test",
+    "completed_categories": "Tamamlanan Kategoriler",
     "weak_topics": "Zayıf Konular",
     "daily_tip": "Günün İpucu",
     "tip_content": "Sağa dönüşlerde yayalara yol vermeyi unutmayın. Bu, trafik kurallarının önemli bir parçasıdır.",
@@ -112,14 +113,15 @@
     "clear_data_confirmation": "Tüm sınav sonuçları ve istatistikler silinecek. Bu işlem geri alınamaz. Devam etmek istiyor musunuz?",
     "data_cleared": "Veriler başarıyla temizlendi",
     "data_clear_error": "Veriler temizlenirken bir hata oluştu",
-    "app": "Uygulama",
+    "app": "Uygulama Bilgileri",
+    "debug": "Hata Ayıklama",
     "share_app": "Uygulamayı Paylaş",
-    "share_message": "Ehliyet sınavına hazırlanmak için harika bir uygulama! https://play.google.com/store/apps/details?id=com.yourapp",
-    "share_subject": "Ehliyet Sınavı Hazırlık Uygulaması",
+    "share_message": "Teorikort ile ehliyet teorik sınavına hazırlanın! https://play.google.com/store/apps/details?id=com.teorikort",
+    "share_subject": "Teorikort - Ehliyet Teorik Sınav Hazırlık Uygulaması",
     "rate_app": "Bizi Değerlendir",
     "about": "Uygulama Hakkında",
     "about_description": "Uygulama Açıklaması",
-    "about_content": "Bu uygulama, ehliyet sınavına hazırlanan adaylar için kapsamlı bir çalışma platformu sunmaktadır. Trafik işaretleri, trafik kuralları, ilk yardım ve motor bilgisi konularında detaylı içerikler ve pratik sınavlar içerir.",
+    "about_content": "Teorikort, ehliyet teorik sınavına hazırlanan adaylar için kapsamlı bir çalışma platformu sunar. Trafik işaretleri, trafik kuralları, ilk yardım ve motor bilgisi konularında detaylı içerikler ve pratik sınavlar içerir.",
     "features": "Özellikler",
     "features_content": "• Detaylı konu anlatımları\n• Çoktan seçmeli sorular\n• Gerçek sınav formatında testler\n• İlerleme takibi ve istatistikler\n• Yanlış cevap analizi\n• Çevrimdışı çalışma imkanı",
     "contact": "İletişim",
@@ -189,7 +191,7 @@
     "question_badge": "Soru %d",
     "buttons": {
       "previous": "Önceki",
-      "next": "Sonraki", 
+      "next": "Sonraki",
       "finish": "Bitir"
     }
   },
@@ -288,7 +290,7 @@
     "questions": "Sorular",
     "exam_categories": {
       "traffic_signs": "Trafik İşaretleri",
-      "traffic_rules": "Trafik Kuralları", 
+      "traffic_rules": "Trafik Kuralları",
       "first_aid": "İlk Yardım",
       "vehicle_technology": "Motor ve Araç Tekniği"
     }
@@ -338,5 +340,31 @@
     "phone_required": "Telefon alanı zorunludur",
     "phone_invalid": "Geçerli bir telefon numarası giriniz",
     "already_have_account": "Zaten hesabın var mı? Giriş yap"
+  },
+  "workbook": {
+    "title": "Çalışma Kitabı",
+    "completed": "Tamamlandı",
+    "in_progress": "Devam Ediyor",
+    "no_workbooks": "Henüz çalışma kitabınız bulunmuyor.",
+    "minutes": "dk"
+  },
+  "report": {
+    "title": "Soru Rapor Et",
+    "description": "Soruda bir hata mı var? Lütfen bize bildirin.",
+    "hint": "Hata açıklamasını buraya yazın...",
+    "success": "Raporunuz başarıyla gönderildi. Teşekkür ederiz.",
+    "submit": "Gönder",
+    "cancel": "İptal"
+  },
+  "packages": {
+    "title": "Paketler",
+    "select": "Paket Seç",
+    "features": "Özellikler",
+    "purchase": "Satın Al",
+    "free": "Ücretsiz"
+  },
+  "signs": {
+    "title": "Trafik İşaretleri",
+    "no_data": "Trafik işareti bulunamadı."
   }
-} 
+}

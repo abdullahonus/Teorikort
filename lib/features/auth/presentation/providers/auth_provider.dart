@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:driving_license_exam/core/services/auth_service.dart';
+import 'package:teorikort/core/services/auth_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/auth_user.dart';
 import '../../data/repositories/auth_repository.dart';

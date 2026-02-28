@@ -1,25 +1,29 @@
-import 'package:driving_license_exam/core/localization/app_localization.dart';
-import 'package:driving_license_exam/core/providers/locale_provider.dart';
-import 'package:driving_license_exam/core/providers/theme_provider.dart';
-import 'package:driving_license_exam/features/profile/presentation/about_screen.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/providers/locale_provider.dart';
+import 'package:teorikort/core/providers/theme_provider.dart';
+import 'package:teorikort/features/profile/presentation/about_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:driving_license_exam/core/services/user_service.dart';
+import 'package:teorikort/core/services/user_service.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:driving_license_exam/features/auth/presentation/screens/sign_in_screen.dart';
-import 'package:driving_license_exam/core/providers/auth_provider.dart';
+import 'package:teorikort/features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:teorikort/core/providers/auth_provider.dart';
+import 'package:teorikort/features/user/presentation/providers/user_provider.dart';
+import 'package:teorikort/features/workbook/presentation/workbook_list_screen.dart';
+import 'package:chucker_flutter/chucker_flutter.dart';
+import 'package:teorikort/features/packages/presentation/packages_screen.dart';
 
-class ProfileTab extends StatefulWidget {
+class ProfileTab extends ConsumerStatefulWidget {
   const ProfileTab({super.key});
 
   @override
-  State<ProfileTab> createState() => _ProfileTabState();
+  ConsumerState<ProfileTab> createState() => _ProfileTabState();
 }
 
-class _ProfileTabState extends State<ProfileTab> {
+class _ProfileTabState extends ConsumerState<ProfileTab> {
   final UserService _userService = UserService();
   final TextEditingController _nameController = TextEditingController();
   bool _isInitialized = false;
@@ -32,6 +36,9 @@ class _ProfileTabState extends State<ProfileTab> {
 
   Future<void> _initializeUserService() async {
     await _userService.initializeService();
+    // fetch live profile data
+    await ref.read(userStateProvider.notifier).getUserProfile();
+    
     if (mounted) {
       setState(() {
         _nameController.text = _userService.currentUserName;
@@ -83,20 +90,31 @@ class _ProfileTabState extends State<ProfileTab> {
           TextButton(
             onPressed: () async {
               if (_nameController.text.trim().isNotEmpty) {
-                await _userService.updateUserName(_nameController.text.trim());
+                final success = await ref.read(userStateProvider.notifier).updateUserProfile(_nameController.text.trim());
                 if (mounted) {
-                  setState(() {});
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        AppLocalization.of(context)
-                            .translate('profile.name_updated'),
+                  if (success) {
+                    setState(() {});
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          AppLocalization.of(context)
+                              .translate('profile.name_updated'),
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          AppLocalization.of(context)
+                              .translate('common.error'), // or any generic error message
+                        ),
+                      ),
+                    );
+                  }
                 }
               }
-              Navigator.pop(context);
+              if (mounted) Navigator.pop(context);
             },
             child: Text(AppLocalization.of(context).translate('common.save')),
           ),
@@ -198,7 +216,52 @@ class _ProfileTabState extends State<ProfileTab> {
           ),
         ),
         const SizedBox(height: 24),
-        // Görünüm Ayarları
+        // Workbook Section
+        _buildSectionTitle(context, 'workbook.title'),
+        _buildSettingsCard(
+          context,
+          children: [
+            _buildSettingsTile(
+              context,
+              title: AppLocalization.of(context).translate('workbook.title'),
+              trailing: IconButton(
+                icon: const Icon(Icons.arrow_forward_ios, size: 16),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WorkbookListScreen(),
+                    
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+
+        // Packages Section
+        _buildSectionTitle(context, 'packages.title'),
+        _buildSettingsCard(
+          context,
+          children: [
+            _buildSettingsTile(
+              context,
+              title: AppLocalization.of(context).translate('packages.title'),
+              trailing: IconButton(
+                icon: const Icon(Icons.arrow_forward_ios, size: 16),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PackagesScreen(),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+
+        // Appearance Settings
         _buildSectionTitle(context, 'profile.appearance'),
         _buildSettingsCard(
           context,
@@ -307,6 +370,26 @@ class _ProfileTabState extends State<ProfileTab> {
             ),
           ],
         ),
+        const SizedBox(height: 24),
+
+        // Debug Settings (Chucker)
+        if (ChuckerFlutter.showOnRelease || ChuckerFlutter.isDebugMode) ...[
+          _buildSectionTitle(context, 'profile.debug'),
+          _buildSettingsCard(
+            context,
+            children: [
+              _buildSettingsTile(
+                context,
+                title: 'API Logger',
+                trailing: IconButton(
+                  icon: const Icon(Icons.bug_report, color: Colors.orange),
+                  onPressed: () => ChuckerFlutter.showChuckerScreen(),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+        ],
 
         // Uygulama Bilgileri kartı sonrası
         const SizedBox(height: 48), // Biraz daha boşluk ekleyelim

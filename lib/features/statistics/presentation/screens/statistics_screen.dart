@@ -1,8 +1,8 @@
-import 'package:driving_license_exam/core/services/strings_service.dart';
 import 'package:flutter/material.dart';
 import '../../data/models/statistics_data.dart';
 import '../../data/services/statistics_service.dart';
-import 'package:driving_license_exam/core/localization/app_localization.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
+import 'category_statistics_screen.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
@@ -13,37 +13,43 @@ class StatisticsScreen extends StatefulWidget {
 
 class StatisticsScreenState extends State<StatisticsScreen> {
   final StatisticsService _statisticsService = StatisticsService();
-  late Future<StatisticsData?> _statisticsDataFuture;
-  late Future<Map<String, dynamic>> _stringsDataFuture;
+  Future<StatisticsData?>? _statisticsDataFuture;
+  Future<AppAnalyticsData?>? _analyticsFuture;
 
   @override
   void initState() {
     super.initState();
-    loadData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_statisticsDataFuture == null) {
+      loadData();
+    }
   }
 
   void loadData() {
     setState(() {
       _statisticsDataFuture = _statisticsService
-          .getStatisticsData()
-          .then((response) => response.data);
-      _stringsDataFuture = StringsService.getStatisticsStrings();
+          .getStatisticsData(context: context)
+          .then((r) => r.data);
+      _analyticsFuture = _statisticsService
+          .getAppAnalytics(context: context)
+          .then((r) => r.data);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
       body: RefreshIndicator(
-        onRefresh: () async {
-          loadData();
-        },
-        child: FutureBuilder<List<dynamic>>(
-          future: Future.wait([_statisticsDataFuture, _stringsDataFuture]),
+        onRefresh: () async => loadData(),
+        child: FutureBuilder<StatisticsData?>(
+          future: _statisticsDataFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
@@ -64,8 +70,7 @@ class StatisticsScreenState extends State<StatisticsScreen> {
                     const SizedBox(height: 16),
                     Text(
                       AppLocalization.of(context)
-                              .translate('statistics.error_message') ??
-                          'Unable to load statistics',
+                          .translate('statistics.error_message'),
                       style: TextStyle(
                         color: colorScheme.onSurface.withOpacity(0.6),
                         fontSize: 16,
@@ -77,8 +82,7 @@ class StatisticsScreenState extends State<StatisticsScreen> {
                       onPressed: loadData,
                       icon: Icon(Icons.refresh, color: colorScheme.primary),
                       label: Text(
-                        AppLocalization.of(context).translate('common.retry') ??
-                            'Retry',
+                        AppLocalization.of(context).translate('common.retry'),
                         style: TextStyle(color: colorScheme.primary),
                       ),
                     ),
@@ -87,8 +91,7 @@ class StatisticsScreenState extends State<StatisticsScreen> {
               );
             }
 
-            final statistics = snapshot.data![0] as StatisticsData?;
-            final strings = snapshot.data![1] as Map<String, dynamic>;
+            final statistics = snapshot.data;
 
             if (statistics == null) {
               return Center(
@@ -103,8 +106,7 @@ class StatisticsScreenState extends State<StatisticsScreen> {
                     const SizedBox(height: 16),
                     Text(
                       AppLocalization.of(context)
-                              .translate('statistics.no_data') ??
-                          'No statistics available',
+                          .translate('statistics.no_data'),
                       style: TextStyle(
                         color: colorScheme.onSurface.withOpacity(0.6),
                         fontSize: 16,
@@ -114,8 +116,7 @@ class StatisticsScreenState extends State<StatisticsScreen> {
                     const SizedBox(height: 8),
                     Text(
                       AppLocalization.of(context)
-                              .translate('statistics.take_exams_first') ??
-                          'Take some exams to see your statistics',
+                          .translate('statistics.take_exams_first'),
                       style: TextStyle(
                         color: colorScheme.onSurface.withOpacity(0.5),
                         fontSize: 14,
@@ -130,25 +131,23 @@ class StatisticsScreenState extends State<StatisticsScreen> {
             return ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               children: [
-                _buildOverallStats(
-                  statistics.overallStats,
-                  AppLocalization.of(context)
-                      .translate('statistics.cards.overall_performance.title'),
-                  categories: statistics.categoryPerformance,
+                // Uygulama geneli analitik banner
+                FutureBuilder<AppAnalyticsData?>(
+                  future: _analyticsFuture,
+                  builder: (ctx, snap) {
+                    if (snap.data == null) return const SizedBox.shrink();
+                    return Column(
+                      children: [
+                        _buildAnalyticsBanner(snap.data!),
+                        const SizedBox(height: 24),
+                      ],
+                    );
+                  },
                 ),
+                _buildOverallStats(statistics),
                 const SizedBox(height: 24),
-                _buildCategoryPerformance(
-                  statistics.categoryPerformance,
-                  AppLocalization.of(context)
-                      .translate('statistics.cards.category_performance.title'),
-                ),
-                if (statistics.recentExams.isNotEmpty) ...[
-                  const SizedBox(height: 24),
-                  _buildRecentExams(
-                    statistics.recentExams,
-                    AppLocalization.of(context)
-                        .translate('statistics.cards.recent_exams.title'),
-                  ),
+                if (statistics.categoryPerformance.isNotEmpty) ...[
+                  _buildCategoryPerformance(statistics.categoryPerformance),
                 ],
               ],
             );
@@ -158,13 +157,100 @@ class StatisticsScreenState extends State<StatisticsScreen> {
     );
   }
 
-  Widget _buildOverallStats(
-    OverallStats stats,
-    String title, {
-    List<CategoryPerformance>? categories,
-  }) {
+  Widget _buildAnalyticsBanner(AppAnalyticsData data) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            colorScheme.primary.withOpacity(0.12),
+            colorScheme.secondary.withOpacity(0.08),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colorScheme.primary.withOpacity(0.15)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.bar_chart_rounded,
+                  color: colorScheme.primary, size: 18),
+              const SizedBox(width: 6),
+              Text(
+                'Platform İstatistikleri',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _analyticsItem('${data.totalUsers}', 'Kullanıcı',
+                  Icons.people_outline),
+              _vDivider(colorScheme),
+              _analyticsItem('${data.totalExams}', 'Toplam Sınav',
+                  Icons.assignment_outlined),
+              _vDivider(colorScheme),
+              _analyticsItem('${data.totalCategories}', 'Kategori',
+                  Icons.category_outlined),
+              _vDivider(colorScheme),
+              _analyticsItem('%${data.averageScore.toStringAsFixed(1)}',
+                  'Ort. Puan', Icons.analytics_outlined),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _analyticsItem(String value, String label, IconData icon) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      children: [
+        Icon(icon, color: colorScheme.primary, size: 18),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 10,
+            color: colorScheme.onSurface.withOpacity(0.55),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _vDivider(colorScheme) => SizedBox(
+        height: 40,
+        child: VerticalDivider(
+          color: colorScheme.outline.withOpacity(0.25),
+          width: 1,
+          thickness: 1,
+        ),
+      );
+
+  Widget _buildOverallStats(StatisticsData stats) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final title = AppLocalization.of(context)
+        .translate('statistics.cards.overall_performance.title');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,24 +265,25 @@ class StatisticsScreenState extends State<StatisticsScreen> {
         ),
         const SizedBox(height: 16),
         Row(
-          spacing: 10,
           children: [
             _buildStatItem(
               AppLocalization.of(context).translate(
                   'statistics.cards.overall_performance.total_exams'),
-              '${categories?.length ?? 0}/${stats.totalAvailableExams}',
+              '${stats.totalExams}',
               Icons.assignment_outlined,
             ),
+            const SizedBox(width: 10),
             _buildStatItem(
               AppLocalization.of(context).translate(
                   'statistics.cards.overall_performance.average_score'),
-              '%${stats.averageScore}',
+              '%${stats.averageScore.toStringAsFixed(1)}',
               Icons.analytics_outlined,
             ),
+            const SizedBox(width: 10),
             _buildStatItem(
               AppLocalization.of(context)
                   .translate('statistics.cards.overall_performance.best_score'),
-              '%${stats.bestScore}',
+              '%${stats.highestScore.toStringAsFixed(0)}',
               Icons.emoji_events_outlined,
             ),
           ],
@@ -242,11 +329,11 @@ class StatisticsScreenState extends State<StatisticsScreen> {
     );
   }
 
-  Widget _buildCategoryPerformance(
-    List<CategoryPerformance> categories,
-    String title,
-  ) {
+  Widget _buildCategoryPerformance(List<CategoryPerformance> categories) {
     final colorScheme = Theme.of(context).colorScheme;
+    final title = AppLocalization.of(context)
+        .translate('statistics.cards.category_performance.title');
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -259,9 +346,20 @@ class StatisticsScreenState extends State<StatisticsScreen> {
           ),
         ),
         const SizedBox(height: 16),
-        ...categories.map((category) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: _buildCategoryProgressBar(category),
+        ...categories.map((category) => GestureDetector(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CategoryStatisticsScreen(
+                    categoryId: category.categoryId.toString(),
+                    categoryTitle: category.categoryName,
+                  ),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: _buildCategoryProgressBar(category),
+              ),
             )),
       ],
     );
@@ -269,9 +367,10 @@ class StatisticsScreenState extends State<StatisticsScreen> {
 
   Widget _buildCategoryProgressBar(CategoryPerformance category) {
     final colorScheme = Theme.of(context).colorScheme;
-    final color = category.averageScore >= 80
+    final score = category.averageScore;
+    final color = score >= 80
         ? colorScheme.primary
-        : category.averageScore >= 60
+        : score >= 60
             ? colorScheme.secondary
             : colorScheme.error;
 
@@ -281,114 +380,50 @@ class StatisticsScreenState extends State<StatisticsScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              category.name,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: colorScheme.onSurface,
+            Expanded(
+              child: Text(
+                category.categoryName,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: colorScheme.onSurface,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
-            Text(
-              '%${category.averageScore}',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: color,
-              ),
+            const SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '%${score.toStringAsFixed(1)}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: color,
+                  ),
+                ),
+                Text(
+                  '${category.totalExams} sınav',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: colorScheme.onSurface.withOpacity(0.5),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
         const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            color: colorScheme.surface,
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: LinearProgressIndicator(
-              value: category.averageScore / 100,
-              backgroundColor: colorScheme.surface,
-              valueColor: AlwaysStoppedAnimation<Color>(color),
-              minHeight: 8,
-            ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: LinearProgressIndicator(
+            value: (score / 100).clamp(0.0, 1.0),
+            backgroundColor: colorScheme.surfaceVariant,
+            valueColor: AlwaysStoppedAnimation<Color>(color),
+            minHeight: 8,
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildRecentExams(List<RecentExam> exams, String title) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: colorScheme.primary,
-          ),
-        ),
-        const SizedBox(height: 16),
-        ...exams.map((exam) => Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          exam.title,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: colorScheme.onSurface,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${exam.correctAnswers} ${AppLocalization.of(context).translate('statistics.cards.recent_exams.correct_answers')}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: colorScheme.onSurface.withOpacity(0.6),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: colorScheme.surface,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                          color: colorScheme.outline.withOpacity(0.2)),
-                    ),
-                    child: Text(
-                      '%${exam.score}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )),
       ],
     );
   }

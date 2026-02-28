@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:driving_license_exam/core/presentation/widgets/app_scaffold.dart';
+import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
 import '../../presentation/providers/auth_provider.dart';
-import 'package:driving_license_exam/features/auth/presentation/screens/sign_up_screen.dart';
+import 'package:teorikort/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/localization/app_localization.dart';

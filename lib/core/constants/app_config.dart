@@ -5,7 +5,7 @@ class AppConfig {
 
   // Mock Fallback Configuration
   // Development'da mock fallback var, Production'da yok
-  static const bool enableMockFallback = isDevelopment;
+  static const bool enableMockFallback = false;
 
   // API Configuration
   static const int apiTimeoutSeconds = 30;
@@ -27,12 +27,8 @@ class AppConfig {
   static String get environmentName =>
       isDevelopment ? 'Development' : 'Production';
 
-  // Get base URL based on environment
+  // Get base URL
   static String get baseUrl {
-    if (isDevelopment) {
-      return 'https://test-api.example.com/v1';
-    } else {
-      return 'https://api.yourdomain.com/v1'; // Production URL
-    }
+    return 'https://teorikort.artratechs.com/api';
   }
 }

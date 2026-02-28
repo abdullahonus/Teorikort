@@ -1,6 +1,4 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/api_response.dart';
 import '../../features/user/domain/models/user_profile.dart';
 import 'dart:convert';
 

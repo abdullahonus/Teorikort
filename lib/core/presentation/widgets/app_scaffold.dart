@@ -1,15 +1,14 @@
-import 'package:driving_license_exam/features/auth/presentation/providers/auth_provider.dart';
-import 'package:driving_license_exam/features/home/presentation/providers/home_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:driving_license_exam/core/localization/app_localization.dart';
-import 'package:driving_license_exam/features/home/presentation/home_screen.dart';
-import 'package:driving_license_exam/features/leaderboard/presentation/screens/leaderboard_screen.dart';
-import 'package:driving_license_exam/features/profile/presentation/profile_screen.dart';
-import 'package:driving_license_exam/features/statistics/presentation/screens/statistics_screen.dart';
-import 'package:driving_license_exam/features/topics/presentation/topics_screen.dart';
-import 'package:driving_license_exam/features/search/presentation/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:driving_license_exam/features/user/presentation/providers/user_provider.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/feature/home/provider/home_provider.dart';
+import 'package:teorikort/feature/home/view/home_view.dart';
+import 'package:teorikort/feature/profile/provider/profile_provider.dart';
+import 'package:teorikort/feature/profile/view/profile_view.dart';
+import 'package:teorikort/feature/leaderboard/view/leaderboard_view.dart';
+import 'package:teorikort/feature/statistics/view/statistics_view.dart';
+import 'package:teorikort/feature/topics/view/topics_view.dart';
+import 'package:teorikort/feature/search/view/search_view.dart';
 
 class AppScaffold extends ConsumerStatefulWidget {
   const AppScaffold({super.key});
@@ -23,10 +22,10 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   late final List<Widget> _screens = [
-    const HomeScreen(),
-    const TopicsScreen(),
-    const StatisticsScreen(),
-    const ProfileTab(),
+    const HomeView(),
+    const TopicsView(),
+    const StatisticsView(),
+    const ProfileView(),
   ];
 
   @override
@@ -38,14 +37,11 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
   }
 
   Future<void> _initializeData() async {
-    final token = ref.read(authStateProvider).token;
-    if (token != null) {
-      await ref.read(homeStateProvider.notifier).fetchWelcomeMessage(token);
-    }
+    // homeProvider kendi build() içinde fetch ediyor — ek işlem gerekmez
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context, WidgetRef ref) {
-    final userState = ref.watch(userStateProvider);
+    final profileState = ref.watch(profileProvider);
 
     if (_currentIndex == 0) {
       return AppBar(
@@ -67,7 +63,7 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
                           children: [
                             const SizedBox(height: 10),
                             Text(
-                              userState.profile?.fullName ??
+                              profileState.profile?.fullName ??
                                   AppLocalization.of(context)
                                       .translate("app_name"),
                               style: Theme.of(context)
@@ -91,7 +87,7 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSurface
-                                        .withOpacity(0.7),
+                                        .withValues(alpha: 0.7),
                                   ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -112,7 +108,7 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SearchScreen()),
+                            builder: (context) => const SearchView()),
                       );
                     },
                     child: Container(
@@ -134,7 +130,7 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSurface
-                                  .withOpacity(0.5)),
+                                  .withValues(alpha: 0.5)),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
@@ -144,7 +140,7 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onSurface
-                                    .withOpacity(0.5),
+                                    .withValues(alpha: 0.5),
                                 fontSize: 16,
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -190,7 +186,7 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const LeaderboardScreen()),
+                    builder: (context) => const LeaderboardView()),
               );
             },
           ),
@@ -217,8 +213,7 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final homeState = ref.watch(homeStateProvider);
-    final userState = ref.watch(userStateProvider);
+    final homeState = ref.watch(homeProvider);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -226,24 +221,10 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
       body: Column(
         children: [
           if (homeState.isLoading) const LinearProgressIndicator(),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              homeState.welcomeMessage?.message ?? "Welcome to the App",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-          ),
           Expanded(
             child: RefreshIndicator(
               key: _refreshKey,
-              onRefresh: () async {
-                final token = ref.read(authStateProvider).token;
-                if (token != null) {
-                  await ref
-                      .read(homeStateProvider.notifier)
-                      .fetchWelcomeMessage(token);
-                }
-              },
+              onRefresh: () => ref.read(homeProvider.notifier).refresh(),
               child: _screens[_currentIndex],
             ),
           ),
