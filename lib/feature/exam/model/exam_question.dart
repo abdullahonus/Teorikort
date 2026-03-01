@@ -21,14 +21,23 @@ class ExamQuestion extends Equatable {
   factory ExamQuestion.fromJson(Map<String, dynamic> json) {
     return ExamQuestion(
       id: json['id']?.toString() ?? '',
-      question: json['question'] ?? '',
+      question: _parseField(json['question']),
       imageUrl: json['image_url'],
       options: (json['options'] as List? ?? [])
           .map((option) => ExamOption.fromJson(option))
           .toList(),
       correctAnswer: (json['correct_answer'] ?? '').toString(),
-      explanation: json['explanation'] ?? '',
+      explanation: _parseField(json['explanation']),
     );
+  }
+
+  static String _parseField(dynamic field) {
+    if (field is Map<String, dynamic>) {
+      return field['tr']?.toString() ??
+          field['en']?.toString() ??
+          (field.values.isNotEmpty ? field.values.first?.toString() ?? '' : '');
+    }
+    return field?.toString() ?? '';
   }
 
   factory ExamQuestion.fromLegacy(dynamic legacy) {
@@ -73,7 +82,7 @@ class ExamOption extends Equatable {
   factory ExamOption.fromJson(Map<String, dynamic> json) {
     return ExamOption(
       id: (json['id'] ?? '').toString(),
-      text: json['text'] ?? '',
+      text: ExamQuestion._parseField(json['text']),
       imageUrl: json['image_url'],
     );
   }

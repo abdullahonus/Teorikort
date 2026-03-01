@@ -7,7 +7,7 @@ import 'core/localization/app_localization.dart';
 import 'core/providers/locale_provider.dart';
 import 'core/providers/theme_provider.dart';
 import 'core/theme/app_theme.dart';
-import 'features/splash/presentation/splash_screen.dart';
+import 'feature/splash/splash_view.dart';
 import 'product/init/app_bootstrap.dart';
 
 void main() async {
@@ -51,7 +51,7 @@ class MyApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      home: const SplashScreen(),
+      home: const SplashView(),
     );
   }
 }

@@ -31,33 +31,33 @@ class ApiException implements Exception {
     );
   }
 
-  factory ApiException.unauthorized() {
+  factory ApiException.unauthorized([String? message]) {
     return ApiException(
-      'Oturum süresi doldu. Lütfen tekrar giriş yapın.',
+      message ?? 'Oturum süresi doldu. Lütfen tekrar giriş yapın.',
       statusCode: 401,
       errorCode: 'unauthorized',
     );
   }
 
-  factory ApiException.forbidden() {
+  factory ApiException.forbidden([String? message]) {
     return ApiException(
-      'Bu işlem için yetkiniz bulunmamaktadır.',
+      message ?? 'Bu işlem için yetkiniz bulunmamaktadır.',
       statusCode: 403,
       errorCode: 'forbidden',
     );
   }
 
-  factory ApiException.notFound() {
+  factory ApiException.notFound([String? message]) {
     return ApiException(
-      'İstenen kaynak bulunamadı.',
+      message ?? 'İstenen kaynak bulunamadı.',
       statusCode: 404,
       errorCode: 'not_found',
     );
   }
 
-  factory ApiException.serverError() {
+  factory ApiException.serverError([String? message]) {
     return ApiException(
-      'Sunucu hatası oluştu. Lütfen daha sonra tekrar deneyin.',
+      message ?? 'Sunucu hatası oluştu. Lütfen daha sonra tekrar deneyin.',
       statusCode: 500,
       errorCode: 'server_error',
     );
@@ -81,16 +81,16 @@ class ApiException implements Exception {
           errorCode: 'bad_request',
         );
       case 401:
-        return ApiException.unauthorized();
+        return ApiException.unauthorized(message);
       case 403:
-        return ApiException.forbidden();
+        return ApiException.forbidden(message);
       case 404:
-        return ApiException.notFound();
+        return ApiException.notFound(message);
       case 422:
         return ApiException.validationError(
             message ?? 'Girilen bilgiler geçersiz.');
       case 500:
-        return ApiException.serverError();
+        return ApiException.serverError(message);
       default:
         return ApiException(
           message ?? 'Beklenmeyen bir hata oluştu.',

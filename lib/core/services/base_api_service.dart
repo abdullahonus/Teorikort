@@ -117,7 +117,9 @@ class BaseApiService {
       final description = responseData['description']?.toString() ?? '';
       final data = responseData['data'];
 
-      if (statusCode == 100 || statusCode == 200 || statusCode == ApiConstants.success) {
+      if (statusCode == 100 ||
+          statusCode == 200 ||
+          statusCode == ApiConstants.success) {
         return ApiResponse<T>(
           success: true,
           statusCode: statusCode,
@@ -125,10 +127,19 @@ class BaseApiService {
           data: data != null ? fromJson(data) : null,
         );
       } else {
+        String? message = description;
+
+        // Try to extract error message from data object as requested by user
+        if (data is Map<String, dynamic> && data.containsKey('message')) {
+          message = data['message']?.toString();
+        } else if (responseData.containsKey('message')) {
+          message = responseData['message']?.toString();
+        }
+
         return ApiResponse<T>(
           success: false,
           statusCode: statusCode,
-          message: description,
+          message: message ?? description,
         );
       }
     } on DioException catch (e) {
@@ -163,11 +174,13 @@ class BaseApiService {
       final description = responseData['description']?.toString() ?? '';
       final data = responseData['data'];
 
-      if ((statusCode == 100 || statusCode == 200 || statusCode == ApiConstants.success) && data != null) {
-        // Handle different list structures from API
+      if ((statusCode == 100 ||
+              statusCode == 200 ||
+              statusCode == ApiConstants.success) &&
+          data != null) {
+        // ... list parsing logic (unchanged)
         List<dynamic> items = [];
         if (data is Map<String, dynamic>) {
-          // If data contains a list field (e.g., categories, questions, results)
           if (data.containsKey('categories')) {
             items = data['categories'] as List<dynamic>;
           } else if (data.containsKey('questions')) {
@@ -199,10 +212,19 @@ class BaseApiService {
           pagination: data is Map<String, dynamic> ? data['pagination'] : null,
         );
       } else {
+        String? message = description;
+
+        // Try to extract error message from data object
+        if (data is Map<String, dynamic> && data.containsKey('message')) {
+          message = data['message']?.toString();
+        } else if (responseData.containsKey('message')) {
+          message = responseData['message']?.toString();
+        }
+
         return ApiResponse<List<T>>(
           success: false,
           statusCode: statusCode,
-          message: description,
+          message: message ?? description,
         );
       }
     } on DioException catch (e) {
@@ -239,10 +261,27 @@ class BaseApiService {
         );
       case DioExceptionType.badResponse:
         final statusCode = error.response?.statusCode ?? 500;
+        String? message;
+
+        // Try to extract message from response body
+        if (error.response?.data != null &&
+            error.response?.data is Map<String, dynamic>) {
+          final responseBody = error.response!.data as Map<String, dynamic>;
+          final data = responseBody['data'];
+
+          if (data is Map<String, dynamic> && data.containsKey('message')) {
+            message = data['message']?.toString();
+          } else if (responseBody.containsKey('message')) {
+            message = responseBody['message']?.toString();
+          } else if (responseBody.containsKey('description')) {
+            message = responseBody['description']?.toString();
+          }
+        }
+
         return ApiResponse<T>(
           success: false,
           statusCode: statusCode,
-          message: _getErrorMessage(statusCode),
+          message: message ?? _getErrorMessage(statusCode),
         );
       case DioExceptionType.connectionError:
         return ApiResponse<T>(
@@ -367,7 +406,23 @@ class BaseApiService {
         return ApiException.timeoutError();
       case DioExceptionType.badResponse:
         final statusCode = error.response?.statusCode ?? 500;
-        return ApiException.fromStatusCode(statusCode);
+        String? message;
+
+        // Try to extract message from response body
+        if (error.response?.data != null &&
+            error.response?.data is Map<String, dynamic>) {
+          final responseBody = error.response!.data as Map<String, dynamic>;
+          final data = responseBody['data'];
+
+          if (data is Map<String, dynamic> && data.containsKey('message')) {
+            message = data['message']?.toString();
+          } else if (responseBody.containsKey('message')) {
+            message = responseBody['message']?.toString();
+          } else if (responseBody.containsKey('description')) {
+            message = responseBody['description']?.toString();
+          }
+        }
+        return ApiException.fromStatusCode(statusCode, message);
       case DioExceptionType.connectionError:
         return ApiException.networkError();
       default:
