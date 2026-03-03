@@ -96,7 +96,14 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Soru ${state.currentQuestionIndex + 1} / ${state.questions.length}',
+                  AppLocalization.of(context)
+                              .translate('quiz.question_count') !=
+                          'quiz.question_count'
+                      ? AppLocalization.of(context)
+                          .translate('quiz.question_count')
+                          .replaceAll('%d', '${state.currentQuestionIndex + 1}')
+                          .replaceFirst('%d', '${state.questions.length}')
+                      : 'Soru ${state.currentQuestionIndex + 1} / ${state.questions.length}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
@@ -301,7 +308,8 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
             OutlinedButton(
               onPressed: () =>
                   ref.read(examSessionProvider.notifier).previousQuestion(),
-              child: const Text('Geri'),
+              child:
+                  Text(AppLocalization.of(context).translate('quiz.previous')),
             )
           else
             const SizedBox(),
@@ -313,7 +321,9 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
                 ref.read(examSessionProvider.notifier).nextQuestion();
               }
             },
-            child: Text(isLast ? 'Sınavı Bitir' : 'İleri'),
+            child: Text(isLast
+                ? AppLocalization.of(context).translate('quiz.finish')
+                : AppLocalization.of(context).translate('quiz.next')),
           ),
         ],
       ),
@@ -324,12 +334,15 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sınavı Bitir'),
-        content: const Text('Sınavı sonlandırmak istediğinize emin misiniz?'),
+        title: Text(
+            AppLocalization.of(context).translate('quiz.confirm_finish_title')),
+        content: Text(
+            AppLocalization.of(context).translate('quiz.confirm_finish_desc')),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('İptal')),
+              child:
+                  Text(AppLocalization.of(context).translate('quiz.cancel'))),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
@@ -338,7 +351,8 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
                     examType: widget.examType,
                   );
             },
-            child: const Text('Bitir'),
+            child: Text(
+                AppLocalization.of(context).translate('quiz.finish_button')),
           ),
         ],
       ),

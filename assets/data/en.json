@@ -220,7 +220,12 @@
     },
     "explanation": "Explanation",
     "correct_answer": "Correct Answer",
-    "your_answer": "Your Answer"
+    "your_answer": "Your Answer",
+    "question_count": "Question %d / %d",
+    "confirm_finish_title": "Finish Exam",
+    "confirm_finish_desc": "Are you sure you want to finish the exam?",
+    "cancel": "Cancel",
+    "finish_button": "Finish"
   },
   "quiz_result": {
     "screen_title": "Exam Result",

@@ -208,7 +208,12 @@
     },
     "explanation": "Açıklama",
     "correct_answer": "Doğru Cevap",
-    "your_answer": "Senin Cevabın"
+    "your_answer": "Senin Cevabın",
+    "question_count": "Soru %d / %d",
+    "confirm_finish_title": "Sınavı Bitir",
+    "confirm_finish_desc": "Sınavı sonlandırmak istediğinize emin misiniz?",
+    "cancel": "İptal",
+    "finish_button": "Bitir"
   },
   "quiz_result": {
     "screen_title": "Sınav Sonucu",
