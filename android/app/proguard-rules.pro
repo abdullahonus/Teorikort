@@ -18,4 +18,4 @@
 }
 
 # Application classes that will be serialized/deserialized over Gson
--keep class com.teorikort.** { *; } 
+-keep class se.teorikort.app.** { *; }

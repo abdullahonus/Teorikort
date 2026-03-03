@@ -1,5 +1,5 @@
-import '../../../core/services/base_api_service.dart';
 import '../../../core/models/api_response.dart';
+import '../../../core/services/base_api_service.dart';
 import '../../../data/splash_response_model.dart';
 
 class VersionService extends BaseApiService {
@@ -28,7 +28,7 @@ class VersionService extends BaseApiService {
           "android": "1.0.2",
           "force_update": false,
           "update_url":
-              "https://play.google.com/store/apps/details?id=com.teorikort",
+              "https://play.google.com/store/apps/details?id=se.teorikort.app",
           "title": "Yeni Güncelleme Mevcut!",
           "description":
               "Uygulamanın performansını artırmak için yeni sürümü yüklemenizi öneririz."
