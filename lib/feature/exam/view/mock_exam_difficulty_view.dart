@@ -9,10 +9,12 @@ class MockExamDifficultyView extends ConsumerStatefulWidget {
   const MockExamDifficultyView({super.key});
 
   @override
-  ConsumerState<MockExamDifficultyView> createState() => _MockExamDifficultyViewState();
+  ConsumerState<MockExamDifficultyView> createState() =>
+      _MockExamDifficultyViewState();
 }
 
-class _MockExamDifficultyViewState extends ConsumerState<MockExamDifficultyView> {
+class _MockExamDifficultyViewState
+    extends ConsumerState<MockExamDifficultyView> {
   @override
   void initState() {
     super.initState();
@@ -26,14 +28,23 @@ class _MockExamDifficultyViewState extends ConsumerState<MockExamDifficultyView>
 
     final category = state.categories.firstWhere(
       (c) => c.id == 1,
-      orElse: () => state.categories.isNotEmpty ? state.categories.first : 
-          const ExamCategory(id: 1, title: 'Genel Sınav', description: '', timeSeconds: 2700, successPoint: 70, imageUrl: '', totalQuestions: 50),
+      orElse: () => state.categories.isNotEmpty
+          ? state.categories.first
+          : const ExamCategory(
+              id: 1,
+              title: 'Genel Sınav',
+              description: '',
+              timeSeconds: 2700,
+              successPoint: 70,
+              imageUrl: '',
+              totalQuestions: 50),
     );
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorScheme.surface,
-        title: Text(AppLocalization.of(context).translate('mock_exam.select_difficulty')),
+        title: Text(AppLocalization.of(context)
+            .translate('mock_exam.select_difficulty')),
       ),
       body: state.isLoading && state.categories.isEmpty
           ? const Center(child: CircularProgressIndicator())
@@ -48,7 +59,8 @@ class _MockExamDifficultyViewState extends ConsumerState<MockExamDifficultyView>
                     _buildExamHeader(context, category),
                     const SizedBox(height: 24),
                     Text(
-                      AppLocalization.of(context).translate('mock_exam.description'),
+                      AppLocalization.of(context)
+                          .translate('mock_exam.description'),
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
@@ -95,7 +107,10 @@ class _MockExamDifficultyViewState extends ConsumerState<MockExamDifficultyView>
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [colorScheme.primary, colorScheme.primary.withValues(alpha: 0.8)],
+          colors: [
+            colorScheme.primary,
+            colorScheme.primary.withValues(alpha: 0.8)
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -119,7 +134,8 @@ class _MockExamDifficultyViewState extends ConsumerState<MockExamDifficultyView>
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.description, color: Colors.white, size: 28),
+                child: const Icon(Icons.description,
+                    color: Colors.white, size: 28),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -177,7 +193,8 @@ class _MockExamDifficultyViewState extends ConsumerState<MockExamDifficultyView>
         const SizedBox(width: 6),
         Text(
           label,
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13),
+          style: const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13),
         ),
       ],
     );
@@ -208,7 +225,9 @@ class _MockExamDifficultyViewState extends ConsumerState<MockExamDifficultyView>
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
+                decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.1),
+                    shape: BoxShape.circle),
                 child: Icon(icon, color: color, size: 32),
               ),
               const SizedBox(width: 16),
@@ -218,17 +237,20 @@ class _MockExamDifficultyViewState extends ConsumerState<MockExamDifficultyView>
                   children: [
                     Text(
                       AppLocalization.of(context).translate(titleKey),
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       AppLocalization.of(context).translate(descriptionKey),
-                      style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.7)),
+                      style: TextStyle(
+                          color: colorScheme.onSurface.withValues(alpha: 0.7)),
                     ),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, color: colorScheme.onSurface.withValues(alpha: 0.5)),
+              Icon(Icons.chevron_right,
+                  color: colorScheme.onSurface.withValues(alpha: 0.5)),
             ],
           ),
         ),
@@ -236,18 +258,22 @@ class _MockExamDifficultyViewState extends ConsumerState<MockExamDifficultyView>
     );
   }
 
-  Future<void> _confirmAndStart(BuildContext context, ExamCategory category, String difficulty) async {
+  Future<void> _confirmAndStart(
+      BuildContext context, ExamCategory category, String difficulty) async {
     final colorScheme = Theme.of(context).colorScheme;
 
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppLocalization.of(context).translate('mock_exam.confirm_start')),
-        content: Text(AppLocalization.of(context).translate('mock_exam.confirm_description')),
+        title: Text(
+            AppLocalization.of(context).translate('mock_exam.confirm_start')),
+        content: Text(AppLocalization.of(context)
+            .translate('mock_exam.confirm_description')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text(AppLocalization.of(context).translate('mock_exam.confirm_no')),
+            child: Text(
+                AppLocalization.of(context).translate('mock_exam.confirm_no')),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
@@ -255,7 +281,8 @@ class _MockExamDifficultyViewState extends ConsumerState<MockExamDifficultyView>
               backgroundColor: colorScheme.primary,
               foregroundColor: colorScheme.onPrimary,
             ),
-            child: Text(AppLocalization.of(context).translate('mock_exam.confirm_yes')),
+            child: Text(
+                AppLocalization.of(context).translate('mock_exam.confirm_yes')),
           ),
         ],
       ),
@@ -263,8 +290,9 @@ class _MockExamDifficultyViewState extends ConsumerState<MockExamDifficultyView>
 
     if (confirmed == true && mounted) {
       final l10n = AppLocalization.of(context);
-      final examTitle = '${l10n.translate('exam_types.mock')} - ${l10n.translate('difficulty_levels.$difficulty')}';
-      
+      final examTitle =
+          '${l10n.translate('exam_types.mock')} - ${l10n.translate('difficulty_levels.$difficulty')}';
+
       if (!mounted) return;
       Navigator.pushReplacement(
         context,

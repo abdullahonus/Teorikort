@@ -35,7 +35,8 @@ class ExamListView extends ConsumerWidget {
             margin: const EdgeInsets.only(top: 60),
             decoration: BoxDecoration(
               color: colorScheme.surface,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(32)),
             ),
             child: RefreshIndicator(
               onRefresh: () => ref.read(examProvider.notifier).refresh(),
@@ -45,14 +46,18 @@ class ExamListView extends ConsumerWidget {
                   if (state.categories.length > 1)
                     _buildExamSection(
                       context,
-                      AppLocalization.of(context).translate('exam_list.active_exams'),
-                      _buildActiveExams(context, ref, state.categories).sublist(1),
+                      AppLocalization.of(context)
+                          .translate('exam_list.active_exams'),
+                      _buildActiveExams(context, ref, state.categories)
+                          .sublist(1),
                     ),
                   const SizedBox(height: 24),
                   _buildExamSection(
                     context,
-                    AppLocalization.of(context).translate('exam_list.completed_exams'),
-                    _buildCompletedExams(context, state.history, state.categories),
+                    AppLocalization.of(context)
+                        .translate('exam_list.completed_exams'),
+                    _buildCompletedExams(
+                        context, state.history, state.categories),
                   ),
                 ],
               ),
@@ -68,8 +73,10 @@ class ExamListView extends ConsumerWidget {
                 child: state.isLoading && state.categories.isEmpty
                     ? CircularProgressIndicator(color: colorScheme.primary)
                     : (state.categories.isEmpty
-                        ? Text(AppLocalization.of(context).translate('exam_list.no_data'))
-                        : _buildActiveExams(context, ref, state.categories).first),
+                        ? Text(AppLocalization.of(context)
+                            .translate('exam_list.no_data'))
+                        : _buildActiveExams(context, ref, state.categories)
+                            .first),
               ),
             ),
           ),
@@ -78,7 +85,8 @@ class ExamListView extends ConsumerWidget {
     );
   }
 
-  Widget _buildExamSection(BuildContext context, String title, List<Widget> items) {
+  Widget _buildExamSection(
+      BuildContext context, String title, List<Widget> items) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -96,12 +104,14 @@ class ExamListView extends ConsumerWidget {
     );
   }
 
-  List<Widget> _buildActiveExams(BuildContext context, WidgetRef ref, List<ExamCategory> categories) {
+  List<Widget> _buildActiveExams(
+      BuildContext context, WidgetRef ref, List<ExamCategory> categories) {
     return categories.map((category) {
       return _ExamItem(
         title: category.title,
         subtitle: AppLocalization.of(context).translate('exam_list.final_exam'),
-        duration: '${category.timeSeconds ~/ 60} ${AppLocalization.of(context).translate('exam_list.minutes')}',
+        duration:
+            '${category.timeSeconds ~/ 60} ${AppLocalization.of(context).translate('exam_list.minutes')}',
         iconUrl: category.imageUrl,
         isActive: true,
         onTap: () {
@@ -121,16 +131,20 @@ class ExamListView extends ConsumerWidget {
     }).toList();
   }
 
-  List<Widget> _buildCompletedExams(
-      BuildContext context, List<ExamResult> history, List<ExamCategory> categories) {
+  List<Widget> _buildCompletedExams(BuildContext context,
+      List<ExamResult> history, List<ExamCategory> categories) {
     if (history.isEmpty) {
       return [
         Center(
           child: Text(
-            AppLocalization.of(context).translate('exam_list.no_completed_exams'),
+            AppLocalization.of(context)
+                .translate('exam_list.no_completed_exams'),
             style: TextStyle(
               fontSize: 16,
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.6),
             ),
           ),
         ),
@@ -145,7 +159,8 @@ class ExamListView extends ConsumerWidget {
       final results = entry.value;
       results.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       final latest = results.first;
-      final categoryData = categories.firstWhereOrNull((c) => c.id.toString() == categoryId);
+      final categoryData =
+          categories.firstWhereOrNull((c) => c.id.toString() == categoryId);
 
       return _ExamItem(
         title: categoryData?.title ?? latest.categoryTitle,
@@ -213,19 +228,26 @@ class _ExamItem extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Icon(Icons.access_time, size: 14, color: colorScheme.onSurface.withValues(alpha: 0.6)),
+                          Icon(Icons.access_time,
+                              size: 14,
+                              color:
+                                  colorScheme.onSurface.withValues(alpha: 0.6)),
                           const SizedBox(width: 4),
                           Expanded(
                             child: Text(
                               duration,
-                              style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6), fontSize: 14),
+                              style: TextStyle(
+                                  color: colorScheme.onSurface
+                                      .withValues(alpha: 0.6),
+                                  fontSize: 14),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -258,7 +280,8 @@ class _ExamItem extends StatelessWidget {
             ? Image.network(
                 iconUrl,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Icon(Icons.school, color: colorScheme.primary),
+                errorBuilder: (_, __, ___) =>
+                    Icon(Icons.school, color: colorScheme.primary),
               )
             : Icon(Icons.school, color: colorScheme.primary),
       ),
