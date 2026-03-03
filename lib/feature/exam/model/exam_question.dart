@@ -23,9 +23,16 @@ class ExamQuestion extends Equatable {
       id: json['id']?.toString() ?? '',
       question: _parseField(json['question']),
       imageUrl: json['image_url'],
-      options: (json['options'] as List? ?? [])
-          .map((option) => ExamOption.fromJson(option))
-          .toList(),
+      options: (json['options'] as List? ?? []).asMap().entries.map((entry) {
+        final optionJson = entry.value;
+        if (optionJson is String) {
+          return ExamOption(
+            id: entry.key.toString(),
+            text: optionJson,
+          );
+        }
+        return ExamOption.fromJson(optionJson);
+      }).toList(),
       correctAnswer: (json['correct_answer'] ?? '').toString(),
       explanation: _parseField(json['explanation']),
     );
@@ -79,12 +86,24 @@ class ExamOption extends Equatable {
     this.imageUrl,
   });
 
-  factory ExamOption.fromJson(Map<String, dynamic> json) {
-    return ExamOption(
-      id: (json['id'] ?? '').toString(),
-      text: ExamQuestion._parseField(json['text']),
-      imageUrl: json['image_url'],
-    );
+  factory ExamOption.fromJson(dynamic json) {
+    if (json is String) {
+      return ExamOption(
+        id: json,
+        text: json,
+      );
+    }
+
+    if (json is Map) {
+      final map = Map<String, dynamic>.from(json);
+      return ExamOption(
+        id: (map['id'] ?? '').toString(),
+        text: ExamQuestion._parseField(map['text']),
+        imageUrl: map['image_url'],
+      );
+    }
+
+    return const ExamOption(id: '', text: '');
   }
 
   @override

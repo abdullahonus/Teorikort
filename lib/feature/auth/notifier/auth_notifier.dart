@@ -1,9 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../core/exceptions/api_exception.dart';
 import '../../../core/services/logger_service.dart';
 import '../../../core/services/user_service.dart';
 import '../../../domain/repository/i_auth_repository.dart';
-import '../../../product/provider/service_providers.dart';
 import '../../../features/user/domain/models/user_profile.dart';
+import '../../../product/provider/service_providers.dart';
+import '../model/auth_user.dart';
 import '../state/auth_state.dart';
 
 /// Spec NOTIFIER PATTERN:
@@ -22,6 +25,12 @@ class AuthNotifier extends Notifier<AuthState> {
 
   Future<void> _checkAuthStatus() async {
     try {
+      final isAuth = await _repo.isAuthenticated();
+      if (!isAuth) {
+        state = const AuthState.unauthenticated();
+        return;
+      }
+
       final user = await _repo.getCurrentUser();
       if (user != null) {
         await _userService.updateUserFromApi(UserProfile(
@@ -34,10 +43,27 @@ class AuthNotifier extends Notifier<AuthState> {
         ));
         state = AuthState.authenticated(user);
       } else {
-        state = const AuthState.unauthenticated();
+        await signOut();
       }
-    } catch (_) {
-      state = const AuthState.unauthenticated();
+    } catch (e) {
+      // Sadece 401 veya yetkilendirme hatalarında oturumu sil,
+      // Eğer geçici network hatası ise ve localde oturum açıksa koru.
+      if (e is ApiException && (e.statusCode == 401 || e.statusCode == 403)) {
+        await signOut();
+      } else {
+        final isAuth = await _repo.isAuthenticated();
+        if (isAuth) {
+          final cachedUser = AuthUser(
+            id: int.tryParse(_userService.currentUserId) ?? 0,
+            email: _userService.currentUser['email']?.toString() ?? '',
+            name: _userService.currentUserName,
+            isEmailVerified: true,
+          );
+          state = AuthState.authenticated(cachedUser);
+        } else {
+          await signOut();
+        }
+      }
     }
   }
 

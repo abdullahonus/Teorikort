@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../data/models/quiz_data.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/features/reports/data/services/report_service.dart';
+
+import '../data/models/quiz_data.dart';
 
 class WrongAnswersReviewScreen extends StatelessWidget {
   final List<QuizQuestion> questions;
@@ -19,7 +20,8 @@ class WrongAnswersReviewScreen extends StatelessWidget {
     return textMap[currentLanguage] ?? textMap['tr'] ?? textMap.values.first;
   }
 
-  Future<void> _showReportDialog(BuildContext context, String questionId) async {
+  Future<void> _showReportDialog(
+      BuildContext context, String questionId) async {
     final TextEditingController reportController = TextEditingController();
     final l10n = AppLocalization.of(context);
     final reportService = ReportService();
@@ -111,6 +113,7 @@ class WrongAnswersReviewScreen extends StatelessWidget {
           final question = entry.value;
           final questionIndex = entry.key;
           final userAnswerId = userAnswers[questionIndex];
+          final isEmpty = userAnswerId == null;
 
           // Find the selected option text
           final userAnswerText = userAnswerId != null
@@ -121,7 +124,11 @@ class WrongAnswersReviewScreen extends StatelessWidget {
                       id: '',
                       text: {
                         'tr': AppLocalization.of(context)
-                                .translate('topics.no_answer'),
+                                    .translate('topics.no_answer') !=
+                                'topics.no_answer'
+                            ? AppLocalization.of(context)
+                                .translate('topics.no_answer')
+                            : 'Boş Bıraktın',
                         'en': 'No answer'
                       },
                     ),
@@ -129,29 +136,39 @@ class WrongAnswersReviewScreen extends StatelessWidget {
                   .text
               : {
                   'tr': AppLocalization.of(context)
-                          .translate('topics.no_answer'),
+                              .translate('topics.no_answer') !=
+                          'topics.no_answer'
+                      ? AppLocalization.of(context)
+                          .translate('topics.no_answer')
+                      : 'Boş Bıraktın',
                   'en': 'No answer'
                 };
 
           // Find the correct option text
           final correctAnswerText = question.options
-              .firstWhere((option) => option.id == question.correctAnswer)
+              .firstWhere((option) => option.id == question.correctAnswer,
+                  orElse: () => Option(
+                        id: '',
+                        text: {'tr': 'Bilinmiyor', 'en': 'Unknown'},
+                      ))
               .text;
 
           return Container(
-            margin: const EdgeInsets.only(bottom: 16),
+            margin: const EdgeInsets.only(bottom: 24),
             decoration: BoxDecoration(
               color: colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: colorScheme.outline,
-                width: 1,
+                color: isEmpty
+                    ? Colors.orange.withOpacity(0.3)
+                    : colorScheme.error.withOpacity(0.3),
+                width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
                   color: colorScheme.shadow.withOpacity(0.05),
                   blurRadius: 10,
-                  offset: const Offset(0, 2),
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
@@ -159,78 +176,115 @@ class WrongAnswersReviewScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
-                    color: colorScheme.surface,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                    ),
+                    color: isEmpty
+                        ? Colors.orange.withOpacity(0.1)
+                        : colorScheme.error.withOpacity(0.1),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(15)),
                   ),
                   child: Row(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
+                          horizontal: 10,
+                          vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: colorScheme.primary.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
+                          color: isEmpty
+                              ? Colors.orange.withOpacity(0.2)
+                              : colorScheme.error.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           AppLocalization.of(context)
-                              .translate('quiz.question_number')
-                              .replaceAll('%d', '${questionIndex + 1}')
-                              .replaceAll('%d', '${questions.length}'),
+                                      .translate('quiz.question_number') !=
+                                  'quiz.question_number'
+                              ? AppLocalization.of(context)
+                                  .translate('quiz.question_number')
+                                  .replaceAll('%d', '${questionIndex + 1}')
+                                  .replaceAll('%n', '${questions.length}')
+                              : 'Soru ${questionIndex + 1}',
                           style: theme.textTheme.titleMedium?.copyWith(
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.w600,
+                            color: isEmpty
+                                ? Colors.orange.shade800
+                                : colorScheme.error,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
                           ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Icon(
+                        isEmpty
+                            ? Icons.radio_button_unchecked
+                            : Icons.cancel_outlined,
+                        color: isEmpty ? Colors.orange : colorScheme.error,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        isEmpty ? 'Boş Bırakıldı' : 'Yanlış Cevap',
+                        style: TextStyle(
+                          color: isEmpty ? Colors.orange : colorScheme.error,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                         ),
                       ),
                       const Spacer(),
                       IconButton(
-                        icon: Icon(Icons.report_gmailerrorred, color: colorScheme.error, size: 20),
-                        onPressed: () => _showReportDialog(context, question.id),
+                        icon: Icon(Icons.report_gmailerrorred,
+                            color: colorScheme.error, size: 22),
+                        onPressed: () =>
+                            _showReportDialog(context, question.id),
                         constraints: const BoxConstraints(),
                         padding: EdgeInsets.zero,
+                        tooltip: 'Soruyu Bildir',
                       ),
                     ],
                   ),
                 ),
-                Divider(
-                  color: colorScheme.outline,
-                  height: 1,
-                ),
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         _getLocalizedText(context, question.question),
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          height: 1.5,
-                        ),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            height: 1.5),
                       ),
                       const SizedBox(height: 24),
+                      if (!isEmpty) ...[
+                        _buildAnswerRow(
+                          context,
+                          AppLocalization.of(context)
+                                      .translate('topics.your_answer') !=
+                                  'topics.your_answer'
+                              ? AppLocalization.of(context)
+                                  .translate('topics.your_answer')
+                              : 'Senin Cevabın',
+                          _getLocalizedText(context, userAnswerText),
+                          colorScheme.error,
+                          Icons.close_rounded,
+                        ),
+                        const SizedBox(height: 12),
+                      ],
                       _buildAnswerRow(
                         context,
                         AppLocalization.of(context)
-                            .translate('topics.your_answer'),
-                        _getLocalizedText(context, userAnswerText),
-                        colorScheme.error,
-                        Icons.close,
-                      ),
-                      const SizedBox(height: 16),
-                      _buildAnswerRow(
-                        context,
-                        AppLocalization.of(context)
-                            .translate('topics.correct_answer'),
+                                    .translate('topics.correct_answer') !=
+                                'topics.correct_answer'
+                            ? AppLocalization.of(context)
+                                .translate('topics.correct_answer')
+                            : 'Doğru Cevap',
                         _getLocalizedText(context, correctAnswerText),
-                        colorScheme.primary,
-                        Icons.check_circle,
+                        Colors.green.shade600,
+                        Icons.check_circle_rounded,
                       ),
                     ],
                   ),
@@ -250,13 +304,12 @@ class WrongAnswersReviewScreen extends StatelessWidget {
     Color color,
     IconData icon,
   ) {
-    final theme = Theme.of(context);
-
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withOpacity(0.08),
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,18 +322,16 @@ class WrongAnswersReviewScreen extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: color,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: color.withOpacity(0.8),
+                      fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   answer,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: theme.colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: TextStyle(
+                      color: color, fontWeight: FontWeight.w600, fontSize: 14),
                 ),
               ],
             ),

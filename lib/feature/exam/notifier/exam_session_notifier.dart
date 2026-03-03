@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../core/services/logger_service.dart';
 import '../../../domain/repository/i_exam_repository.dart';
 import '../../../product/provider/service_providers.dart';
@@ -20,7 +22,7 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
 
   Future<void> startExam(String categoryId, int initialSeconds) async {
     state = state.copyWith(isLoading: true, clearError: true);
-    
+
     try {
       final response = await _repository.getQuestions(categoryId);
       if (response.success && response.data != null) {
@@ -72,13 +74,21 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
 
   void nextQuestion() {
     if (state.currentQuestionIndex < state.questions.length - 1) {
-      state = state.copyWith(currentQuestionIndex: state.currentQuestionIndex + 1);
+      state =
+          state.copyWith(currentQuestionIndex: state.currentQuestionIndex + 1);
     }
   }
 
   void previousQuestion() {
     if (state.currentQuestionIndex > 0) {
-      state = state.copyWith(currentQuestionIndex: state.currentQuestionIndex - 1);
+      state =
+          state.copyWith(currentQuestionIndex: state.currentQuestionIndex - 1);
+    }
+  }
+
+  void jumpToQuestion(int index) {
+    if (index >= 0 && index < state.questions.length) {
+      state = state.copyWith(currentQuestionIndex: index);
     }
   }
 
@@ -88,7 +98,8 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
     state = state.copyWith(userAnswers: updatedAnswers);
   }
 
-  Future<void> finishExam({String categoryId = '1', String examType = 'final'}) async {
+  Future<void> finishExam(
+      {String categoryId = '1', String examType = 'final'}) async {
     _timer?.cancel();
     if (state.isFinished) return;
 
@@ -102,7 +113,8 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
         correctAnswers: state.correctCount,
         wrongAnswers: state.wrongCount,
         emptyAnswers: state.emptyCount,
-        duration: Duration(seconds: 2700 - state.remainingSeconds), // Assume 45min
+        duration:
+            Duration(seconds: 2700 - state.remainingSeconds), // Assume 45min
         examType: examType,
       );
 

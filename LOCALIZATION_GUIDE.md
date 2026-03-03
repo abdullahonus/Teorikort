@@ -20,6 +20,9 @@ assets/
 
 ## 🔧 Sistem Nasıl Çalışır?
 
+1. **Dil Verileri Bizde**: Projenin asıl dil çevirileri ve altyapısı Backend'den **GELMEZ**. Tüm çeviri JSON dosyaları bizzat bizim Flutter projemizin içindedir (Yani *Source Of Truth* mobil uygulamadır).
+2. **Dil Listesi Backend'den**: "Kullanıcının profil ekranında seçebileceği" aktif diller listesi (`Splash API` -> `languages` array'i üzerinden) cihaz açılırken Backend'den gelir. Böylece backend tarafı istediği zaman "Almanca desteklendiğinde" bunu listeye ekleyebilir.
+
 ### 1. Ana Yapılandırma (`main.dart`)
 
 ```dart
@@ -77,12 +80,12 @@ class AppLocalization {
   String translate(String key) {
     List<String> keys = key.split('.');
     dynamic value = _localizedStrings;
-    
+
     // "home.welcome" -> ["home", "welcome"]
     for (String k in keys) {
       value = value[k];
     }
-    
+
     return value?.toString() ?? key;
   }
 }
@@ -139,7 +142,7 @@ Text('${user.name} ${AppLocalization.of(context).translate('home.welcome')}')
 ```json
 {
   "exam": {
-    "new_feature": "Yeni Özellik", 
+    "new_feature": "Yeni Özellik",
     "description": "Bu yeni özellik açıklamasıdır"
   }
 }
@@ -222,9 +225,15 @@ ref.read(localeProvider.notifier).setLocale('en');
 - Her iki dil dosyasında da **aynı key yapısı** olmalı
 - Eksik key'ler fallback olarak key'in kendisini gösterir
 
-### 2. Hot Reload
-- JSON dosyalarında değişiklik yaptıktan sonra **hot restart** gerekir
-- Sadece hot reload yeterli değil
+### 2. Hot Reload & Caching Sorunları (Key Olarak Gözükme Hatası)
+Flutter statik JSON asset'lerini cihaz içinde önbelleğe (cache) alır. Eğer her şeyi doğru yaptığınız halde, eklediğiniz yeni metinler ekranda çevrilmiş haliyle değil de salt **"key"** olarak (*örn: `home.welcome`*) gözüküyorsa, standart bir Hot Reload veya Hot Restart yeterli olmaz.
+
+Bu durumda terminalden şu kodu sırasıyla çalıştırmanız **ZORUNLUDUR**:
+
+```bash
+flutter clean && flutter pub get
+```
+*Bu terminal komutlarını çalıştırdıktan sonra uygulamayı sıfırdan (`Run` modunda) tekrar başlatmanız gerekmektedir.*
 
 ### 3. Key Naming Convention
 ```json
@@ -292,7 +301,7 @@ Diyelim ki bir "Quiz Timer" özelliği ekliyorsunuz:
     "timer": {
       "title": "Quiz Zamanlayıcısı",
       "remaining": "Kalan Süre",
-      "expired": "Süre Doldu", 
+      "expired": "Süre Doldu",
       "minutes": "dakika",
       "seconds": "saniye"
     }
@@ -316,4 +325,4 @@ class QuizTimer extends StatelessWidget {
 }
 ```
 
-Bu kılavuz ile projenizdeki tüm metinleri kolayca çok dilli hale getirebilirsiniz! 🎉 
+Bu kılavuz ile projenizdeki tüm metinleri kolayca çok dilli hale getirebilirsiniz! 🎉

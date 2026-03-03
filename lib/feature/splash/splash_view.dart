@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
+import 'package:teorikort/feature/auth/provider/auth_provider.dart';
+import 'package:teorikort/feature/auth/view/sign_in_view.dart';
 import 'package:teorikort/feature/splash/notifier/splash_state.dart';
 import 'package:teorikort/feature/splash/provider/splash_provider.dart';
-import 'package:teorikort/feature/auth/provider/auth_provider.dart';
-import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
-import 'package:teorikort/feature/auth/view/sign_in_view.dart';
 
 class SplashView extends ConsumerStatefulWidget {
   const SplashView({super.key});
@@ -27,6 +27,10 @@ class _SplashViewState extends ConsumerState<SplashView> {
       // 1. Splash data loaded successfully, now check auth
       final authState = ref.read(authProvider);
 
+      // If auth check is still running, wait for it to finish.
+      // The listener on `authProvider` below will handle it.
+      if (authState.isLoading) return;
+
       if (!mounted) return;
 
       if (authState.isAuthenticated) {
@@ -47,6 +51,14 @@ class _SplashViewState extends ConsumerState<SplashView> {
     ref.listen<SplashState>(splashNotifierProvider, (previous, next) {
       if (next.status == SplashStatus.completed) {
         _handleNavigation(next.status);
+      }
+    });
+
+    // Listen to auth status changes in case auth finishes after splash
+    ref.listen(authProvider, (previous, next) {
+      final splashStatus = ref.read(splashNotifierProvider).status;
+      if (splashStatus == SplashStatus.completed && !next.isLoading) {
+        _handleNavigation(splashStatus);
       }
     });
 
@@ -107,7 +119,11 @@ class _SplashViewState extends ConsumerState<SplashView> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
-              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
+              color: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.color
+                  ?.withOpacity(0.8),
               height: 1.5,
             ),
           ),
@@ -123,7 +139,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.system_update_rounded, 
+          Icon(Icons.system_update_rounded,
               size: 80, color: Theme.of(context).colorScheme.primary),
           const SizedBox(height: 24),
           Text(
@@ -138,7 +154,11 @@ class _SplashViewState extends ConsumerState<SplashView> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
-              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
+              color: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.color
+                  ?.withOpacity(0.8),
               height: 1.5,
             ),
           ),
@@ -163,7 +183,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error_outline_rounded, 
+          Icon(Icons.error_outline_rounded,
               size: 80, color: Theme.of(context).colorScheme.error),
           const SizedBox(height: 24),
           const Text(
@@ -176,7 +196,11 @@ class _SplashViewState extends ConsumerState<SplashView> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
-              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
+              color: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.color
+                  ?.withOpacity(0.8),
             ),
           ),
           const SizedBox(height: 32),

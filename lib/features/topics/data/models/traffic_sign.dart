@@ -1,8 +1,3 @@
-import 'package:flutter/material.dart';
-import '../../../../core/services/base_api_service.dart';
-import '../../../../core/constants/api_constants.dart';
-import '../../../../core/models/api_response.dart';
-
 class TrafficSign {
   final int id;
   final String title;
@@ -24,7 +19,7 @@ class TrafficSign {
       title: json['title'] as String? ?? '',
       slug: json['slug'] as String? ?? '',
       description: json['description'] as String? ?? '',
-      imageUrl: json['image_url'] as String? ?? '',
+      imageUrl: (json['img'] ?? json['image_url'] ?? '') as String,
     );
   }
 }
@@ -37,10 +32,10 @@ class TrafficSignResponse {
 
   factory TrafficSignResponse.fromJson(Map<String, dynamic> json) {
     return TrafficSignResponse(
-      signs: (json['data'] as List? ?? [])
+      signs: (json['signs'] as List? ?? [])
           .map((e) => TrafficSign.fromJson(e))
           .toList(),
-      pagination: PaginationData.fromJson(json['meta'] ?? {}),
+      pagination: PaginationData.fromJson(json['pagination'] ?? {}),
     );
   }
 }
@@ -50,7 +45,8 @@ class PaginationData {
   final int lastPage;
   final int total;
 
-  PaginationData({required this.currentPage, required this.lastPage, required this.total});
+  PaginationData(
+      {required this.currentPage, required this.lastPage, required this.total});
 
   factory PaginationData.fromJson(Map<String, dynamic> json) {
     return PaginationData(

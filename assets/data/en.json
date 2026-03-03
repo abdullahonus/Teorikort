@@ -27,7 +27,14 @@
     "empty_answers": "empty answers",
     "success_rate": "success rate",
     "total_exams": "total exams",
-    "total_questions": "total questions"
+    "total_questions": "total questions",
+    "no_data": "No Data Available",
+    "score_range": "Score Range",
+    "platform_stats": "Platform Statistics",
+    "overall_performance": "Overall Performance",
+    "category_performance": "Category Performance",
+    "take_exams_first": "You need to take exams first to see statistics.",
+    "recent_exams": "Recent Exams"
   },
   "common": {
     "language": "Language",
@@ -48,7 +55,10 @@
     "languages": {
       "turkish": "Türkçe",
       "english": "English"
-    }
+    },
+    "close": "Close",
+    "confirm": "Confirm",
+    "description": "Description"
   },
   "home": {
     "welcome": "Welcome",
@@ -98,7 +108,8 @@
     "daily_tip": "Daily Tip",
     "tip_content": "Remember to give way to pedestrians when turning right. This is an important part of traffic rules.",
     "exam_reminder": "Upcoming Exam",
-    "exam_date": "March 15, 2024, 10:00"
+    "exam_date": "March 15, 2024, 10:00",
+    "no_tip_available": "No tips available right now."
   },
   "exam": {
     "all_exams": "All Exams",
@@ -168,7 +179,8 @@
     "physics": "Vehicle Technique",
     "no_completed_exams": "No completed exams yet",
     "minutes": "minutes",
-    "correct": "correct"
+    "correct": "correct",
+    "no_data": "No exams to display."
   },
   "quiz": {
     "screen_title": "Exam",
@@ -205,7 +217,10 @@
       "previous": "Previous",
       "next": "Next",
       "finish": "Finish"
-    }
+    },
+    "explanation": "Explanation",
+    "correct_answer": "Correct Answer",
+    "your_answer": "Your Answer"
   },
   "quiz_result": {
     "screen_title": "Exam Result",
@@ -226,7 +241,9 @@
     "correct_answer": "Correct Answer",
     "success": "Success",
     "fail": "Failed",
-    "no_answer": "No answer"
+    "no_answer": "No answer",
+    "empty_answer_title": "Left Empty",
+    "wrong_answer_title": "Wrong Answer"
   },
   "exam_categories": {
     "traffic_signs": "Traffic Signs",
@@ -255,7 +272,10 @@
     "error": "An error occurred while loading topics",
     "your_answer": "Your Answer",
     "correct_answer": "Correct Answer",
-    "no_answer": "No answer"
+    "no_answer": "No answer",
+    "complete_study": "Complete Study",
+    "content": "Content",
+    "read_content": "Read Content"
   },
   "bottom_nav": {
     "home": "Home",
@@ -274,7 +294,8 @@
     "refresh": "Refresh",
     "rank": "Rank",
     "score": "Score",
-    "user": "User"
+    "user": "User",
+    "take_exams_first": "You need to take exams first to appear on the leaderboard."
   },
   "mock_exam": {
     "select_difficulty": "Select Difficulty Level",
@@ -305,7 +326,8 @@
       "traffic_rules": "Traffic Rules",
       "first_aid": "First Aid",
       "vehicle_technology": "Vehicle Technology"
-    }
+    },
+    "question_detail": "Question Detail"
   },
   "auth": {
     "welcome": "Welcome Back",
@@ -338,7 +360,21 @@
     "last_name_required": "Last name is required",
     "phone_required": "Phone is required",
     "phone_invalid": "Please enter a valid phone number",
-    "already_have_account": "Already have an account? Sign In"
+    "already_have_account": "Already have an account? Sign In",
+    "new_password_title": "New Password",
+    "reset_password": "Reset Password",
+    "confirm_password_required": "Please confirm your password.",
+    "new_password_desc": "Enter your new password.",
+    "password_medium": "Medium",
+    "confirm_password": "Confirm Password",
+    "password_weak": "Weak",
+    "email_invalid": "Invalid Email Format",
+    "passwords_not_match": "Passwords do not match.",
+    "password_strong": "Strong",
+    "reset_success": "Password Reset Successful",
+    "password_length": "Password must be at least 6 characters.",
+    "reset_password_button": "Reset Password",
+    "new_password": "New Password"
   },
   "workbook": {
     "title": "Workbook",
@@ -364,6 +400,19 @@
   },
   "signs": {
     "title": "Traffic Signs",
-    "no_data": "No traffic signs found."
+    "no_data": "No traffic signs found.",
+    "subtitle": "All Traffic Signs"
+  },
+  "errors": {
+    "not_found": "Not Found",
+    "unauthorized": "Unauthorized Access",
+    "server_error": "Server Error",
+    "service_unavailable": "Service Unavailable",
+    "too_many_requests": "Too Many Requests",
+    "conflict": "Conflict Occurred",
+    "unknown_error": "Unknown Error",
+    "validation_error": "Validation Error",
+    "forbidden": "Access Denied",
+    "bad_request": "Bad Request"
   }
 }

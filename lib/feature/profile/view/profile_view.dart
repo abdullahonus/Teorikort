@@ -7,6 +7,7 @@ import 'package:teorikort/core/providers/theme_provider.dart';
 import 'package:teorikort/feature/auth/provider/auth_provider.dart';
 import 'package:teorikort/feature/auth/view/sign_in_view.dart';
 import 'package:teorikort/feature/profile/provider/profile_provider.dart';
+import 'package:teorikort/feature/splash/provider/splash_provider.dart';
 import 'package:teorikort/features/packages/presentation/packages_screen.dart';
 import 'package:teorikort/features/workbook/presentation/workbook_list_screen.dart';
 
@@ -49,7 +50,8 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
         content: TextField(
           controller: _nameController,
           decoration: InputDecoration(
-            hintText: AppLocalization.of(context).translate('profile.enter_name'),
+            hintText:
+                AppLocalization.of(context).translate('profile.enter_name'),
           ),
         ),
         actions: [
@@ -65,11 +67,14 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
 
               final newName = _nameController.text.trim();
               if (newName.isNotEmpty) {
-                final success = await ref.read(profileProvider.notifier).updateName(newName);
+                final success = await ref
+                    .read(profileProvider.notifier)
+                    .updateName(newName);
                 if (success) {
                   messenger.showSnackBar(
                     SnackBar(
-                      content: Text(localization.translate('profile.name_updated')),
+                      content:
+                          Text(localization.translate('profile.name_updated')),
                     ),
                   );
                 }
@@ -235,7 +240,8 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                   final theme = ref.watch(themeProvider);
                   return Switch(
                     value: theme == ThemeMode.dark,
-                    onChanged: (value) => ref.read(themeProvider.notifier).toggleTheme(),
+                    onChanged: (value) =>
+                        ref.read(themeProvider.notifier).toggleTheme(),
                   );
                 },
               ),
@@ -246,21 +252,51 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
               trailing: Consumer(
                 builder: (context, ref, _) {
                   final locale = ref.watch(localeProvider);
+                  final splashState = ref.watch(splashNotifierProvider);
+                  final availableLanguages = splashState.data?.languages ?? [];
+
+                  if (availableLanguages.isEmpty) {
+                    return DropdownButton<String>(
+                      value: locale.languageCode,
+                      underline: const SizedBox(),
+                      items: [
+                        DropdownMenuItem(
+                          value: 'tr',
+                          child: Text(AppLocalization.of(context)
+                              .translate('common.languages.turkish')),
+                        ),
+                        DropdownMenuItem(
+                          value: 'en',
+                          child: Text(AppLocalization.of(context)
+                              .translate('common.languages.english')),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        if (value != null)
+                          ref.read(localeProvider.notifier).setLocale(value);
+                      },
+                    );
+                  }
+
+                  // Verify current locale is in the available languages list
+                  final isValidLocale = availableLanguages
+                      .any((lang) => lang.code == locale.languageCode);
+                  final currentValue = isValidLocale
+                      ? locale.languageCode
+                      : availableLanguages.first.code;
+
                   return DropdownButton<String>(
-                    value: locale.languageCode,
+                    value: currentValue,
                     underline: const SizedBox(),
-                    items: [
-                      DropdownMenuItem(
-                        value: 'tr',
-                        child: Text(AppLocalization.of(context).translate('common.languages.turkish')),
-                      ),
-                      DropdownMenuItem(
-                        value: 'en',
-                        child: Text(AppLocalization.of(context).translate('common.languages.english')),
-                      ),
-                    ],
+                    items: availableLanguages.map((lang) {
+                      return DropdownMenuItem(
+                        value: lang.code,
+                        child: Text(lang.name),
+                      );
+                    }).toList(),
                     onChanged: (value) {
-                      if (value != null) ref.read(localeProvider.notifier).setLocale(value);
+                      if (value != null)
+                        ref.read(localeProvider.notifier).setLocale(value);
                     },
                   );
                 },
@@ -277,7 +313,8 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
             backgroundColor: colorScheme.error,
             foregroundColor: colorScheme.onError,
             padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
           child: Text(
             AppLocalization.of(context).translate('auth.logout'),
@@ -294,7 +331,8 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(AppLocalization.of(context).translate('auth.logout_title')),
-        content: Text(AppLocalization.of(context).translate('auth.logout_confirmation')),
+        content: Text(
+            AppLocalization.of(context).translate('auth.logout_confirmation')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -332,7 +370,8 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     );
   }
 
-  Widget _buildSettingsCard(BuildContext context, {required List<Widget> children}) {
+  Widget _buildSettingsCard(BuildContext context,
+      {required List<Widget> children}) {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -345,7 +384,8 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     );
   }
 
-  Widget _buildSettingsTile(BuildContext context, {required String title, Widget? trailing}) {
+  Widget _buildSettingsTile(BuildContext context,
+      {required String title, Widget? trailing}) {
     return ListTile(
       title: Text(title),
       trailing: trailing,

@@ -1,10 +1,12 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import '../../../../core/services/base_api_service.dart';
+import 'package:teorikort/features/exam/data/models/exam_data.dart';
+
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/models/api_response.dart';
+import '../../../../core/services/base_api_service.dart';
 import '../models/quiz_data.dart';
-import 'package:teorikort/features/exam/data/models/exam_data.dart';
 
 class QuizService extends BaseApiService {
   // Get questions by category ID from API
@@ -115,14 +117,14 @@ class QuizService extends BaseApiService {
       'correct_answers': correctAnswers,
       'wrong_answers': wrongAnswers,
       'empty_answers': emptyAnswers,
-      'score_percentage': scorePercentage,
+      'score_percentage': scorePercentage.round(),
       'duration_seconds': durationSeconds ?? 0,
       'completed_at': completedAt.toIso8601String(),
       'answers': answers ?? [],
 
       // Legacy fields for backward compatibility if needed
       'cat_id': int.tryParse(category) ?? 1,
-      'point': scorePercentage,
+      'point': scorePercentage.round(),
       'results': jsonEncode({
         'correct': correctAnswers,
         'wrong': wrongAnswers,

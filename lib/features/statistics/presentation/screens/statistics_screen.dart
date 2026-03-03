@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
+
 import '../../data/models/statistics_data.dart';
 import '../../data/services/statistics_service.dart';
-import 'package:teorikort/core/localization/app_localization.dart';
 import 'category_statistics_screen.dart';
 
 class StatisticsScreen extends StatefulWidget {
@@ -14,7 +15,6 @@ class StatisticsScreen extends StatefulWidget {
 class StatisticsScreenState extends State<StatisticsScreen> {
   final StatisticsService _statisticsService = StatisticsService();
   Future<StatisticsData?>? _statisticsDataFuture;
-  Future<AppAnalyticsData?>? _analyticsFuture;
 
   @override
   void initState() {
@@ -33,9 +33,6 @@ class StatisticsScreenState extends State<StatisticsScreen> {
     setState(() {
       _statisticsDataFuture = _statisticsService
           .getStatisticsData(context: context)
-          .then((r) => r.data);
-      _analyticsFuture = _statisticsService
-          .getAppAnalytics(context: context)
           .then((r) => r.data);
     });
   }
@@ -131,19 +128,7 @@ class StatisticsScreenState extends State<StatisticsScreen> {
             return ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               children: [
-                // Uygulama geneli analitik banner
-                FutureBuilder<AppAnalyticsData?>(
-                  future: _analyticsFuture,
-                  builder: (ctx, snap) {
-                    if (snap.data == null) return const SizedBox.shrink();
-                    return Column(
-                      children: [
-                        _buildAnalyticsBanner(snap.data!),
-                        const SizedBox(height: 24),
-                      ],
-                    );
-                  },
-                ),
+                // Uygulama geneli analitik banner (Kaldırıldı)
                 _buildOverallStats(statistics),
                 const SizedBox(height: 24),
                 if (statistics.categoryPerformance.isNotEmpty) ...[
@@ -156,96 +141,6 @@ class StatisticsScreenState extends State<StatisticsScreen> {
       ),
     );
   }
-
-  Widget _buildAnalyticsBanner(AppAnalyticsData data) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            colorScheme.primary.withOpacity(0.12),
-            colorScheme.secondary.withOpacity(0.08),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colorScheme.primary.withOpacity(0.15)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.bar_chart_rounded,
-                  color: colorScheme.primary, size: 18),
-              const SizedBox(width: 6),
-              Text(
-                'Platform İstatistikleri',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: colorScheme.primary,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _analyticsItem('${data.totalUsers}', 'Kullanıcı',
-                  Icons.people_outline),
-              _vDivider(colorScheme),
-              _analyticsItem('${data.totalExams}', 'Toplam Sınav',
-                  Icons.assignment_outlined),
-              _vDivider(colorScheme),
-              _analyticsItem('${data.totalCategories}', 'Kategori',
-                  Icons.category_outlined),
-              _vDivider(colorScheme),
-              _analyticsItem('%${data.averageScore.toStringAsFixed(1)}',
-                  'Ort. Puan', Icons.analytics_outlined),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _analyticsItem(String value, String label, IconData icon) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      children: [
-        Icon(icon, color: colorScheme.primary, size: 18),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            color: colorScheme.onSurface,
-          ),
-        ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 10,
-            color: colorScheme.onSurface.withOpacity(0.55),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _vDivider(colorScheme) => SizedBox(
-        height: 40,
-        child: VerticalDivider(
-          color: colorScheme.outline.withOpacity(0.25),
-          width: 1,
-          thickness: 1,
-        ),
-      );
 
   Widget _buildOverallStats(StatisticsData stats) {
     final colorScheme = Theme.of(context).colorScheme;

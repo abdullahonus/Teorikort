@@ -27,7 +27,14 @@
     "empty_answers": "boş cevap",
     "success_rate": "başarı oranı",
     "total_exams": "toplam sınav",
-    "total_questions": "toplam soru"
+    "total_questions": "toplam soru",
+    "no_data": "Veri Bulunamadı",
+    "score_range": "Puan Aralığı",
+    "platform_stats": "Platform İstatistikleri",
+    "overall_performance": "Genel Performans",
+    "category_performance": "Kategori Performansı",
+    "take_exams_first": "İstatistikleri görebilmek için önce sınav çözmelisiniz.",
+    "recent_exams": "Son Sınavlar"
   },
   "common": {
     "language": "Dil",
@@ -48,7 +55,10 @@
     "languages": {
       "turkish": "Türkçe",
       "english": "English"
-    }
+    },
+    "close": "Kapat",
+    "confirm": "Onayla",
+    "description": "Açıklama"
   },
   "home": {
     "welcome": "Hoş Geldiniz",
@@ -86,7 +96,8 @@
     "daily_tip": "Günün İpucu",
     "tip_content": "Sağa dönüşlerde yayalara yol vermeyi unutmayın. Bu, trafik kurallarının önemli bir parçasıdır.",
     "exam_reminder": "Yaklaşan Sınav",
-    "exam_date": "15 Mart 2024, 10:00"
+    "exam_date": "15 Mart 2024, 10:00",
+    "no_tip_available": "Şu an için ipucu bulunmamaktadır."
   },
   "exam": {
     "all_exams": "Tüm Sınavlar",
@@ -156,7 +167,8 @@
     "physics": "Araç Tekniği",
     "no_completed_exams": "Henüz tamamlanmış sınav bulunmuyor",
     "minutes": "dakika",
-    "correct": "doğru"
+    "correct": "doğru",
+    "no_data": "Gösterilecek sınav bulunamadı."
   },
   "quiz": {
     "screen_title": "Sınav",
@@ -193,7 +205,10 @@
       "previous": "Önceki",
       "next": "Sonraki",
       "finish": "Bitir"
-    }
+    },
+    "explanation": "Açıklama",
+    "correct_answer": "Doğru Cevap",
+    "your_answer": "Senin Cevabın"
   },
   "quiz_result": {
     "screen_title": "Sınav Sonucu",
@@ -214,7 +229,9 @@
     "correct_answer": "Doğru Cevap",
     "success": "Başarılı",
     "fail": "Başarısız",
-    "no_answer": "Cevap verilmedi"
+    "no_answer": "Cevap verilmedi",
+    "empty_answer_title": "Boş Bırakıldı",
+    "wrong_answer_title": "Yanlış Cevap"
   },
   "exam_categories": {
     "traffic_signs": "Trafik İşaretleri",
@@ -243,7 +260,10 @@
     "error": "Konular yüklenirken bir hata oluştu",
     "your_answer": "Sizin Cevabınız",
     "correct_answer": "Doğru Cevap",
-    "no_answer": "Cevap verilmedi"
+    "no_answer": "Cevap verilmedi",
+    "complete_study": "Çalışmayı Tamamla",
+    "content": "İçerik",
+    "read_content": "İçeriği Oku"
   },
   "bottom_nav": {
     "home": "Anasayfa",
@@ -262,7 +282,8 @@
     "refresh": "Yenile",
     "rank": "Sıra",
     "score": "Puan",
-    "user": "Kullanıcı"
+    "user": "Kullanıcı",
+    "take_exams_first": "Skor tablosunda yer almak için önce sınav çözmelisiniz."
   },
   "mock_exam": {
     "select_difficulty": "Zorluk Seviyesi Seç",
@@ -293,7 +314,8 @@
       "traffic_rules": "Trafik Kuralları",
       "first_aid": "İlk Yardım",
       "vehicle_technology": "Motor ve Araç Tekniği"
-    }
+    },
+    "question_detail": "Soru Detayı"
   },
   "auth": {
     "welcome": "Tekrar Hoşgeldiniz",
@@ -339,7 +361,10 @@
     "last_name_required": "Soyad alanı zorunludur",
     "phone_required": "Telefon alanı zorunludur",
     "phone_invalid": "Geçerli bir telefon numarası giriniz",
-    "already_have_account": "Zaten hesabın var mı? Giriş yap"
+    "already_have_account": "Zaten hesabın var mı? Giriş yap",
+    "confirm_password_required": "Şifrenizi tekrar giriniz.",
+    "email_invalid": "Geçersiz E-posta Formatı",
+    "password_length": "Şifre en az 6 karakter olmalıdır"
   },
   "workbook": {
     "title": "Çalışma Kitabı",
@@ -365,6 +390,19 @@
   },
   "signs": {
     "title": "Trafik İşaretleri",
-    "no_data": "Trafik işareti bulunamadı."
+    "no_data": "Trafik işareti bulunamadı.",
+    "subtitle": "Tüm Trafik İşaretleri"
+  },
+  "errors": {
+    "not_found": "Bulunamadı",
+    "unauthorized": "Yetkisiz Erişim",
+    "server_error": "Sunucu Hatası",
+    "service_unavailable": "Servis Kullanılamıyor",
+    "too_many_requests": "Çok Fazla İstek",
+    "conflict": "Çakışma Oluştu",
+    "unknown_error": "Bilinmeyen Hata",
+    "validation_error": "Doğrulama Hatası",
+    "forbidden": "Erişim Reddedildi",
+    "bad_request": "Geçersiz İstek"
   }
 }

@@ -22,6 +22,7 @@ class ApiConstants {
       '/exam-categories/$categoryId';
   static String examCategoryQuestions(String categoryId) =>
       '/exam-categories/$categoryId/questions';
+
   /// API: GET /exam-categories/{id}/mock-exam?count=20
   static String mockExamQuestions(String categoryId) =>
       '/exam-categories/$categoryId/mock-exam';
@@ -63,10 +64,6 @@ class ApiConstants {
   static String packageDetail(String packageId) => '/packages/$packageId';
   static const String signs = '/signs';
   static String signDetail(String signId) => '/signs/$signId';
-
-  // Analytics Endpoints (Admin)
-  static const String analyticsAppStats = '/analytics/app-stats';
-  static const String analyticsAppStatsOld = '/statistics/analytics';
 
   // API Headers
   static Map<String, String> headers = {

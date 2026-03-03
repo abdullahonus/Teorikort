@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../provider/exam_provider.dart';
+
 import '../model/exam_question.dart';
+import '../provider/exam_provider.dart';
 import '../state/exam_session_state.dart';
 import 'exam_result_view.dart';
 
@@ -31,9 +32,13 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
     super.initState();
     Future.microtask(() {
       if (widget.examType == 'mock' && widget.difficulty != null) {
-        ref.read(examSessionProvider.notifier).startMockExam(widget.difficulty!, widget.initialSeconds);
+        ref
+            .read(examSessionProvider.notifier)
+            .startMockExam(widget.difficulty!, widget.initialSeconds);
       } else {
-        ref.read(examSessionProvider.notifier).startExam(widget.categoryId, widget.initialSeconds);
+        ref
+            .read(examSessionProvider.notifier)
+            .startExam(widget.categoryId, widget.initialSeconds);
       }
     });
   }
@@ -48,7 +53,11 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => ExamResultView(result: next.lastResult!),
+            builder: (_) => ExamResultView(
+              result: next.lastResult!,
+              questions: next.questions,
+              userAnswers: next.userAnswers,
+            ),
           ),
         );
       }
@@ -93,13 +102,15 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
               ],
             ),
           ),
+          _buildQuestionList(context, ref, state),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (currentQuestion.imageUrl != null && currentQuestion.imageUrl!.isNotEmpty)
+                  if (currentQuestion.imageUrl != null &&
+                      currentQuestion.imageUrl!.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
                       child: ClipRRect(
@@ -107,7 +118,8 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
                         child: Image.network(
                           currentQuestion.imageUrl!,
                           fit: BoxFit.contain,
-                          errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+                          errorBuilder: (_, __, ___) =>
+                              const Icon(Icons.broken_image),
                         ),
                       ),
                     ),
@@ -116,7 +128,11 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 24),
-                  ...currentQuestion.options.map((option) => _buildOption(context, currentQuestion.id, option, state.userAnswers[currentQuestion.id])),
+                  ...currentQuestion.options.map((option) => _buildOption(
+                      context,
+                      currentQuestion.id,
+                      option,
+                      state.userAnswers[currentQuestion.id])),
                 ],
               ),
             ),
@@ -130,7 +146,8 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
   Widget _buildTimer(BuildContext context, int seconds) {
     final minutes = seconds ~/ 60;
     final remainingSecs = seconds % 60;
-    final color = seconds < 300 ? Colors.red : Theme.of(context).colorScheme.primary;
+    final color =
+        seconds < 300 ? Colors.red : Theme.of(context).colorScheme.primary;
 
     return Center(
       child: Padding(
@@ -158,14 +175,70 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
     );
   }
 
-  Widget _buildOption(BuildContext context, String questionId, ExamOption option, String? selectedOptionId) {
+  Widget _buildQuestionList(
+      BuildContext context, WidgetRef ref, ExamSessionState state) {
+    return SizedBox(
+      height: 60,
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          itemCount: state.questions.length,
+          itemBuilder: (context, index) {
+            final q = state.questions[index];
+            final isAnswered = state.userAnswers.containsKey(q.id);
+            final isCurrent = index == state.currentQuestionIndex;
+
+            return GestureDetector(
+              onTap: () =>
+                  ref.read(examSessionProvider.notifier).jumpToQuestion(index),
+              child: Container(
+                width: 44,
+                height: 44,
+                margin: const EdgeInsets.only(right: 8),
+                decoration: BoxDecoration(
+                    color: isCurrent
+                        ? Theme.of(context).colorScheme.primary
+                        : (isAnswered
+                            ? Theme.of(context).colorScheme.primaryContainer
+                            : Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHighest),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isCurrent
+                          ? Theme.of(context).colorScheme.primary
+                          : (isAnswered
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.transparent),
+                      width: 2,
+                    )),
+                alignment: Alignment.center,
+                child: Text(
+                  '${index + 1}',
+                  style: TextStyle(
+                    color: isCurrent
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : null,
+                    fontWeight: isCurrent ? FontWeight.bold : null,
+                  ),
+                ),
+              ),
+            );
+          }),
+    );
+  }
+
+  Widget _buildOption(BuildContext context, String questionId,
+      ExamOption option, String? selectedOptionId) {
     final isSelected = selectedOptionId == option.id;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: InkWell(
-        onTap: () => ref.read(examSessionProvider.notifier).selectOption(questionId, option.id),
+        onTap: () => ref
+            .read(examSessionProvider.notifier)
+            .selectOption(questionId, option.id),
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -173,7 +246,9 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
             color: isSelected ? colorScheme.primary : colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isSelected ? colorScheme.primary : colorScheme.outline.withValues(alpha: 0.3),
+              color: isSelected
+                  ? colorScheme.primary
+                  : colorScheme.outline.withValues(alpha: 0.3),
             ),
           ),
           child: Row(
@@ -184,17 +259,23 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: isSelected ? colorScheme.onPrimary : colorScheme.outline,
+                    color: isSelected
+                        ? colorScheme.onPrimary
+                        : colorScheme.outline,
                   ),
                 ),
-                child: isSelected ? Icon(Icons.check, size: 16, color: colorScheme.onPrimary) : null,
+                child: isSelected
+                    ? Icon(Icons.check, size: 16, color: colorScheme.onPrimary)
+                    : null,
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   option.text,
                   style: TextStyle(
-                    color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
+                    color: isSelected
+                        ? colorScheme.onPrimary
+                        : colorScheme.onSurface,
                   ),
                 ),
               ),
@@ -205,7 +286,8 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
     );
   }
 
-  Widget _buildBottomNav(BuildContext context, WidgetRef ref, ExamSessionState state) {
+  Widget _buildBottomNav(
+      BuildContext context, WidgetRef ref, ExamSessionState state) {
     final isLast = state.currentQuestionIndex == state.questions.length - 1;
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -217,7 +299,8 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
         children: [
           if (state.currentQuestionIndex > 0)
             OutlinedButton(
-              onPressed: () => ref.read(examSessionProvider.notifier).previousQuestion(),
+              onPressed: () =>
+                  ref.read(examSessionProvider.notifier).previousQuestion(),
               child: const Text('Geri'),
             )
           else
@@ -244,14 +327,16 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
         title: const Text('Sınavı Bitir'),
         content: const Text('Sınavı sonlandırmak istediğinize emin misiniz?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('İptal')),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('İptal')),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
               ref.read(examSessionProvider.notifier).finishExam(
-                categoryId: widget.categoryId,
-                examType: widget.examType,
-              );
+                    categoryId: widget.categoryId,
+                    examType: widget.examType,
+                  );
             },
             child: const Text('Bitir'),
           ),

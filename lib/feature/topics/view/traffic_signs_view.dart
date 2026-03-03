@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
-import '../provider/topic_provider.dart';
+
 import '../model/traffic_sign.dart';
+import '../provider/topic_provider.dart';
 
 class TrafficSignsView extends ConsumerStatefulWidget {
   const TrafficSignsView({super.key});
@@ -28,7 +29,8 @@ class _TrafficSignsViewState extends ConsumerState<TrafficSignsView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 300) {
       ref.read(trafficSignProvider.notifier).loadNextPage();
     }
   }
@@ -48,7 +50,10 @@ class _TrafficSignsViewState extends ConsumerState<TrafficSignsView> {
             const Center(
               child: Padding(
                 padding: EdgeInsets.all(16),
-                child: SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+                child: SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2)),
               ),
             ),
         ],
@@ -62,14 +67,16 @@ class _TrafficSignsViewState extends ConsumerState<TrafficSignsView> {
                   : GridView.builder(
                       controller: _scrollController,
                       padding: const EdgeInsets.all(16),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 0.82,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
                       ),
                       itemCount: state.signs.length,
-                      itemBuilder: (context, index) => _TrafficSignCard(sign: state.signs[index]),
+                      itemBuilder: (context, index) =>
+                          _TrafficSignCard(sign: state.signs[index]),
                     ),
             ),
     );
@@ -102,8 +109,10 @@ class _TrafficSignCard extends StatelessWidget {
                 child: Image.network(
                   sign.imageUrl,
                   fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) =>
-                      Icon(Icons.warning_amber_rounded, color: colorScheme.primary.withValues(alpha: 0.2), size: 40),
+                  errorBuilder: (context, error, stackTrace) => Icon(
+                      Icons.warning_amber_rounded,
+                      color: colorScheme.primary.withValues(alpha: 0.2),
+                      size: 40),
                 ),
               ),
             ),
@@ -114,7 +123,8 @@ class _TrafficSignCard extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
               ),
             ),
           ],
@@ -144,24 +154,30 @@ class _TrafficSignCard extends StatelessWidget {
                 child: Container(
                   width: 40,
                   height: 4,
-                  decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2)),
+                  decoration: BoxDecoration(
+                      color: Colors.grey.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(2)),
                 ),
               ),
               const SizedBox(height: 32),
               Center(
-                child: Image.network(sign.imageUrl, height: 160, fit: BoxFit.contain),
+                child: Image.network(sign.imageUrl,
+                    height: 160, fit: BoxFit.contain),
               ),
               const SizedBox(height: 24),
-              Text(sign.title, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              Text(sign.title,
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               Text(
                 sign.slug,
-                style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
-              const Text('Açıklama', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              Text(sign.description, style: const TextStyle(fontSize: 15, height: 1.6)),
+              Text(sign.description,
+                  style: const TextStyle(fontSize: 15, height: 1.6)),
             ],
           ),
         ),

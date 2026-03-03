@@ -22,7 +22,7 @@ class TrafficSign extends Equatable {
       title: json['title'] as String? ?? '',
       slug: json['slug'] as String? ?? '',
       description: json['description'] as String? ?? '',
-      imageUrl: json['image_url'] as String? ?? '',
+      imageUrl: (json['img'] ?? json['image_url'] ?? '') as String,
     );
   }
 
@@ -54,10 +54,10 @@ class TrafficSignResponse extends Equatable {
 
   factory TrafficSignResponse.fromJson(Map<String, dynamic> json) {
     return TrafficSignResponse(
-      signs: (json['data'] as List? ?? [])
+      signs: (json['signs'] as List? ?? [])
           .map((e) => TrafficSign.fromJson(e))
           .toList(),
-      pagination: PaginationData.fromJson(json['meta'] ?? {}),
+      pagination: PaginationData.fromJson(json['pagination'] ?? {}),
     );
   }
 

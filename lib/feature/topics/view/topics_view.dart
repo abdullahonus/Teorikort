@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
-import '../provider/topic_provider.dart';
+
 import '../model/topic.dart';
+import '../provider/topic_provider.dart';
 import 'topic_detail_view.dart';
 import 'traffic_signs_view.dart';
 
@@ -28,7 +29,8 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
     if (state.isLoading && state.topics.isEmpty) {
       return Scaffold(
         backgroundColor: colorScheme.surface,
-        body: Center(child: CircularProgressIndicator(color: colorScheme.primary)),
+        body: Center(
+            child: CircularProgressIndicator(color: colorScheme.primary)),
       );
     }
 
@@ -89,7 +91,10 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [colorScheme.primary, colorScheme.primary.withValues(alpha: 0.8)],
+              colors: [
+                colorScheme.primary,
+                colorScheme.primary.withValues(alpha: 0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -102,7 +107,8 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 28),
+                child: const Icon(Icons.warning_amber_rounded,
+                    color: Colors.white, size: 28),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -128,7 +134,8 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+              const Icon(Icons.arrow_forward_ios,
+                  color: Colors.white, size: 16),
             ],
           ),
         ),
@@ -147,12 +154,15 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
       child: InkWell(
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => TopicDetailView(topicId: topic.id.toString(), initialTopic: topic)),
+          MaterialPageRoute(
+              builder: (_) => TopicDetailView(
+                  topicId: topic.id.toString(), initialTopic: topic)),
         ),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            border: Border.all(color: colorScheme.outline.withValues(alpha: 0.1)),
+            border:
+                Border.all(color: colorScheme.outline.withValues(alpha: 0.1)),
           ),
           child: Row(
             children: [
@@ -171,7 +181,8 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                   children: [
                     Text(
                       topic.title,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -186,7 +197,8 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, color: colorScheme.onSurface.withValues(alpha: 0.2)),
+              Icon(Icons.chevron_right,
+                  color: colorScheme.onSurface.withValues(alpha: 0.2)),
             ],
           ),
         ),
@@ -207,7 +219,8 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () => ref.read(topicProvider.notifier).loadTopics(),
-              child: Text(AppLocalization.of(context).translate('common.retry')),
+              child:
+                  Text(AppLocalization.of(context).translate('common.retry')),
             ),
           ],
         ),
