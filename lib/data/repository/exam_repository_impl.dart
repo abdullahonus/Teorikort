@@ -1,24 +1,21 @@
 import 'package:teorikort/core/models/api_response.dart';
 import 'package:teorikort/core/services/logger_service.dart';
-import 'package:teorikort/features/exam/data/services/exam_service.dart';
-import 'package:teorikort/features/quiz/data/services/quiz_service.dart';
-import 'package:teorikort/features/exam/data/services/mock_exam_service.dart';
 import 'package:teorikort/domain/repository/i_exam_repository.dart';
 import 'package:teorikort/feature/exam/model/exam_category.dart';
 import 'package:teorikort/feature/exam/model/exam_question.dart';
 import 'package:teorikort/feature/exam/model/exam_result.dart';
+import 'package:teorikort/features/exam/data/services/exam_service.dart';
+import 'package:teorikort/features/quiz/data/services/quiz_service.dart';
 
 /// Concrete implementation of [IExamRepository].
 /// Combines results from various internal services.
 class ExamRepositoryImpl implements IExamRepository {
   final ExamService _examService;
   final QuizService _quizService;
-  final MockExamService _mockExamService;
 
   ExamRepositoryImpl(
     this._examService,
     this._quizService,
-    this._mockExamService,
   );
 
   @override
@@ -103,9 +100,25 @@ class ExamRepositoryImpl implements IExamRepository {
   @override
   Future<List<ExamQuestion>> getMockQuestions(String difficulty) async {
     try {
-      final questionsRaw =
-          await _mockExamService.getQuestionsByDifficulty(difficulty);
-      return questionsRaw.map((q) => ExamQuestion.fromJson(q)).toList();
+      final response = await _quizService.getMockExamQuestions(
+        difficulty: difficulty,
+      );
+      if (response.success && response.data != null) {
+        return response.data!.questions
+            .map((q) => ExamQuestion.fromJson({
+                  'id': q.id,
+                  'question': q.question,
+                  'image_url': q.imageUrl,
+                  'options': q.options
+                      .map((o) =>
+                          {'id': o.id, 'text': o.text, 'image_url': o.imageUrl})
+                      .toList(),
+                  'correct_answer': q.correctAnswer,
+                  'explanation': q.explanation,
+                }))
+            .toList();
+      }
+      return [];
     } catch (e) {
       LoggerService.error('ExamRepositoryImpl.getMockQuestions', e);
       return [];
