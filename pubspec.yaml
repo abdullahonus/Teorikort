@@ -14,14 +14,14 @@ dependencies:
   # State Management
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.3
-  
+
   # Network & API
   dio: ^5.4.0
   retrofit: ^4.0.3
-  
+
   # Local Storage
   path_provider: ^2.1.5
-  
+
   # UI Components
   flutter_svg: ^2.0.9
   cached_network_image: ^3.3.0
@@ -29,7 +29,7 @@ dependencies:
   image_picker: ^1.0.7
   flutter_html: ^3.0.0-alpha.6
   flutter_html_all: ^3.0.0-alpha.6
-  
+
   # Utils
   equatable: ^2.0.5
   freezed_annotation: ^2.4.1
@@ -78,7 +78,7 @@ flutter_native_splash:
   image: assets/icons/ic_app_logo.png
   color_dark: "#1A237E"
   image_dark: assets/icons/ic_app_logo.png
-  
+
   android_12:
     image: assets/icons/ic_app_logo.png
     icon_background_color: "#FFFFFF"
@@ -89,5 +89,3 @@ flutter_native_splash:
   ios: true
   android: true
   fullscreen: true
-
-
