@@ -168,7 +168,10 @@
     "no_completed_exams": "Henüz tamamlanmış sınav bulunmuyor",
     "minutes": "dakika",
     "correct": "doğru",
-    "no_data": "Gösterilecek sınav bulunamadı."
+    "no_data": "Gösterilecek sınav bulunamadı.",
+    "unknown_category": "Bilinmeyen Kategori",
+    "practice_exam": "Alıştırma Sınavı",
+    "mock_exam": "Deneme Sınavı"
   },
   "quiz": {
     "screen_title": "Sınav",

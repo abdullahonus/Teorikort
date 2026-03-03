@@ -180,7 +180,10 @@
     "no_completed_exams": "No completed exams yet",
     "minutes": "minutes",
     "correct": "correct",
-    "no_data": "No exams to display."
+    "no_data": "No exams to display.",
+    "unknown_category": "Unknown Category",
+    "practice_exam": "Practice Exam",
+    "mock_exam": "Mock Exam"
   },
   "quiz": {
     "screen_title": "Exam",
