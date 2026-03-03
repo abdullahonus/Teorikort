@@ -188,13 +188,18 @@ class ExamResultView extends StatelessWidget {
                   .translate('quiz_result.empty_answer')
               : q.options
                   .firstWhere((o) => o.id == userAnswerId,
-                      orElse: () =>
-                          const ExamOption(id: '', text: 'Bilinmiyor'))
+                      orElse: () => ExamOption(
+                          id: '',
+                          text: AppLocalization.of(context)
+                              .translate('quiz_result.unknown')))
                   .text;
 
           final correctAnswerText = q.options
               .firstWhere((o) => o.id == q.correctAnswer,
-                  orElse: () => const ExamOption(id: '', text: 'Bilinmiyor'))
+                  orElse: () => ExamOption(
+                      id: '',
+                      text: AppLocalization.of(context)
+                          .translate('quiz_result.unknown')))
               .text;
 
           return Container(

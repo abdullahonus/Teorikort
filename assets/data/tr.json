@@ -231,7 +231,8 @@
     "fail": "Başarısız",
     "no_answer": "Cevap verilmedi",
     "empty_answer_title": "Boş Bırakıldı",
-    "wrong_answer_title": "Yanlış Cevap"
+    "wrong_answer_title": "Yanlış Cevap",
+    "unknown": "Bilinmiyor"
   },
   "exam_categories": {
     "traffic_signs": "Trafik İşaretleri",

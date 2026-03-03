@@ -243,7 +243,8 @@
     "fail": "Failed",
     "no_answer": "No answer",
     "empty_answer_title": "Left Empty",
-    "wrong_answer_title": "Wrong Answer"
+    "wrong_answer_title": "Wrong Answer",
+    "unknown": "Unknown"
   },
   "exam_categories": {
     "traffic_signs": "Traffic Signs",
