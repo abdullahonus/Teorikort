@@ -4,6 +4,7 @@ import 'package:teorikort/core/localization/app_localization.dart';
 
 import '../model/traffic_sign.dart';
 import '../provider/topic_provider.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class TrafficSignsView extends ConsumerStatefulWidget {
   const TrafficSignsView({super.key});
@@ -50,16 +51,13 @@ class _TrafficSignsViewState extends ConsumerState<TrafficSignsView> {
             const Center(
               child: Padding(
                 padding: EdgeInsets.all(16),
-                child: SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2)),
+                child: const AppLoadingWidget.small(),
               ),
             ),
         ],
       ),
       body: state.isLoading && state.signs.isEmpty
-          ? const Center(child: CircularProgressIndicator())
+          ? const AppLoadingWidget.fullscreen()
           : RefreshIndicator(
               onRefresh: () => ref.read(trafficSignProvider.notifier).refresh(),
               child: state.signs.isEmpty

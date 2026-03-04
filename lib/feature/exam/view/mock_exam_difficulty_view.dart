@@ -4,6 +4,7 @@ import 'package:teorikort/core/localization/app_localization.dart';
 import '../provider/exam_provider.dart';
 import '../model/exam_category.dart';
 import 'exam_session_view.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class MockExamDifficultyView extends ConsumerStatefulWidget {
   const MockExamDifficultyView({super.key});
@@ -47,7 +48,7 @@ class _MockExamDifficultyViewState
             .translate('mock_exam.select_difficulty')),
       ),
       body: state.isLoading && state.categories.isEmpty
-          ? const Center(child: CircularProgressIndicator())
+          ? const AppLoadingWidget.fullscreen()
           : RefreshIndicator(
               onRefresh: () => ref.read(examProvider.notifier).refresh(),
               child: SingleChildScrollView(

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 import 'package:teorikort/product/provider/service_providers.dart';
-import '../provider/topic_provider.dart';
+
 import '../model/topic.dart';
+import '../provider/topic_provider.dart';
 
 class TopicDetailView extends ConsumerStatefulWidget {
   final String topicId;
@@ -79,14 +81,14 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
     final state = ref.watch(topicProvider);
     final detail = state.topicDetails[widget.topicId];
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     // Fallback to initial topic if detail is pending
     final topic = detail?.topic ?? widget.initialTopic;
 
     if (topic == null) {
       return Scaffold(
         appBar: AppBar(),
-        body: const Center(child: CircularProgressIndicator()),
+        body: const AppLoadingWidget.fullscreen(),
       );
     }
 
@@ -99,13 +101,14 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
             const Center(
               child: Padding(
                 padding: EdgeInsets.only(right: 16),
-                child: SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+                child: AppLoadingWidget.small(),
               ),
             ),
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => ref.read(topicProvider.notifier).loadTopicDetail(widget.topicId),
+        onRefresh: () =>
+            ref.read(topicProvider.notifier).loadTopicDetail(widget.topicId),
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
@@ -114,11 +117,15 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
               decoration: BoxDecoration(
                 color: colorScheme.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: colorScheme.primary.withValues(alpha: 0.2)),
+                border: Border.all(
+                    color: colorScheme.primary.withValues(alpha: 0.2)),
               ),
               child: Text(
                 topic.description,
-                style: TextStyle(fontStyle: FontStyle.italic, color: colorScheme.primary, fontSize: 14),
+                style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: colorScheme.primary,
+                    fontSize: 14),
               ),
             ),
             const SizedBox(height: 32),
@@ -141,12 +148,14 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
               child: FilledButton.icon(
                 onPressed: _isSaving ? null : () => _completeStudy(topic),
                 icon: _isSaving
-                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                    ? const AppLoadingWidget.small()
                     : const Icon(Icons.check_circle_outline),
-                label: Text(AppLocalization.of(context).translate('topics.complete_study')),
+                label: Text(AppLocalization.of(context)
+                    .translate('topics.complete_study')),
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 20),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
               ),
             ),
@@ -154,14 +163,15 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
               const SizedBox(height: 40),
               const Divider(),
               const SizedBox(height: 20),
-              const Text('İlgili Sorular', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('İlgili Sorular',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
               ...detail.questions.map((q) => ListTile(
-                leading: const Icon(Icons.help_outline),
-                title: Text(q['question']?.toString() ?? ''),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {},
-              )),
+                    leading: const Icon(Icons.help_outline),
+                    title: Text(q['question']?.toString() ?? ''),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {},
+                  )),
             ],
             const SizedBox(height: 40),
           ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class ErrorDisplayWidget extends StatelessWidget {
   final String errorMessage;
@@ -144,7 +145,7 @@ class LoadingWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const CircularProgressIndicator(),
+          const AppLoadingWidget(),
           if (message != null) ...[
             const SizedBox(height: 16),
             Text(

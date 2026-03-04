@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import '../data/models/package.dart';
 import '../data/services/package_service.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class PackagesScreen extends StatefulWidget {
   const PackagesScreen({super.key});
@@ -65,7 +66,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const AppLoadingWidget.fullscreen();
     }
 
     if (_errorMessage != null) {

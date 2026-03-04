@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class AuthButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -28,16 +29,7 @@ class AuthButton extends StatelessWidget {
         elevation: 0,
       ),
       child: isLoading
-          ? SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  colorScheme.onPrimary,
-                ),
-              ),
-            )
+          ? const AppLoadingWidget.small()
           : Text(
               text,
               style: const TextStyle(

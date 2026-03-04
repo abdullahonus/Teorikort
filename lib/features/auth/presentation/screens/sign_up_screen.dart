@@ -3,6 +3,7 @@ import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -188,7 +189,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   backgroundColor: theme.primaryColor,
                 ),
                 child: state.isLoading
-                    ? const CircularProgressIndicator()
+                    ? const AppLoadingWidget()
                     : Text(
                         AppLocalization.of(context).translate('auth.sign_up')),
               ),

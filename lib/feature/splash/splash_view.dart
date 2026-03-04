@@ -5,6 +5,7 @@ import 'package:teorikort/feature/auth/provider/auth_provider.dart';
 import 'package:teorikort/feature/auth/view/sign_in_view.dart';
 import 'package:teorikort/feature/splash/notifier/splash_state.dart';
 import 'package:teorikort/feature/splash/provider/splash_provider.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class SplashView extends ConsumerStatefulWidget {
   const SplashView({super.key});
@@ -83,7 +84,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
         return const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(),
+            const AppLoadingWidget(),
             SizedBox(height: 24),
             Text(
               'Teorikort',

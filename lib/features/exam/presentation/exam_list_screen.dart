@@ -1,12 +1,11 @@
-import 'package:teorikort/features/quiz/presentation/quiz_screen.dart';
-
-import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
-import 'package:teorikort/features/exam/data/services/exam_service.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 import 'package:teorikort/features/exam/data/models/exam_data.dart';
-import 'package:teorikort/features/quiz/data/services/quiz_service.dart'
-    hide ExamCategory;
+import 'package:teorikort/features/exam/data/services/exam_service.dart';
+import 'package:teorikort/features/quiz/data/services/quiz_service.dart';
+import 'package:teorikort/features/quiz/presentation/quiz_screen.dart';
 
 class ExamListScreen extends StatefulWidget {
   const ExamListScreen({super.key});
@@ -115,9 +114,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
                 height: 140,
                 child: Center(
                   child: _categories == null
-                      ? CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.primary,
-                        )
+                      ? const AppLoadingWidget()
                       : (_categories!.isEmpty
                           ? const Text('Kategori bulunamadı')
                           : _buildActiveExams(context).first),

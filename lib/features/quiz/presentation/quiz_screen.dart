@@ -1,17 +1,18 @@
-import 'package:teorikort/features/quiz/data/models/quiz_data.dart';
-import 'package:teorikort/features/quiz/data/services/quiz_service.dart' hide ExamCategory;
-import 'package:teorikort/features/quiz/presentation/quiz_result_screen.dart';
-import 'package:teorikort/features/quiz/presentation/widgets/quiz_progress_widget.dart';
-import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:convert';
-import 'package:teorikort/features/quiz/presentation/widgets/question_navigation_dialog.dart';
-import 'package:teorikort/features/exam/data/models/exam_result.dart';
-import 'package:teorikort/features/exam/data/services/exam_result_service.dart';
+
+import 'package:flutter/material.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/services/user_service.dart';
-
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
+import 'package:teorikort/features/exam/data/models/exam_result.dart';
+import 'package:teorikort/features/exam/data/services/exam_result_service.dart';
 import 'package:teorikort/features/exam/data/services/exam_service.dart';
+import 'package:teorikort/features/quiz/data/models/quiz_data.dart';
+import 'package:teorikort/features/quiz/data/services/quiz_service.dart'
+    hide ExamCategory;
+import 'package:teorikort/features/quiz/presentation/quiz_result_screen.dart';
+import 'package:teorikort/features/quiz/presentation/widgets/question_navigation_dialog.dart';
+import 'package:teorikort/features/quiz/presentation/widgets/quiz_progress_widget.dart';
 import 'package:teorikort/features/reports/data/services/report_service.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -68,9 +69,8 @@ class _QuizScreenState extends State<QuizScreen> {
       isLoading = false;
       _startTimer();
     } else if (widget.questions != null) {
-      questions = widget.questions!
-          .map((q) => QuizQuestion.fromJson(q))
-          .toList();
+      questions =
+          widget.questions!.map((q) => QuizQuestion.fromJson(q)).toList();
       isLoading = false;
       _startTimer();
     } else {
@@ -97,7 +97,6 @@ class _QuizScreenState extends State<QuizScreen> {
       });
     });
   }
-
 
   void _selectAnswer(String optionId) {
     setState(() {
@@ -126,7 +125,6 @@ class _QuizScreenState extends State<QuizScreen> {
       }
     }
   }
-
 
   String _getLocalizedText(dynamic field) {
     if (field is Map<String, dynamic>) {
@@ -189,18 +187,24 @@ class _QuizScreenState extends State<QuizScreen> {
 
     final durationSeconds = duration.inSeconds;
 
-    _quizService.submitExamResult(
+    _quizService
+        .submitExamResult(
       category: widget.category,
       correctAnswers: finalCorrect,
       wrongAnswers: finalWrong,
       emptyAnswers: empty,
       scorePercentage: score,
       completedAt: now,
-      examType: widget.examType ?? (widget.examTitle.toLowerCase().contains('mock') || widget.examTitle.contains('Deneme') ? 'mock' : 'category'),
+      examType: widget.examType ??
+          (widget.examTitle.toLowerCase().contains('mock') ||
+                  widget.examTitle.contains('Deneme')
+              ? 'mock'
+              : 'category'),
       difficulty: widget.difficulty ?? 'medium',
       durationSeconds: durationSeconds,
       answers: detailedAnswers,
-    ).then((res) {
+    )
+        .then((res) {
       if (!res.success) {
         print('Exam result submit failed: ${res.message}');
       }
@@ -259,7 +263,7 @@ class _QuizScreenState extends State<QuizScreen> {
           ElevatedButton(
             onPressed: () async {
               if (reportController.text.trim().isEmpty) return;
-              
+
               final response = await reportService.reportQuestion(
                 questionId: questionId,
                 description: reportController.text.trim(),
@@ -287,11 +291,7 @@ class _QuizScreenState extends State<QuizScreen> {
     if (isLoading || questions.isEmpty) {
       return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: Center(
-          child: CircularProgressIndicator(
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
+        body: const AppLoadingWidget.fullscreen(),
       );
     }
 

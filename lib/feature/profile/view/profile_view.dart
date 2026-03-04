@@ -10,6 +10,7 @@ import 'package:teorikort/feature/profile/provider/profile_provider.dart';
 import 'package:teorikort/feature/splash/provider/splash_provider.dart';
 import 'package:teorikort/features/packages/presentation/packages_screen.dart';
 import 'package:teorikort/features/workbook/presentation/workbook_list_screen.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class ProfileView extends ConsumerStatefulWidget {
   const ProfileView({super.key});
@@ -94,7 +95,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (state.isLoading && !state.hasProfile) {
-      return const Center(child: CircularProgressIndicator());
+      return const AppLoadingWidget.fullscreen();
     }
 
     return ListView(

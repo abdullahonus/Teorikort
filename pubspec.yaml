@@ -61,6 +61,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/data/
+    - assets/loading/
     - assets/icons/ic_app_logo.png
 
 

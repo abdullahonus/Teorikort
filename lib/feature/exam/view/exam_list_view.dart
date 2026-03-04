@@ -6,6 +6,7 @@ import '../provider/exam_provider.dart';
 import '../model/exam_category.dart';
 import '../model/exam_result.dart';
 import 'exam_session_view.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class ExamListView extends ConsumerWidget {
   const ExamListView({super.key});
@@ -71,7 +72,7 @@ class ExamListView extends ConsumerWidget {
               height: 140,
               child: Center(
                 child: state.isLoading && state.categories.isEmpty
-                    ? CircularProgressIndicator(color: colorScheme.primary)
+                    ? const AppLoadingWidget()
                     : (state.categories.isEmpty
                         ? Text(AppLocalization.of(context)
                             .translate('exam_list.no_data'))

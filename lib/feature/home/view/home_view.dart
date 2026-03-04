@@ -6,6 +6,7 @@ import 'package:teorikort/feature/exam/view/mock_exam_difficulty_view.dart';
 import '../../../features/home/data/services/daily_tip_service.dart';
 import '../../../features/home/data/services/home_service.dart';
 import '../provider/home_provider.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class HomeView extends ConsumerWidget {
   const HomeView({super.key});
@@ -17,7 +18,7 @@ class HomeView extends ConsumerWidget {
     return RefreshIndicator(
       onRefresh: () => ref.read(homeProvider.notifier).refresh(),
       child: state.isLoading && !state.hasData
-          ? const Center(child: CircularProgressIndicator())
+          ? const AppLoadingWidget.fullscreen()
           : ListView(
               padding: const EdgeInsets.all(16).copyWith(top: 0),
               children: [

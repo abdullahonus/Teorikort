@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/models/traffic_sign.dart';
 import '../data/services/traffic_sign_service.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class TrafficSignsScreen extends StatefulWidget {
   const TrafficSignsScreen({super.key});
@@ -92,7 +93,7 @@ class _TrafficSignsScreenState extends State<TrafficSignsScreen> {
         elevation: 0,
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const AppLoadingWidget.fullscreen()
           : RefreshIndicator(
               onRefresh: _fetchSigns,
               child: _signs.isEmpty
@@ -109,7 +110,7 @@ class _TrafficSignsScreenState extends State<TrafficSignsScreen> {
                       itemCount: _signs.length + (_isFetchingMore ? 2 : 0),
                       itemBuilder: (context, index) {
                         if (index >= _signs.length) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const AppLoadingWidget.fullscreen();
                         }
                         return _buildSignCard(_signs[index]);
                       },

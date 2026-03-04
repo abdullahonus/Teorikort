@@ -15,6 +15,7 @@ import 'package:teorikort/features/user/presentation/providers/user_provider.dar
 import 'package:teorikort/features/workbook/presentation/workbook_list_screen.dart';
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:teorikort/features/packages/presentation/packages_screen.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class ProfileTab extends ConsumerStatefulWidget {
   const ProfileTab({super.key});
@@ -126,7 +127,7 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
   @override
   Widget build(BuildContext context) {
     if (!_isInitialized) {
-      return const Center(child: CircularProgressIndicator());
+      return const AppLoadingWidget.fullscreen();
     }
 
     final colorScheme = Theme.of(context).colorScheme;

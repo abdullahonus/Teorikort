@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../models/api_response.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
+
 import '../localization/app_localization.dart';
+import '../models/api_response.dart';
 
 class ApiErrorHandler {
   // Show error message to user
@@ -36,9 +38,7 @@ class ApiErrorHandler {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            const AppLoadingWidget(),
             const SizedBox(height: 16),
             Text(
               message ??

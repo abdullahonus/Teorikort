@@ -4,6 +4,7 @@ import '../data/services/topic_service.dart';
 import 'topic_detail_screen.dart';
 import 'traffic_signs_screen.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class TopicsScreen extends StatefulWidget {
   const TopicsScreen({super.key});
@@ -63,7 +64,7 @@ class _TopicsScreenState extends State<TopicsScreen> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: colorScheme.primary))
+          ? const AppLoadingWidget.fullscreen()
           : _error != null || _topics.isEmpty
               ? Center(
                   child: Column(

@@ -4,6 +4,7 @@ import 'package:teorikort/core/localization/app_localization.dart';
 import '../../data/models/statistics_data.dart';
 import '../../data/services/statistics_service.dart';
 import 'category_statistics_screen.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
@@ -50,7 +51,7 @@ class StatisticsScreenState extends State<StatisticsScreen> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
-                child: CircularProgressIndicator(color: colorScheme.primary),
+                child: const AppLoadingWidget(),
               );
             }
 

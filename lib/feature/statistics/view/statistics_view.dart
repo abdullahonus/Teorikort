@@ -5,6 +5,7 @@ import '../provider/statistics_provider.dart';
 import '../model/app_analytics.dart';
 import '../model/statistics_data.dart';
 import 'category_statistics_view.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class StatisticsView extends ConsumerStatefulWidget {
   const StatisticsView({super.key});
@@ -28,7 +29,7 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
     if (state.isLoading && state.statistics == null) {
       return Scaffold(
         backgroundColor: colorScheme.surface,
-        body: Center(child: CircularProgressIndicator(color: colorScheme.primary)),
+        body: const AppLoadingWidget.fullscreen(),
       );
     }
 

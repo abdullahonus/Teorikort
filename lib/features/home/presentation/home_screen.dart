@@ -9,6 +9,7 @@ import 'package:teorikort/features/home/data/services/daily_tip_service.dart';
 
 import 'package:teorikort/features/home/data/services/home_service.dart';
 import 'package:teorikort/core/models/api_response.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
         future: _homeDataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const AppLoadingWidget.fullscreen();
           }
 
           final homeData = snapshot.data?.data;

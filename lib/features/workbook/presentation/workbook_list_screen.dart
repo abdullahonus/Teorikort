@@ -3,6 +3,7 @@ import 'package:teorikort/core/localization/app_localization.dart';
 import '../data/services/workbook_service.dart';
 import '../data/models/workbook_data.dart';
 import '../../topics/presentation/topic_detail_screen.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class WorkbookListScreen extends StatefulWidget {
   const WorkbookListScreen({super.key});
@@ -78,7 +79,7 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const AppLoadingWidget.fullscreen();
     }
 
     if (_errorMessage != null) {

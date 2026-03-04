@@ -4,6 +4,7 @@ import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import '../provider/auth_provider.dart';
 import 'sign_in_view.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class SignUpView extends ConsumerStatefulWidget {
   const SignUpView({super.key});
@@ -179,7 +180,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                   backgroundColor: theme.primaryColor,
                 ),
                 child: isLoading
-                    ? const CircularProgressIndicator()
+                    ? const AppLoadingWidget()
                     : Text(AppLocalization.of(context)
                         .translate('auth.sign_up')),
               ),

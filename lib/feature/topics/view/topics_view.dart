@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 import '../model/topic.dart';
 import '../provider/topic_provider.dart';
@@ -29,8 +30,7 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
     if (state.isLoading && state.topics.isEmpty) {
       return Scaffold(
         backgroundColor: colorScheme.surface,
-        body: Center(
-            child: CircularProgressIndicator(color: colorScheme.primary)),
+        body: const AppLoadingWidget.fullscreen(),
       );
     }
 

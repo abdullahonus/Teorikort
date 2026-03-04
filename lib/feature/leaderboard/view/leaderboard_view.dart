@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import '../provider/leaderboard_provider.dart';
 import '../model/leaderboard_entry.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class LeaderboardView extends ConsumerStatefulWidget {
   const LeaderboardView({super.key});
@@ -50,7 +51,7 @@ class _LeaderboardViewState extends ConsumerState<LeaderboardView> {
       ),
       body: state.isLoading && state.entries.isEmpty
           ? Center(
-              child: CircularProgressIndicator(color: colorScheme.primary),
+              child: const AppLoadingWidget(),
             )
           : RefreshIndicator(
               onRefresh: () =>

@@ -6,6 +6,7 @@ import 'package:teorikort/features/exam/data/models/exam_data.dart';
 import 'package:teorikort/features/exam/data/services/exam_service.dart';
 import 'package:teorikort/features/statistics/data/models/statistics_data.dart';
 import 'package:teorikort/features/statistics/data/services/statistics_service.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class MockExamDifficultyScreen extends StatefulWidget {
   const MockExamDifficultyScreen({super.key});
@@ -75,7 +76,7 @@ class _MockExamDifficultyScreenState extends State<MockExamDifficultyScreen> {
         ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const AppLoadingWidget.fullscreen()
           : RefreshIndicator(
               onRefresh: _loadData,
               child: SingleChildScrollView(
@@ -340,7 +341,7 @@ class _MockExamDifficultyScreenState extends State<MockExamDifficultyScreen> {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => const Center(child: CircularProgressIndicator()),
+        builder: (context) => const AppLoadingWidget.fullscreen(),
       );
 
       // API'den mock sınav sorularını yükle

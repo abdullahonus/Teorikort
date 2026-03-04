@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/features/leaderboard/data/models/leaderboard_entry.dart';
 import 'package:teorikort/features/leaderboard/data/services/leaderboard_service.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key});
@@ -62,7 +63,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(color: colorScheme.primary),
+              child: const AppLoadingWidget(),
             );
           }
 

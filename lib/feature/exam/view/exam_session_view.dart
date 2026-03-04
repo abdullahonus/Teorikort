@@ -6,6 +6,7 @@ import '../model/exam_question.dart';
 import '../provider/exam_provider.dart';
 import '../state/exam_session_state.dart';
 import 'exam_result_view.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class ExamSessionView extends ConsumerStatefulWidget {
   final String categoryId;
@@ -65,7 +66,7 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
     });
 
     if (state.isLoading && state.questions.isEmpty) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(body: const AppLoadingWidget.fullscreen());
     }
 
     if (state.error != null && state.questions.isEmpty) {

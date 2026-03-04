@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import '../provider/statistics_provider.dart';
 import '../model/category_statistics.dart' as model;
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class CategoryStatisticsView extends ConsumerStatefulWidget {
   final String categoryId;
@@ -40,7 +41,7 @@ class _CategoryStatisticsViewState extends ConsumerState<CategoryStatisticsView>
         title: Text(widget.categoryTitle),
       ),
       body: state.isLoading && categoryData == null
-          ? const Center(child: CircularProgressIndicator())
+          ? const AppLoadingWidget.fullscreen()
           : RefreshIndicator(
               onRefresh: () async => ref.read(statisticsProvider.notifier).loadCategoryStats(widget.categoryId),
               child: categoryData == null

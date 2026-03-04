@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
+
+import '../../workbook/data/services/workbook_service.dart';
 import '../data/models/topic.dart';
 import '../data/services/topic_service.dart';
-import '../../workbook/data/services/workbook_service.dart';
-import 'package:teorikort/core/localization/app_localization.dart';
 
 class TopicDetailScreen extends StatefulWidget {
   final Topic topic;
@@ -38,7 +40,8 @@ class _TopicDetailScreenState extends State<TopicDetailScreen> {
 
   Future<void> _loadDetail() async {
     try {
-      final response = await _service.getTopicById(_topic.id.toString(), context: context);
+      final response =
+          await _service.getTopicById(_topic.id.toString(), context: context);
       if (mounted && response.data != null) {
         setState(() {
           _topic = response.data!.course;
@@ -79,7 +82,8 @@ class _TopicDetailScreenState extends State<TopicDetailScreen> {
       if (mounted) {
         setState(() => _isSaving = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('İlerleme kaydedilirken bir hata oluştu.')),
+          const SnackBar(
+              content: Text('İlerleme kaydedilirken bir hata oluştu.')),
         );
       }
     }
@@ -116,8 +120,7 @@ class _TopicDetailScreenState extends State<TopicDetailScreen> {
               const Center(
                 child: Padding(
                   padding: EdgeInsets.only(right: 16),
-                  child: SizedBox(
-                      width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+                  child: AppLoadingWidget.small(),
                 ),
               ),
           ],
@@ -129,11 +132,13 @@ class _TopicDetailScreenState extends State<TopicDetailScreen> {
             children: [
               // Description badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: colorScheme.primary.withOpacity(0.08),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: colorScheme.primary.withOpacity(0.15)),
+                  border:
+                      Border.all(color: colorScheme.primary.withOpacity(0.15)),
                 ),
                 child: Text(
                   _topic.description,
@@ -185,18 +190,16 @@ class _TopicDetailScreenState extends State<TopicDetailScreen> {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton.icon(
-                  onPressed: _isLoading || _isSaving ? null : _saveStudyProgress,
+                  onPressed:
+                      _isLoading || _isSaving ? null : _saveStudyProgress,
                   icon: _isSaving
-                      ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                        )
+                      ? const AppLoadingWidget.small()
                       : const Icon(Icons.check_circle_outline),
                   label: const Text('Çalışmayı Tamamla ve Kaydet'),
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
               ),
