@@ -1,24 +1,57 @@
-
 class SplashResponseModel {
   final VersionModel? version;
   final MaintenanceModel? maintenance;
   final List<LanguageModel>? languages;
+  final String? selectedLanguage;
   final String? deviceKey;
 
   SplashResponseModel({
     this.version,
     this.maintenance,
     this.languages,
+    this.selectedLanguage,
     this.deviceKey,
   });
 
+  /// API yapısı:
+  /// "languages": {
+  ///   "selectedlanguage": "tr",
+  ///   "list": [ { "code": "tr", ... }, ... ]
+  /// }
   factory SplashResponseModel.fromJson(Map<String, dynamic> json) {
+    // languages alanı object mi (yeni format) yoksa array mi (eski format)?
+    final rawLanguages = json['languages'];
+    List<LanguageModel>? parsedLanguages;
+    String? parsedSelectedLanguage;
+
+    if (rawLanguages is Map<String, dynamic>) {
+      // Yeni format: { "selectedlanguage": "tr", "list": [...] }
+      parsedSelectedLanguage = (rawLanguages['selectedlanguage'] ??
+          rawLanguages['selectedLanguage']) as String?;
+      final list = rawLanguages['list'];
+      if (list is List) {
+        parsedLanguages = list
+            .map((i) => LanguageModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+      }
+    } else if (rawLanguages is List) {
+      // Eski format: direkt array
+      parsedLanguages = rawLanguages
+          .map((i) => LanguageModel.fromJson(i as Map<String, dynamic>))
+          .toList();
+    }
+
     return SplashResponseModel(
-      version: json['version'] != null ? VersionModel.fromJson(json['version']) : null,
-      maintenance: json['maintenance'] != null ? MaintenanceModel.fromJson(json['maintenance']) : null,
-      languages: json['languages'] != null 
-          ? (json['languages'] as List).map((i) => LanguageModel.fromJson(i)).toList() 
+      version: json['version'] != null
+          ? VersionModel.fromJson(json['version'])
           : null,
+      maintenance: json['maintenance'] != null
+          ? MaintenanceModel.fromJson(json['maintenance'])
+          : null,
+      languages: parsedLanguages,
+      // Hem yeni format (languages objesi içinde) hem de eski (data root'ta)
+      selectedLanguage:
+          parsedSelectedLanguage ?? json['selectedLanguage'] as String?,
       deviceKey: json['device_key'],
     );
   }
@@ -92,7 +125,7 @@ class LanguageModel {
   factory LanguageModel.fromJson(Map<String, dynamic> json) {
     return LanguageModel(
       code: json['code'] ?? 'tr',
-      name: json['name'] ?? 'Turkish',
+      name: json['name'] ?? 'Türkçe',
       flag: json['flag'],
       isDefault: json['is_default'] as bool? ?? false,
     );

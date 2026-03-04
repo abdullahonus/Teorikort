@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:chucker_flutter/chucker_flutter.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/localization/app_localization.dart';
 import 'core/providers/locale_provider.dart';
@@ -32,6 +32,16 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeProvider);
     final locale = ref.watch(localeProvider);
+    final availableLanguages = ref.watch(availableLanguagesProvider);
+
+    // Splash API'den gelen dil listesi → supportedLocales
+    final supportedLocales =
+        availableLanguages.map((l) => Locale(l.code)).toList();
+
+    // Fallback: en az tr ve en olsun
+    if (supportedLocales.isEmpty) {
+      supportedLocales.addAll([const Locale('tr'), const Locale('en')]);
+    }
 
     return MaterialApp(
       title: 'Teorikort',
@@ -41,10 +51,7 @@ class MyApp extends ConsumerWidget {
       themeMode: themeMode,
       locale: locale,
       navigatorObservers: [ChuckerFlutter.navigatorObserver],
-      supportedLocales: const [
-        Locale('tr', 'TR'),
-        Locale('en', 'US'),
-      ],
+      supportedLocales: supportedLocales,
       localizationsDelegates: const [
         AppLocalization.delegate,
         GlobalMaterialLocalizations.delegate,
