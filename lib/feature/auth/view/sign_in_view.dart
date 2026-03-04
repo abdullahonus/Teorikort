@@ -565,6 +565,8 @@ String _getFlag(String code) {
       return '🇳🇴';
     case 'da':
       return '🇩🇰';
+    case 'fa':
+      return '🇮🇷';
     default:
       return '🌐';
   }

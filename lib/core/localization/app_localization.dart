@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -39,7 +40,7 @@ class _AppLocalizationDelegate extends LocalizationsDelegate<AppLocalization> {
 
   @override
   bool isSupported(Locale locale) {
-    return ['en', 'tr'].contains(locale.languageCode);
+    return ['en', 'tr', 'sv', 'no', 'fa'].contains(locale.languageCode);
   }
 
   @override
