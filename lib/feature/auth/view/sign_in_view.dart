@@ -172,11 +172,11 @@ class _SignInViewState extends ConsumerState<SignInView> {
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     padding: const EdgeInsets.fromLTRB(24, 28, 24, 28),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colorScheme.surfaceContainerLowest,
                       borderRadius: BorderRadius.circular(28),
                       boxShadow: [
                         BoxShadow(
-                          color: colorScheme.primary.withOpacity(0.08),
+                          color: colorScheme.shadow.withOpacity(0.08),
                           blurRadius: 32,
                           offset: const Offset(0, 8),
                         ),
@@ -205,7 +205,7 @@ class _SignInViewState extends ConsumerState<SignInView> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14,
-                              color: colorScheme.onSurface.withOpacity(0.55),
+                              color: colorScheme.onSurfaceVariant,
                             ),
                           ),
                           const SizedBox(height: 28),
@@ -413,9 +413,9 @@ class _LanguageChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.20),
+          color: Colors.white.withOpacity(0.18),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withOpacity(0.50), width: 1),
+          border: Border.all(color: Colors.white.withOpacity(0.55), width: 1),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
