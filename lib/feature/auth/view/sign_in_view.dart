@@ -92,7 +92,7 @@ class _SignInViewState extends ConsumerState<SignInView> {
             left: 0,
             right: 0,
             child: Container(
-              height: size.height * 0.36,
+              height: size.height * 0.50,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -102,28 +102,9 @@ class _SignInViewState extends ConsumerState<SignInView> {
                     colorScheme.primary.withOpacity(0.75),
                   ],
                 ),
-                /*  borderRadius: const BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(40),
                   bottomRight: Radius.circular(40),
-                ), */
-              ),
-            ),
-          ),
-
-          // ── Dil Chip (üst sağ, header üzerinde) ────────────────────────
-          SafeArea(
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 14, right: 20),
-                child: _LanguageChip(
-                  languages: languages,
-                  currentCode: currentLocale.languageCode,
-                  onTap: () => _showLanguagePicker(
-                    context,
-                    languages,
-                    currentLocale.languageCode,
-                  ),
                 ),
               ),
             ),
@@ -378,6 +359,25 @@ class _SignInViewState extends ConsumerState<SignInView> {
                   ),
                   const SizedBox(height: 32),
                 ],
+              ),
+            ),
+          ),
+
+          // ── Dil Chip — EN ÜSTTE olması için stack'in son child'ı ────────
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 14, right: 20),
+                child: _LanguageChip(
+                  languages: languages,
+                  currentCode: currentLocale.languageCode,
+                  onTap: () => _showLanguagePicker(
+                    context,
+                    languages,
+                    currentLocale.languageCode,
+                  ),
+                ),
               ),
             ),
           ),
