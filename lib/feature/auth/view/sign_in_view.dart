@@ -457,9 +457,9 @@ class _LanguagePickerSheet extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLowest,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
       ),
       padding: const EdgeInsets.only(bottom: 32),
       child: Column(
@@ -470,7 +470,7 @@ class _LanguagePickerSheet extends StatelessWidget {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: Colors.grey.shade300,
+              color: colorScheme.onSurface.withOpacity(0.15),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -495,8 +495,8 @@ class _LanguagePickerSheet extends StatelessWidget {
                 height: 44,
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? colorScheme.primary.withOpacity(0.08)
-                      : Colors.grey.shade50,
+                      ? colorScheme.primary.withOpacity(0.10)
+                      : colorScheme.onSurface.withOpacity(0.06),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
