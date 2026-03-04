@@ -1,6 +1,7 @@
 {
   "app_name": "Teorikort",
-  "app_subtitle": "Teorikort - Ehliyet Teorik Sınav Hazırlık",
+  "app_subtitle": "Driver's License Exam Prep",
+  "app_tagline": "Driver's License Exam Prep",
   "statistics": {
     "screen_title": "Statistics",
     "subtitle": "Performance Analysis",
@@ -34,7 +35,14 @@
     "overall_performance": "Overall Performance",
     "category_performance": "Category Performance",
     "take_exams_first": "You need to take exams first to see statistics.",
-    "recent_exams": "Recent Exams"
+    "recent_exams": "Recent Exams",
+    "users": "users",
+    "exams": "exams",
+    "categories": "categories",
+    "avg_score": "avg. score",
+    "best_score": "best score",
+    "total_score": "total score",
+    "highest_score": "highest"
   },
   "common": {
     "language": "Language",
@@ -149,7 +157,8 @@
     "features_content": "• Detailed topic explanations\n• Multiple choice questions\n• Tests in real exam format\n• Progress tracking and statistics\n• Wrong answer analysis\n• Offline study capability",
     "contact": "Contact",
     "contact_content": "For questions and suggestions:\nEmail: support@drivingexam.com\nWeb: www.drivingexam.com",
-    "copyright": "All rights reserved"
+    "copyright": "All rights reserved",
+    "photo_upload_inactive": "Photo upload is not available at the moment."
   },
   "navigation": {
     "home": "Home",
@@ -237,7 +246,9 @@
     "score_text": "Your Score",
     "correct_answers": "Correct Answers",
     "wrong_answers": "Wrong Answers",
+    "wrong_answers_review": "Review Wrong Answers",
     "empty_answers": "Empty Answers",
+    "empty_answer": "Left Empty",
     "detailed_results": "Detailed Results",
     "question_unit": "question",
     "time_taken": "Time Taken",
@@ -282,9 +293,13 @@
     "your_answer": "Your Answer",
     "correct_answer": "Correct Answer",
     "no_answer": "No answer",
-    "complete_study": "Complete Study",
+    "complete_study": "Complete Study & Save",
     "content": "Content",
-    "read_content": "Read Content"
+    "read_content": "Read Content",
+    "related_questions": "Related Questions",
+    "progress_saved": "Your progress has been saved successfully!",
+    "progress_save_error": "An error occurred while saving progress.",
+    "system_error": "A system error occurred."
   },
   "bottom_nav": {
     "home": "Home",
@@ -390,6 +405,7 @@
     "completed": "Completed",
     "in_progress": "In Progress",
     "no_workbooks": "You don't have any workbooks yet.",
+    "no_workbooks_desc": "You don't have any workbooks yet.",
     "minutes": "min"
   },
   "report": {

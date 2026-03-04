@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
+
 import '../../data/models/statistics_data.dart';
 import '../../data/services/statistics_service.dart';
-import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class CategoryStatisticsScreen extends StatefulWidget {
   final String categoryId;
@@ -80,8 +81,7 @@ class _CategoryStatisticsScreenState extends State<CategoryStatisticsScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.error_outline,
-                        size: 64,
-                        color: colorScheme.error.withOpacity(0.5)),
+                        size: 64, color: colorScheme.error.withOpacity(0.5)),
                     const SizedBox(height: 16),
                     Text(
                       AppLocalization.of(context)
@@ -114,21 +114,21 @@ class _CategoryStatisticsScreenState extends State<CategoryStatisticsScreen> {
                     _statCard(
                       context,
                       icon: Icons.assignment_outlined,
-                      label: 'Toplam Sınav',
+                      labelKey: 'statistics.total_exams',
                       value: '${data.totalExams}',
                     ),
                     const SizedBox(width: 12),
                     _statCard(
                       context,
                       icon: Icons.analytics_outlined,
-                      label: 'Ortalama',
+                      labelKey: 'statistics.avg_score',
                       value: '%${data.averageScore.toStringAsFixed(1)}',
                     ),
                     const SizedBox(width: 12),
                     _statCard(
                       context,
                       icon: Icons.emoji_events_outlined,
-                      label: 'En Yüksek',
+                      labelKey: 'statistics.highest_score',
                       value: '%${data.highestScore.toStringAsFixed(0)}',
                     ),
                   ],
@@ -144,7 +144,8 @@ class _CategoryStatisticsScreenState extends State<CategoryStatisticsScreen> {
                 // Recent exams list
                 if (data.recentExams.isNotEmpty) ...[
                   Text(
-                    'Son Sınavlar',
+                    AppLocalization.of(context)
+                        .translate('statistics.recent_exams'),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -152,8 +153,8 @@ class _CategoryStatisticsScreenState extends State<CategoryStatisticsScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  ...data.recentExams.map((exam) =>
-                      _buildRecentExamItem(context, exam)),
+                  ...data.recentExams
+                      .map((exam) => _buildRecentExamItem(context, exam)),
                 ],
               ],
             );
@@ -166,7 +167,7 @@ class _CategoryStatisticsScreenState extends State<CategoryStatisticsScreen> {
   Widget _statCard(
     BuildContext context, {
     required IconData icon,
-    required String label,
+    required String labelKey,
     required String value,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -193,7 +194,7 @@ class _CategoryStatisticsScreenState extends State<CategoryStatisticsScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              label,
+              AppLocalization.of(context).translate(labelKey),
               style: TextStyle(
                 fontSize: 11,
                 color: colorScheme.onSurface.withOpacity(0.6),
@@ -234,7 +235,7 @@ class _CategoryStatisticsScreenState extends State<CategoryStatisticsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Puan Aralığı',
+            AppLocalization.of(context).translate('statistics.score_range'),
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -245,13 +246,21 @@ class _CategoryStatisticsScreenState extends State<CategoryStatisticsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _rangeItem(context, 'En Düşük',
-                  '%${data.lowestScore.toStringAsFixed(0)}', colorScheme.error),
-              _rangeItem(context, 'Ortalama',
-                  '%${data.averageScore.toStringAsFixed(1)}', color),
               _rangeItem(
                   context,
-                  'En Yüksek',
+                  AppLocalization.of(context)
+                      .translate('statistics.score_range'),
+                  '%${data.lowestScore.toStringAsFixed(0)}',
+                  colorScheme.error),
+              _rangeItem(
+                  context,
+                  AppLocalization.of(context).translate('statistics.avg_score'),
+                  '%${data.averageScore.toStringAsFixed(1)}',
+                  color),
+              _rangeItem(
+                  context,
+                  AppLocalization.of(context)
+                      .translate('statistics.highest_score'),
                   '%${data.highestScore.toStringAsFixed(0)}',
                   Colors.green),
             ],
@@ -296,8 +305,7 @@ class _CategoryStatisticsScreenState extends State<CategoryStatisticsScreen> {
     );
   }
 
-  Widget _buildRecentExamItem(
-      BuildContext context, RecentExamResult exam) {
+  Widget _buildRecentExamItem(BuildContext context, RecentExamResult exam) {
     final colorScheme = Theme.of(context).colorScheme;
     final score = exam.point;
     final color = score >= 80
@@ -319,8 +327,8 @@ class _CategoryStatisticsScreenState extends State<CategoryStatisticsScreen> {
       ),
       child: Row(
         children: [
-          Icon(Icons.history, color: colorScheme.onSurface.withOpacity(0.4),
-              size: 20),
+          Icon(Icons.history,
+              color: colorScheme.onSurface.withOpacity(0.4), size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
@@ -332,8 +340,7 @@ class _CategoryStatisticsScreenState extends State<CategoryStatisticsScreen> {
             ),
           ),
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
             decoration: BoxDecoration(
               color: color.withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),

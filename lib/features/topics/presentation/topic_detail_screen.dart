@@ -73,7 +73,9 @@ class _TopicDetailScreenState extends State<TopicDetailScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Çalışma ilerlemeniz kaydedildi.')),
+          SnackBar(
+              content: Text(AppLocalization.of(context)
+                  .translate('topics.progress_saved'))),
         );
         Navigator.pop(context);
       }
@@ -82,8 +84,9 @@ class _TopicDetailScreenState extends State<TopicDetailScreen> {
       if (mounted) {
         setState(() => _isSaving = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('İlerleme kaydedilirken bir hata oluştu.')),
+          SnackBar(
+              content: Text(AppLocalization.of(context)
+                  .translate('topics.progress_save_error'))),
         );
       }
     }

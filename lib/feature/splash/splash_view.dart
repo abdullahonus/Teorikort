@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 import 'package:teorikort/feature/auth/provider/auth_provider.dart';
 import 'package:teorikort/feature/auth/view/sign_in_view.dart';
 import 'package:teorikort/feature/splash/notifier/splash_state.dart';
 import 'package:teorikort/feature/splash/provider/splash_provider.dart';
-import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class SplashView extends ConsumerStatefulWidget {
   const SplashView({super.key});
@@ -84,7 +85,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
         return const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const AppLoadingWidget(),
+            AppLoadingWidget(),
             SizedBox(height: 24),
             Text(
               'Teorikort',
@@ -170,7 +171,8 @@ class _SplashViewState extends ConsumerState<SplashView> {
               onPressed: () {
                 // Redirect to store
               },
-              child: const Text('Şimdi Güncelle'),
+              child:
+                  Text(AppLocalization.of(context).translate('common.confirm')),
             ),
           ),
         ],

@@ -1,6 +1,7 @@
 {
   "app_name": "Teorikort",
-  "app_subtitle": "Teorikort - Ehliyet Teorik Sınav Hazırlık",
+  "app_subtitle": "Ehliyet Sınavı Hazırlık",
+  "app_tagline": "Ehliyet Sınavı Hazırlık",
   "statistics": {
     "screen_title": "İstatistikler",
     "subtitle": "Performans Analizi",
@@ -34,7 +35,14 @@
     "overall_performance": "Genel Performans",
     "category_performance": "Kategori Performansı",
     "take_exams_first": "İstatistikleri görebilmek için önce sınav çözmelisiniz.",
-    "recent_exams": "Son Sınavlar"
+    "recent_exams": "Son Sınavlar",
+    "users": "kullanıcı",
+    "exams": "sınav",
+    "categories": "kategori",
+    "avg_score": "ort. puan",
+    "best_score": "en iyi puan",
+    "total_score": "toplam puan",
+    "highest_score": "en yüksek"
   },
   "common": {
     "language": "Dil",
@@ -137,7 +145,8 @@
     "features_content": "• Detaylı konu anlatımları\n• Çoktan seçmeli sorular\n• Gerçek sınav formatında testler\n• İlerleme takibi ve istatistikler\n• Yanlış cevap analizi\n• Çevrimdışı çalışma imkanı",
     "contact": "İletişim",
     "contact_content": "Sorularınız ve önerileriniz için:\nE-posta: support@drivingexam.com\nWeb: www.drivingexam.com",
-    "copyright": "Tüm hakları saklıdır"
+    "copyright": "Tüm hakları saklıdır",
+    "photo_upload_inactive": "Fotoğraf yükleme şu an aktif değil."
   },
   "navigation": {
     "home": "Ana Sayfa",
@@ -225,7 +234,9 @@
     "score_text": "Puanınız",
     "correct_answers": "Doğru Cevaplar",
     "wrong_answers": "Yanlış Cevaplar",
+    "wrong_answers_review": "Yanlış Cevapları İncele",
     "empty_answers": "Boş Bırakılan",
+    "empty_answer": "Boş Bırakıldı",
     "detailed_results": "Detaylı Sonuçlar",
     "question_unit": "soru",
     "time_taken": "Geçen Süre",
@@ -270,9 +281,13 @@
     "your_answer": "Sizin Cevabınız",
     "correct_answer": "Doğru Cevap",
     "no_answer": "Cevap verilmedi",
-    "complete_study": "Çalışmayı Tamamla",
+    "complete_study": "Çalışmayı Tamamla ve Kaydet",
     "content": "İçerik",
-    "read_content": "İçeriği Oku"
+    "read_content": "İçeriği Oku",
+    "related_questions": "İlgili Sorular",
+    "progress_saved": "İlerlemeniz başarıyla kaydedildi!",
+    "progress_save_error": "İlerleme kaydedilirken bir hata oluştu.",
+    "system_error": "Sistem hatası oluştu."
   },
   "bottom_nav": {
     "home": "Anasayfa",
@@ -380,6 +395,7 @@
     "completed": "Tamamlandı",
     "in_progress": "Devam Ediyor",
     "no_workbooks": "Henüz çalışma kitabınız bulunmuyor.",
+    "no_workbooks_desc": "Henüz bir çalışma kitabınız bulunmuyor.",
     "minutes": "dk"
   },
   "report": {

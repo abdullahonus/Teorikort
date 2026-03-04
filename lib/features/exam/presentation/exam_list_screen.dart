@@ -116,7 +116,8 @@ class _ExamListScreenState extends State<ExamListScreen> {
                   child: _categories == null
                       ? const AppLoadingWidget()
                       : (_categories!.isEmpty
-                          ? const Text('Kategori bulunamadı')
+                          ? Text(AppLocalization.of(context)
+                              .translate('exam_list.unknown_category'))
                           : _buildActiveExams(context).first),
                 )),
           ),

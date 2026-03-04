@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
-import '../data/services/workbook_service.dart';
-import '../data/models/workbook_data.dart';
-import '../../topics/presentation/topic_detail_screen.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
+
+import '../../topics/presentation/topic_detail_screen.dart';
+import '../data/models/workbook_data.dart';
+import '../data/services/workbook_service.dart';
 
 class WorkbookListScreen extends StatefulWidget {
   const WorkbookListScreen({super.key});
@@ -87,13 +88,15 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 48, color: Theme.of(context).colorScheme.error),
+            Icon(Icons.error_outline,
+                size: 48, color: Theme.of(context).colorScheme.error),
             const SizedBox(height: 16),
             Text(_errorMessage!),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _fetchWorkbooks,
-              child: const Text('Retry'),
+              child:
+                  Text(AppLocalization.of(context).translate('common.retry')),
             ),
           ],
         ),
@@ -105,9 +108,15 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.book_outlined, size: 64, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2)),
+            Icon(Icons.book_outlined,
+                size: 64,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.2)),
             const SizedBox(height: 16),
-            const Text('Henüz bir çalışma kitabınız bulunmuyor.'),
+            Text(
+                AppLocalization.of(context).translate('workbook.no_workbooks')),
           ],
         ),
       );
@@ -157,7 +166,8 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
                       color: colorScheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(Icons.menu_book, color: colorScheme.primary, size: 24),
+                    child: Icon(Icons.menu_book,
+                        color: colorScheme.primary, size: 24),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -191,8 +201,10 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildInfoItem(Icons.timer_outlined, '${(workbook.time / 60).floor()} ${AppLocalization.of(context).translate('workbook.minutes')}'),
-                  _buildInfoItem(Icons.calendar_today_outlined, '${workbook.updatedAt.day}.${workbook.updatedAt.month}.${workbook.updatedAt.year}'),
+                  _buildInfoItem(Icons.timer_outlined,
+                      '${(workbook.time / 60).floor()} ${AppLocalization.of(context).translate('workbook.minutes')}'),
+                  _buildInfoItem(Icons.calendar_today_outlined,
+                      '${workbook.updatedAt.day}.${workbook.updatedAt.month}.${workbook.updatedAt.year}'),
                 ],
               ),
             ],
@@ -211,7 +223,9 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        passed ? AppLocalization.of(context).translate('workbook.completed') : AppLocalization.of(context).translate('workbook.in_progress'),
+        passed
+            ? AppLocalization.of(context).translate('workbook.completed')
+            : AppLocalization.of(context).translate('workbook.in_progress'),
         style: TextStyle(
           color: color,
           fontSize: 11,
@@ -224,13 +238,17 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
   Widget _buildInfoItem(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 14, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
+        Icon(icon,
+            size: 14,
+            color:
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
         const SizedBox(width: 4),
         Text(
           text,
           style: TextStyle(
             fontSize: 12,
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+            color:
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ],

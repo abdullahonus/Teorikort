@@ -56,13 +56,17 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
       if (mounted) {
         if (response.success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('İlerlemeniz başarıyla kaydedildi!')),
+            SnackBar(
+                content: Text(AppLocalization.of(context)
+                    .translate('topics.progress_saved'))),
           );
           Navigator.pop(context);
         } else {
           setState(() => _isSaving = false);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(response.message ?? 'Bir hata oluştu.')),
+            SnackBar(
+                content: Text(response.message ??
+                    AppLocalization.of(context).translate('common.error'))),
           );
         }
       }
@@ -70,7 +74,9 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
       if (mounted) {
         setState(() => _isSaving = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Sistem hatası oluştu.')),
+          SnackBar(
+              content: Text(AppLocalization.of(context)
+                  .translate('topics.system_error'))),
         );
       }
     }
@@ -163,8 +169,12 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
               const SizedBox(height: 40),
               const Divider(),
               const SizedBox(height: 20),
-              const Text('İlgili Sorular',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text(
+                AppLocalization.of(context)
+                    .translate('topics.related_questions'),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 16),
               ...detail.questions.map((q) => ListTile(
                     leading: const Icon(Icons.help_outline),

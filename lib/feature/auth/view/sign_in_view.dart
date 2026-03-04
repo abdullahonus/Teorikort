@@ -156,7 +156,7 @@ class _SignInViewState extends ConsumerState<SignInView> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Ehliyet Sınav Hazırlık',
+                          AppLocalization.of(context).translate('app_subtitle'),
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.80),
                             fontSize: 13,
