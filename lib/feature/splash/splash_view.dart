@@ -110,14 +110,17 @@ class _SplashViewState extends ConsumerState<SplashView> {
               size: 80, color: Theme.of(context).colorScheme.secondary),
           const SizedBox(height: 24),
           Text(
-            maintenance?.title ?? 'Bakım Çalışması',
+            maintenance?.title ??
+                AppLocalization.of(context)
+                    .translate('splash.maintenance_title'),
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           Text(
             maintenance?.description ??
-                'Size daha iyi hizmet verebilmek için çalışıyoruz. Lütfen daha sonra tekrar deneyiniz.',
+                AppLocalization.of(context)
+                    .translate('splash.maintenance_desc'),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
@@ -145,14 +148,15 @@ class _SplashViewState extends ConsumerState<SplashView> {
               size: 80, color: Theme.of(context).colorScheme.primary),
           const SizedBox(height: 24),
           Text(
-            version?.title ?? 'Güncelleme Gerekli',
+            version?.title ??
+                AppLocalization.of(context).translate('splash.update_title'),
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           Text(
             version?.description ??
-                'Uygulamanın yeni bir versiyonu mevcut. Devam etmek için lütfen güncelleyiniz.',
+                AppLocalization.of(context).translate('splash.update_desc'),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
@@ -189,13 +193,14 @@ class _SplashViewState extends ConsumerState<SplashView> {
           Icon(Icons.error_outline_rounded,
               size: 80, color: Theme.of(context).colorScheme.error),
           const SizedBox(height: 24),
-          const Text(
-            'Bir Hata Oluştu',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          Text(
+            AppLocalization.of(context).translate('splash.error_title'),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
-            state.errorMessage ?? 'Bağlantı sırasında bir problem yaşandı.',
+            state.errorMessage ??
+                AppLocalization.of(context).translate('splash.error_desc'),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
@@ -212,7 +217,8 @@ class _SplashViewState extends ConsumerState<SplashView> {
             child: ElevatedButton(
               onPressed: () =>
                   ref.read(splashNotifierProvider.notifier).initialize(),
-              child: const Text('Tekrar Dene'),
+              child:
+                  Text(AppLocalization.of(context).translate('splash.retry')),
             ),
           ),
         ],

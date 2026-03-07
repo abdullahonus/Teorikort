@@ -418,6 +418,15 @@
     "no_data": "Inga vägmärken hittades.",
     "subtitle": "Alla vägmärken"
   },
+  "splash": {
+    "maintenance_title": "Underhållsarbete",
+    "maintenance_desc": "Vi arbetar för att tjäna dig bättre. Försök igen senare.",
+    "update_title": "Uppdatering krävs",
+    "update_desc": "En ny version finns tillgänglig. Vänligen uppdatera för att fortsätta.",
+    "error_title": "Ett fel uppstod",
+    "error_desc": "Ett problem uppstod under anslutningen.",
+    "retry": "Försök Igen"
+  },
   "errors": {
     "not_found": "Hittades inte",
     "unauthorized": "Obehörig åtkomst",

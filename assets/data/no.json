@@ -418,6 +418,15 @@
     "no_data": "Ingen trafikkskilt funnet.",
     "subtitle": "Alle trafikkskilt"
   },
+  "splash": {
+    "maintenance_title": "Vedlikeholdsarbeid",
+    "maintenance_desc": "Vi jobber for å betjene deg bedre. Vennligst prøv igjen senere.",
+    "update_title": "Oppdatering kreves",
+    "update_desc": "En ny versjon er tilgjengelig. Vennligst oppdater for å fortsette.",
+    "error_title": "Det oppsto en feil",
+    "error_desc": "Et problem oppsto under tilkoblingen.",
+    "retry": "Prøv Igjen"
+  },
   "errors": {
     "not_found": "Ikke funnet",
     "unauthorized": "Uautorisert tilgang",

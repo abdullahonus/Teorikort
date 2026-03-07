@@ -13,32 +13,36 @@ class SplashResponseModel {
     this.deviceKey,
   });
 
-  /// API yapısı:
-  /// "languages": {
-  ///   "selectedlanguage": "tr",
-  ///   "list": [ { "code": "tr", ... }, ... ]
-  /// }
   factory SplashResponseModel.fromJson(Map<String, dynamic> json) {
-    // languages alanı object mi (yeni format) yoksa array mi (eski format)?
+    // Check for languages list
     final rawLanguages = json['languages'];
     List<LanguageModel>? parsedLanguages;
-    String? parsedSelectedLanguage;
 
-    if (rawLanguages is Map<String, dynamic>) {
-      // Yeni format: { "selectedlanguage": "tr", "list": [...] }
-      parsedSelectedLanguage = (rawLanguages['selectedlanguage'] ??
-          rawLanguages['selectedLanguage']) as String?;
+    if (rawLanguages is List) {
+      parsedLanguages = rawLanguages
+          .map((i) => LanguageModel.fromJson(i as Map<String, dynamic>))
+          .toList();
+    } else if (rawLanguages is Map<String, dynamic>) {
       final list = rawLanguages['list'];
       if (list is List) {
         parsedLanguages = list
             .map((i) => LanguageModel.fromJson(i as Map<String, dynamic>))
             .toList();
       }
-    } else if (rawLanguages is List) {
-      // Eski format: direkt array
-      parsedLanguages = rawLanguages
-          .map((i) => LanguageModel.fromJson(i as Map<String, dynamic>))
-          .toList();
+    }
+
+    // Try finding selected language
+    String? sLang;
+    if (json.containsKey('selectedlanguage')) {
+      sLang = json['selectedlanguage']?.toString();
+    } else if (json.containsKey('selectedLanguage')) {
+      sLang = json['selectedLanguage']?.toString();
+    } else if (rawLanguages is Map<String, dynamic> &&
+        rawLanguages.containsKey('selectedlanguage')) {
+      sLang = rawLanguages['selectedlanguage']?.toString();
+    } else if (rawLanguages is Map<String, dynamic> &&
+        rawLanguages.containsKey('selectedLanguage')) {
+      sLang = rawLanguages['selectedLanguage']?.toString();
     }
 
     return SplashResponseModel(
@@ -49,9 +53,7 @@ class SplashResponseModel {
           ? MaintenanceModel.fromJson(json['maintenance'])
           : null,
       languages: parsedLanguages,
-      // Hem yeni format (languages objesi içinde) hem de eski (data root'ta)
-      selectedLanguage:
-          parsedSelectedLanguage ?? json['selectedLanguage'] as String?,
+      selectedLanguage: sLang,
       deviceKey: json['device_key'],
     );
   }

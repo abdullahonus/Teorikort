@@ -428,6 +428,15 @@
     "no_data": "No traffic signs found.",
     "subtitle": "All Traffic Signs"
   },
+  "splash": {
+    "maintenance_title": "Maintenance",
+    "maintenance_desc": "We are working to serve you better. Please try again later.",
+    "update_title": "Update Required",
+    "update_desc": "A new version is available. Please update to continue.",
+    "error_title": "An Error Occurred",
+    "error_desc": "A problem occurred during connection.",
+    "retry": "Try Again"
+  },
   "errors": {
     "not_found": "Not Found",
     "unauthorized": "Unauthorized Access",

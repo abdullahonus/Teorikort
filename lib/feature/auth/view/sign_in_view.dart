@@ -3,11 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
-import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
 import 'package:teorikort/core/providers/locale_provider.dart';
 import 'package:teorikort/core/widgets/auth_button.dart';
 import 'package:teorikort/core/widgets/auth_text_field.dart';
 import 'package:teorikort/data/splash_response_model.dart';
+import 'package:teorikort/feature/splash/splash_view.dart';
 
 import '../provider/auth_provider.dart';
 import 'forgot_password_view.dart';
@@ -44,7 +44,7 @@ class _SignInViewState extends ConsumerState<SignInView> {
       final authState = ref.read(authProvider);
       if (authState.isAuthenticated) {
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const AppScaffold()),
+          MaterialPageRoute(builder: (_) => const SplashView()),
           (route) => false,
         );
       } else if (authState.error != null) {

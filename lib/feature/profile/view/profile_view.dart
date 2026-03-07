@@ -6,9 +6,9 @@ import 'package:teorikort/core/providers/locale_provider.dart';
 import 'package:teorikort/core/providers/theme_provider.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 import 'package:teorikort/feature/auth/provider/auth_provider.dart';
-import 'package:teorikort/feature/auth/view/sign_in_view.dart';
 import 'package:teorikort/feature/profile/provider/profile_provider.dart';
 import 'package:teorikort/feature/splash/provider/splash_provider.dart';
+import 'package:teorikort/feature/splash/splash_view.dart';
 import 'package:teorikort/features/packages/presentation/packages_screen.dart';
 import 'package:teorikort/features/workbook/presentation/workbook_list_screen.dart';
 
@@ -353,7 +353,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
       final navigator = Navigator.of(context);
       await ref.read(authProvider.notifier).signOut();
       navigator.pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const SignInView()),
+        MaterialPageRoute(builder: (_) => const SplashView()),
         (route) => false,
       );
     }

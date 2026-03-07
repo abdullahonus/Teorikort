@@ -188,12 +188,19 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                 onPressed: isLoading ? null : _handleSignUp,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: theme.primaryColor,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  textStyle: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onPrimary,
+                  ),
                 ),
                 child: isLoading
                     ? const AppLoadingWidget()
                     : Text(
-                        AppLocalization.of(context).translate('auth.sign_up')),
+                        AppLocalization.of(context).translate('auth.sign_up'),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
               ),
               if (error != null)
                 Padding(

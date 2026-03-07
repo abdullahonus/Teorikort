@@ -418,6 +418,15 @@
     "no_data": "Trafik işareti bulunamadı.",
     "subtitle": "Tüm Trafik İşaretleri"
   },
+  "splash": {
+    "maintenance_title": "Bakım Çalışması",
+    "maintenance_desc": "Size daha iyi hizmet verebilmek için çalışıyoruz. Lütfen daha sonra tekrar deneyiniz.",
+    "update_title": "Güncelleme Gerekli",
+    "update_desc": "Uygulamanın yeni bir versiyonu mevcut. Devam etmek için lütfen güncelleyiniz.",
+    "error_title": "Bir Hata Oluştu",
+    "error_desc": "Bağlantı sırasında bir problem yaşandı.",
+    "retry": "Tekrar Dene"
+  },
   "errors": {
     "not_found": "Bulunamadı",
     "unauthorized": "Yetkisiz Erişim",

@@ -15,6 +15,7 @@ class ApiConstants {
   // Home Screen Endpoints
   static const String home = '/home';
   static const String dailyTips = '/daily-tips/today';
+  static const String splash = '/splash';
 
   // Exam Categories & Questions Endpoints
   static const String examCategories = '/exam-categories';
