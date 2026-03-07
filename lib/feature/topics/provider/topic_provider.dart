@@ -10,7 +10,8 @@ final topicProvider = NotifierProvider<TopicNotifier, TopicState>(
 );
 
 /// Provider for traffic signs.
-final trafficSignProvider = NotifierProvider<TrafficSignNotifier, TrafficSignState>(
+final trafficSignProvider =
+    NotifierProvider<TrafficSignNotifier, TrafficSignState>(
   () => TrafficSignNotifier(),
 );
 

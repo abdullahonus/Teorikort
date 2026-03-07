@@ -13,7 +13,8 @@ class SearchNotifier extends StateNotifier<SearchState> {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
 
     if (query.isEmpty) {
-      state = state.copyWith(query: '', results: [], hasSearched: false, isLoading: false);
+      state = state.copyWith(
+          query: '', results: [], hasSearched: false, isLoading: false);
       return;
     }
 

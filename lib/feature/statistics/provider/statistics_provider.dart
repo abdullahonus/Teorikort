@@ -3,7 +3,8 @@ import '../notifier/statistics_notifier.dart';
 import '../state/statistics_state.dart';
 
 /// Provider for global statistics state management.
-final statisticsProvider = NotifierProvider<StatisticsNotifier, StatisticsState>(
+final statisticsProvider =
+    NotifierProvider<StatisticsNotifier, StatisticsState>(
   () => StatisticsNotifier(),
 );
 

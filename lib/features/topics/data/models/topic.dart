@@ -31,7 +31,8 @@ class Topic {
 
 class TopicDetail {
   final Topic course;
-  final List<dynamic> questions; // Use dynamic for now as we haven't defined a question model for this specific nested case yet or will reuse QuizQuestion later
+  final List<dynamic>
+      questions; // Use dynamic for now as we haven't defined a question model for this specific nested case yet or will reuse QuizQuestion later
 
   TopicDetail({
     required this.course,
@@ -67,5 +68,3 @@ class SubTopic {
     );
   }
 }
-
-

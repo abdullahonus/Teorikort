@@ -9,7 +9,8 @@ class SearchQuestionDetailView extends ConsumerWidget {
 
   const SearchQuestionDetailView({super.key, required this.question});
 
-  Future<void> _showReportDialog(BuildContext context, String questionId) async {
+  Future<void> _showReportDialog(
+      BuildContext context, String questionId) async {
     final TextEditingController reportController = TextEditingController();
     final l10n = AppLocalization.of(context);
     final reportService = ReportService();
@@ -76,7 +77,8 @@ class SearchQuestionDetailView extends ConsumerWidget {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: Text(AppLocalization.of(context).translate('search.question_detail')),
+        title: Text(
+            AppLocalization.of(context).translate('search.question_detail')),
         backgroundColor: colorScheme.surface,
         elevation: 0,
         actions: [
@@ -108,10 +110,14 @@ class SearchQuestionDetailView extends ConsumerWidget {
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: isCorrect ? colorScheme.primary.withValues(alpha: 0.1) : colorScheme.surface,
+                  color: isCorrect
+                      ? colorScheme.primary.withValues(alpha: 0.1)
+                      : colorScheme.surface,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: isCorrect ? colorScheme.primary : colorScheme.outline.withValues(alpha: 0.1),
+                    color: isCorrect
+                        ? colorScheme.primary
+                        : colorScheme.outline.withValues(alpha: 0.1),
                     width: isCorrect ? 2 : 1,
                   ),
                 ),
@@ -122,13 +128,17 @@ class SearchQuestionDetailView extends ConsumerWidget {
                       height: 32,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: isCorrect ? colorScheme.primary : colorScheme.outline.withValues(alpha: 0.1),
+                        color: isCorrect
+                            ? colorScheme.primary
+                            : colorScheme.outline.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Text(
                         option.id.toUpperCase(),
                         style: TextStyle(
-                          color: isCorrect ? colorScheme.onPrimary : colorScheme.onSurface,
+                          color: isCorrect
+                              ? colorScheme.onPrimary
+                              : colorScheme.onSurface,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -139,14 +149,18 @@ class SearchQuestionDetailView extends ConsumerWidget {
                       child: Text(
                         option.text,
                         style: TextStyle(
-                          color: isCorrect ? colorScheme.primary : colorScheme.onSurface,
-                          fontWeight: isCorrect ? FontWeight.bold : FontWeight.normal,
+                          color: isCorrect
+                              ? colorScheme.primary
+                              : colorScheme.onSurface,
+                          fontWeight:
+                              isCorrect ? FontWeight.bold : FontWeight.normal,
                           fontSize: 15,
                         ),
                       ),
                     ),
                     if (isCorrect)
-                      Icon(Icons.check_circle_rounded, color: colorScheme.primary, size: 24),
+                      Icon(Icons.check_circle_rounded,
+                          color: colorScheme.primary, size: 24),
                   ],
                 ),
               );
@@ -160,19 +174,23 @@ class SearchQuestionDetailView extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                color:
+                    colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: colorScheme.outline.withValues(alpha: 0.1)),
+                border: Border.all(
+                    color: colorScheme.outline.withValues(alpha: 0.1)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.info_outline, color: colorScheme.primary, size: 20),
+                      Icon(Icons.info_outline,
+                          color: colorScheme.primary, size: 20),
                       const SizedBox(width: 10),
                       Text(
-                        AppLocalization.of(context).translate('quiz.explanation'),
+                        AppLocalization.of(context)
+                            .translate('quiz.explanation'),
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: colorScheme.primary,

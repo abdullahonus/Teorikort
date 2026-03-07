@@ -28,7 +28,7 @@ class TopicNotifier extends Notifier<TopicState> {
   }
 
   Future<void> loadTopicDetail(String topicId) async {
-    // If already loaded, we could skip or just reload. 
+    // If already loaded, we could skip or just reload.
     // Usually for details, we might want to refresh.
     state = state.copyWith(isLoading: true, clearError: true);
     try {

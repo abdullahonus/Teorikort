@@ -1,7 +1,8 @@
 import 'package:teorikort/core/models/api_response.dart';
 import 'package:teorikort/core/services/logger_service.dart';
 import 'package:teorikort/domain/repository/i_leaderboard_repository.dart';
-import 'package:teorikort/feature/leaderboard/model/leaderboard_entry.dart' as model;
+import 'package:teorikort/feature/leaderboard/model/leaderboard_entry.dart'
+    as model;
 import 'package:teorikort/features/leaderboard/data/services/leaderboard_service.dart';
 
 class LeaderboardRepositoryImpl implements ILeaderboardRepository {

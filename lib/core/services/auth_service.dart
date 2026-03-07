@@ -173,7 +173,7 @@ class AuthService extends BaseApiService {
   }
 
   Future<void> logout() async {
-    // Clears local tokens. 
+    // Clears local tokens.
     // Backend documentation does not specify a logout endpoint.
     await deleteTokens();
   }

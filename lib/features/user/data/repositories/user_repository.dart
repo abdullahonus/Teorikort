@@ -11,7 +11,8 @@ class UserRepository extends BaseApiService {
 
   Future<ApiResponse<UserProfile>> getUserProfile() async {
     try {
-      LoggerService.api('GET', ApiConstants.userProfile, 'Fetching user profile...');
+      LoggerService.api(
+          'GET', ApiConstants.userProfile, 'Fetching user profile...');
 
       final response = await handleResponse<UserProfile>(
         get(ApiConstants.userProfile),
@@ -44,7 +45,8 @@ class UserRepository extends BaseApiService {
 
   Future<ApiResponse<UserProfile>> updateUserProfile(String name) async {
     try {
-      LoggerService.api('PUT', ApiConstants.userProfile, 'Updating user profile...');
+      LoggerService.api(
+          'PUT', ApiConstants.userProfile, 'Updating user profile...');
 
       final response = await handleResponse<UserProfile>(
         put(ApiConstants.userProfile, data: {'name': name}),

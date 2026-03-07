@@ -13,7 +13,8 @@ class ApiResponse<T> {
     this.pagination,
   });
 
-  factory ApiResponse.success(T data, {String? message, Map<String, dynamic>? pagination}) {
+  factory ApiResponse.success(T data,
+      {String? message, Map<String, dynamic>? pagination}) {
     return ApiResponse(
       success: true,
       data: data,
@@ -48,7 +49,5 @@ class ApiResponse<T> {
   }
 
   bool get isSuccess =>
-      success &&
-      (statusCode == 100 || statusCode == 200) &&
-      data != null;
+      success && (statusCode == 100 || statusCode == 200) && data != null;
 }

@@ -69,5 +69,6 @@ class CategoryPerformance extends Equatable {
   }
 
   @override
-  List<Object?> get props => [categoryId, categoryName, averageScore, totalExams];
+  List<Object?> get props =>
+      [categoryId, categoryName, averageScore, totalExams];
 }

@@ -10,21 +10,24 @@ class WorkbookRepositoryImpl implements IWorkbookRepository {
   WorkbookRepositoryImpl(this._service);
 
   @override
-  Future<ApiResponse<model.WorkbookResponse>> getWorkbooks({int page = 1}) async {
+  Future<ApiResponse<model.WorkbookResponse>> getWorkbooks(
+      {int page = 1}) async {
     try {
       final response = await _service.getWorkbooks(page: page);
       if (response.success && response.data != null) {
         final legacyRes = response.data!;
         return ApiResponse.success(model.WorkbookResponse(
-          workbooks: legacyRes.workbooks.map((w) => model.Workbook(
-            id: w.id,
-            userId: w.userId,
-            courseId: w.courseId,
-            detail: w.detail,
-            passed: w.passed,
-            time: w.time,
-            createdAt: w.createdAt,
-          )).toList(),
+          workbooks: legacyRes.workbooks
+              .map((w) => model.Workbook(
+                    id: w.id,
+                    userId: w.userId,
+                    courseId: w.courseId,
+                    detail: w.detail,
+                    passed: w.passed,
+                    time: w.time,
+                    createdAt: w.createdAt,
+                  ))
+              .toList(),
           currentPage: legacyRes.pagination.currentPage,
           lastPage: legacyRes.pagination.lastPage,
         ));

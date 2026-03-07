@@ -20,11 +20,15 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
 
   IExamRepository get _repository => ref.read(examRepositoryProvider);
 
-  Future<void> startExam(String categoryId, int initialSeconds) async {
+  Future<void> startExam(String categoryId, int initialSeconds,
+      {String examType = 'final'}) async {
     state = state.copyWith(isLoading: true, clearError: true);
 
     try {
-      final response = await _repository.getQuestions(categoryId);
+      final response = examType == 'practice'
+          ? await _repository
+              .getTestQuestions(categoryId) // testId is passed as categoryId
+          : await _repository.getQuestions(categoryId);
       if (response.success && response.data != null) {
         state = state.copyWith(
           questions: response.data,
@@ -39,24 +43,6 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
       }
     } catch (e) {
       LoggerService.error('ExamSessionNotifier.startExam', e);
-      state = state.copyWith(isLoading: false, error: e.toString());
-    }
-  }
-
-  Future<void> startMockExam(String difficulty, int initialSeconds) async {
-    state = state.copyWith(isLoading: true, clearError: true);
-    try {
-      final questions = await _repository.getMockQuestions(difficulty);
-      state = state.copyWith(
-        questions: questions,
-        remainingSeconds: initialSeconds,
-        isLoading: false,
-        userAnswers: {},
-        currentQuestionIndex: 0,
-      );
-      _startTimer();
-    } catch (e) {
-      LoggerService.error('ExamSessionNotifier.startMockExam', e);
       state = state.copyWith(isLoading: false, error: e.toString());
     }
   }

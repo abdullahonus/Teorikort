@@ -15,9 +15,9 @@ class ProfileRepositoryImpl implements IProfileRepository {
   Future<ApiResponse<UserProfile>> getUserProfile() async {
     try {
       final response = await _userRepository.getUserProfile();
-      
+
       if (response.success && response.data != null) {
-        // Map the legacy UserProfile to the new immutable one if they differ, 
+        // Map the legacy UserProfile to the new immutable one if they differ,
         // but here they are designed to be compatible.
         return ApiResponse<UserProfile>(
           success: true,
@@ -25,7 +25,7 @@ class ProfileRepositoryImpl implements IProfileRepository {
           data: UserProfile.fromJson(response.data!.toJson()),
         );
       }
-      
+
       return ApiResponse<UserProfile>(
         success: false,
         message: response.message,
@@ -45,7 +45,7 @@ class ProfileRepositoryImpl implements IProfileRepository {
   Future<ApiResponse<UserProfile>> updateUserProfile(String name) async {
     try {
       final response = await _userRepository.updateUserProfile(name);
-      
+
       if (response.success && response.data != null) {
         return ApiResponse<UserProfile>(
           success: true,
@@ -53,7 +53,7 @@ class ProfileRepositoryImpl implements IProfileRepository {
           data: UserProfile.fromJson(response.data!.toJson()),
         );
       }
-      
+
       return ApiResponse<UserProfile>(
         success: false,
         message: response.message,

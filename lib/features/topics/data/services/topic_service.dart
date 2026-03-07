@@ -27,5 +27,4 @@ class TopicService extends BaseApiService {
       TopicDetail.fromJson,
     );
   }
-
 }

@@ -30,7 +30,9 @@ class ExamResult extends Equatable {
     // Handling different format variants from API
     final results = json['results'] != null && json['results'] is Map
         ? json['results'] as Map<String, dynamic>
-        : (json['results'] is String ? {} : {}); // simplifies legacy results decoding
+        : (json['results'] is String
+            ? {}
+            : {}); // simplifies legacy results decoding
 
     return ExamResult(
       id: _parseInt(json['id']),

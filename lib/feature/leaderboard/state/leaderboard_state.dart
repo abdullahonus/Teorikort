@@ -23,7 +23,8 @@ class LeaderboardState extends Equatable {
   }) {
     return LeaderboardState(
       isLoading: isLoading ?? this.isLoading,
-      error: error, // Can be nullified unless specifically passed as a new string
+      error:
+          error, // Can be nullified unless specifically passed as a new string
       entries: entries ?? this.entries,
       myRank: myRank ?? this.myRank,
     );

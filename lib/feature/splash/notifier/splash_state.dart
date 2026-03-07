@@ -1,7 +1,14 @@
 import '../../../data/splash_response_model.dart';
 import 'package:equatable/equatable.dart';
 
-enum SplashStatus { initial, loading, maintenance, forceUpdate, completed, error }
+enum SplashStatus {
+  initial,
+  loading,
+  maintenance,
+  forceUpdate,
+  completed,
+  error
+}
 
 class SplashState extends Equatable {
   final SplashStatus status;

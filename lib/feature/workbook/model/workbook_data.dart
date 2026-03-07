@@ -41,7 +41,8 @@ class Workbook extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, userId, courseId, detail, passed, time, createdAt];
+  List<Object?> get props =>
+      [id, userId, courseId, detail, passed, time, createdAt];
 }
 
 class WorkbookResponse extends Equatable {

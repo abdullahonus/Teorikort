@@ -34,7 +34,8 @@ class _SearchViewState extends ConsumerState<SearchView> {
         title: TextField(
           controller: _searchController,
           autofocus: true,
-          onChanged: (val) => ref.read(searchProvider.notifier).onQueryChanged(val),
+          onChanged: (val) =>
+              ref.read(searchProvider.notifier).onQueryChanged(val),
           decoration: InputDecoration(
             hintText: AppLocalization.of(context).translate('search.hint'),
             border: InputBorder.none,
@@ -60,7 +61,9 @@ class _SearchViewState extends ConsumerState<SearchView> {
               )
             : null,
       ),
-      body: state.hasSearched ? _buildSearchResults(context, state) : _buildInitialContent(context),
+      body: state.hasSearched
+          ? _buildSearchResults(context, state)
+          : _buildInitialContent(context),
     );
   }
 
@@ -70,7 +73,12 @@ class _SearchViewState extends ConsumerState<SearchView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.search_off, size: 80, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)),
+            Icon(Icons.search_off,
+                size: 80,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.1)),
             const SizedBox(height: 16),
             Text(
               AppLocalization.of(context).translate('search.no_results'),
@@ -183,12 +191,14 @@ class _SearchQuestionCard extends StatelessWidget {
             ),
           ],
         ),
-        trailing: Icon(Icons.chevron_right, color: colorScheme.primary.withValues(alpha: 0.5)),
+        trailing: Icon(Icons.chevron_right,
+            color: colorScheme.primary.withValues(alpha: 0.5)),
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => SearchQuestionDetailView(question: question),
+              builder: (context) =>
+                  SearchQuestionDetailView(question: question),
             ),
           );
         },

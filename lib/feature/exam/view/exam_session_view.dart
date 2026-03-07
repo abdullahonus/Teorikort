@@ -1,12 +1,12 @@
-import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 import '../model/exam_question.dart';
 import '../provider/exam_provider.dart';
 import '../state/exam_session_state.dart';
 import 'exam_result_view.dart';
-import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class ExamSessionView extends ConsumerStatefulWidget {
   final String categoryId;
@@ -33,15 +33,9 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      if (widget.examType == 'mock' && widget.difficulty != null) {
-        ref
-            .read(examSessionProvider.notifier)
-            .startMockExam(widget.difficulty!, widget.initialSeconds);
-      } else {
-        ref
-            .read(examSessionProvider.notifier)
-            .startExam(widget.categoryId, widget.initialSeconds);
-      }
+      ref.read(examSessionProvider.notifier).startExam(
+          widget.categoryId, widget.initialSeconds,
+          examType: widget.examType);
     });
   }
 
@@ -66,7 +60,7 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
     });
 
     if (state.isLoading && state.questions.isEmpty) {
-      return const Scaffold(body: const AppLoadingWidget.fullscreen());
+      return const Scaffold(body: AppLoadingWidget.fullscreen());
     }
 
     if (state.error != null && state.questions.isEmpty) {

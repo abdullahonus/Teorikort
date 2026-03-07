@@ -59,9 +59,10 @@ class HomeData {
   factory HomeData.fromJson(Map<String, dynamic> json) {
     return HomeData(
       welcomeMessage: _parseMultiLangField(json['welcome_message']),
-      motivationalQuote: _parseMultiLangField(
-          json['motivational_quote'] ?? 'Başarıya giden yolda her adım önemlidir.'),
-      todaysGoal: _parseMultiLangField(json['todays_goal'] ?? 'Bugün 5 soru çöz'),
+      motivationalQuote: _parseMultiLangField(json['motivational_quote'] ??
+          'Başarıya giden yolda her adım önemlidir.'),
+      todaysGoal:
+          _parseMultiLangField(json['todays_goal'] ?? 'Bugün 5 soru çöz'),
       userProgress: UserProgress.fromJson(json['user_progress'] ?? {}),
       featuredTopics: (json['featured_topics'] as List? ?? [])
           .map((topic) => FeaturedTopic.fromJson(topic))

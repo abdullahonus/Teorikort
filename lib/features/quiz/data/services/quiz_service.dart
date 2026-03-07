@@ -56,26 +56,7 @@ class QuizService extends BaseApiService {
     }
   }
 
-  /// Mock exam sorularını API'den yükler.
-  /// API: GET /exam-categories/{id}/mock-exam?count=20
-  /// Response: { total_questions, questions } - /mock-exams/questions endpoint'i YOK (404)
-  Future<ApiResponse<MockExamData>> getMockExamQuestions({
-    String? categoryId,
-    String difficulty = 'medium',
-    int count = 50,
-    BuildContext? context,
-  }) async {
-    final catId = categoryId ?? '1';
-    return await handleResponse<MockExamData>(
-      get(
-        ApiConstants.mockExamQuestions(catId),
-        queryParameters: {'count': count.toString()},
-      ),
-      MockExamData.fromJson,
-    );
-  }
-
-  // Get exam categories
+  // Get exam categories (Main Categories)
   Future<ApiResponse<List<ExamCategory>>> getExamCategories({
     BuildContext? context,
   }) async {
@@ -88,6 +69,81 @@ class QuizService extends BaseApiService {
       ),
       ExamCategory.fromJson,
     );
+  }
+
+  // Get exam subcategories
+  Future<ApiResponse<List<ExamCategory>>> getExamSubCategories(
+    String categoryId, {
+    BuildContext? context,
+  }) async {
+    final language = getCurrentLanguage(context);
+
+    return await handleListResponse<ExamCategory>(
+      get(
+        ApiConstants.examSubCategories(categoryId),
+        language: language,
+      ),
+      ExamCategory.fromJson,
+    );
+  }
+
+  // Get tests for a subcategory
+  Future<ApiResponse<List<ExamCategory>>> getExamTests(
+    String subcategoryId, {
+    BuildContext? context,
+  }) async {
+    final language = getCurrentLanguage(context);
+
+    return await handleListResponse<ExamCategory>(
+      get(
+        ApiConstants.examTests(subcategoryId),
+        language: language,
+      ),
+      ExamCategory.fromJson,
+    );
+  }
+
+  // Get questions for a specific test
+  Future<ApiResponse<List<QuizQuestion>>> loadTestQuestions(
+    String testId, {
+    BuildContext? context,
+    int limit = 10,
+  }) async {
+    final language = getCurrentLanguage(context);
+    final queryParams = {
+      'count': limit.toString(),
+      'language': language,
+    };
+
+    try {
+      final response = await handleResponse<List<QuizQuestion>>(
+        get(
+          ApiConstants.testQuestions(testId),
+          queryParameters: queryParams,
+        ),
+        (dynamic json) {
+          List<dynamic> questionsList = [];
+          if (json is Map<String, dynamic>) {
+            questionsList = (json['questions'] as List? ??
+                json['data'] as List? ??
+                json['items'] as List? ??
+                []);
+          } else if (json is List) {
+            questionsList = json;
+          }
+          return questionsList
+              .map((q) => QuizQuestion.fromJson(q as Map<String, dynamic>))
+              .toList();
+        },
+      );
+      return response;
+    } catch (e) {
+      return ApiResponse<List<QuizQuestion>>(
+        success: false,
+        statusCode: 500,
+        message: 'Sorular yüklenemedi: $e',
+      );
+    }
   }
 
   // Submit exam result
@@ -202,8 +258,8 @@ class MockExamData {
     }
 
     final questions = questionsRaw
-        .where((q) => q is Map<String, dynamic>)
-        .map((q) => QuizQuestion.fromJson(q as Map<String, dynamic>))
+        .whereType<Map<String, dynamic>>()
+        .map((q) => QuizQuestion.fromJson(q))
         .toList();
 
     return MockExamData(

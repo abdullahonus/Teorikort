@@ -174,11 +174,10 @@ class _OtpVerificationViewState extends ConsumerState<OtpVerificationView> {
                 const SizedBox(height: 32),
                 Text(
                   AppLocalization.of(context).translate('auth.otp_title'),
-                  style:
-                      Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: colorScheme.onSurface,
-                          ),
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.onSurface,
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
@@ -197,8 +196,8 @@ class _OtpVerificationViewState extends ConsumerState<OtpVerificationView> {
                 AuthButton(
                   onPressed: isLoading ? null : _verifyOTP,
                   isLoading: isLoading,
-                  text: AppLocalization.of(context)
-                      .translate('auth.verify_code'),
+                  text:
+                      AppLocalization.of(context).translate('auth.verify_code'),
                 ),
                 if (error != null) ...[
                   const SizedBox(height: 16),
@@ -212,8 +211,7 @@ class _OtpVerificationViewState extends ConsumerState<OtpVerificationView> {
                 TextButton(
                   onPressed: _resendSeconds > 0 ? null : _resendCode,
                   child: Text(
-                    AppLocalization.of(context)
-                        .translate('auth.resend_code'),
+                    AppLocalization.of(context).translate('auth.resend_code'),
                     style: TextStyle(
                       color: _resendSeconds > 0
                           ? colorScheme.onSurface.withValues(alpha: 0.5)

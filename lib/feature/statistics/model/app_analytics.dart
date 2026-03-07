@@ -38,5 +38,6 @@ class AppAnalytics extends Equatable {
   }
 
   @override
-  List<Object?> get props => [totalUsers, totalExams, totalCategories, averageScore];
+  List<Object?> get props =>
+      [totalUsers, totalExams, totalCategories, averageScore];
 }

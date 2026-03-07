@@ -1,4 +1,4 @@
-import '../../../topics/data/models/topic.dart';
+import '../../../../feature/topics/model/topic.dart';
 
 class WorkbookResponse {
   final List<Workbook> workbooks;

@@ -18,11 +18,20 @@ class ApiConstants {
   static const String splash = '/splash';
 
   // Exam Categories & Questions Endpoints
-  static const String examCategories = '/exam-categories';
+  // Exam Categories endpoint is also available as /exam-categories for legacy, keeping both or updating.
+  // The user requested /exam/categories so we add it. Note that examCategories is currently used by default exam fetches.
+  static const String examCategories = '/exam/categories';
   static String examCategoryDetail(String categoryId) =>
-      '/exam-categories/$categoryId';
+      '/exam/categories/$categoryId';
   static String examCategoryQuestions(String categoryId) =>
       '/exam-categories/$categoryId/questions';
+
+  // New Practice Flow Endpoints
+  static String examSubCategories(String categoryId) =>
+      '/exam/categories/$categoryId/subcategories';
+  static String examTests(String subcategoryId) =>
+      '/exam/categories/$subcategoryId/tests';
+  static String testQuestions(String testId) => '/exam/tests/$testId/questions';
 
   /// API: GET /exam-categories/{id}/mock-exam?count=20
   static String mockExamQuestions(String categoryId) =>

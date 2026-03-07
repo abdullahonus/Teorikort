@@ -95,8 +95,7 @@ class NetworkManager {
   ) async {
     try {
       final response = await apiCall;
-      Map<String, dynamic> responseData =
-          response.data as Map<String, dynamic>;
+      Map<String, dynamic> responseData = response.data as Map<String, dynamic>;
 
       if (responseData.containsKey('statusCode') &&
           responseData.containsKey('data') &&
@@ -142,8 +141,7 @@ class NetworkManager {
   ) async {
     try {
       final response = await apiCall;
-      Map<String, dynamic> responseData =
-          response.data as Map<String, dynamic>;
+      Map<String, dynamic> responseData = response.data as Map<String, dynamic>;
 
       if (responseData.containsKey('statusCode') &&
           responseData.containsKey('data') &&
@@ -189,8 +187,7 @@ class NetworkManager {
           statusCode: statusCode,
           message: description,
           data: parsedItems,
-          pagination:
-              data is Map<String, dynamic> ? data['pagination'] : null,
+          pagination: data is Map<String, dynamic> ? data['pagination'] : null,
         );
       } else {
         return ApiResponse<List<T>>(
@@ -255,8 +252,8 @@ class NetworkManager {
       if (language != null) params['language'] = language;
 
       final response = await _dio.get(path, queryParameters: params);
-      final apiResponse = await handleListResponse<T>(
-          Future.value(response), fromJson);
+      final apiResponse =
+          await handleListResponse<T>(Future.value(response), fromJson);
 
       if (apiResponse.success) {
         if (AppConfig.enableApiLogging) {
@@ -359,9 +356,7 @@ class NetworkManager {
       case DioExceptionType.badResponse:
         final sc = error.response?.statusCode ?? 500;
         return ApiResponse<T>(
-            success: false,
-            statusCode: sc,
-            message: _errorMessage(sc));
+            success: false, statusCode: sc, message: _errorMessage(sc));
       case DioExceptionType.connectionError:
         return ApiResponse<T>(
             success: false,
@@ -382,8 +377,7 @@ class NetworkManager {
       case DioExceptionType.receiveTimeout:
         return ApiException.timeoutError();
       case DioExceptionType.badResponse:
-        return ApiException.fromStatusCode(
-            error.response?.statusCode ?? 500);
+        return ApiException.fromStatusCode(error.response?.statusCode ?? 500);
       case DioExceptionType.connectionError:
         return ApiException.networkError();
       default:

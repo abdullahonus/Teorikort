@@ -18,7 +18,7 @@ class TrafficSignNotifier extends Notifier<TrafficSignState> {
     } else {
       state = state.copyWith(isLoading: true);
     }
-    
+
     try {
       final response = await _repository.getTrafficSigns(page: page);
       if (response.success && response.data != null) {

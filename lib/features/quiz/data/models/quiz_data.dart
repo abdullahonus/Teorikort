@@ -77,7 +77,7 @@ class QuizQuestion {
 
     final correctAnswerRaw = json['correct_answer'];
     String correctAnswer = '';
-    
+
     // Try to get as int (either directly or parsing string)
     int? correctIdx;
     if (correctAnswerRaw is int) {
@@ -85,7 +85,7 @@ class QuizQuestion {
     } else if (correctAnswerRaw is String) {
       correctIdx = int.tryParse(correctAnswerRaw);
     }
-    
+
     if (correctIdx != null) {
       const letters = ['a', 'b', 'c', 'd', 'e'];
       final idx = correctIdx - 1;
@@ -99,7 +99,9 @@ class QuizQuestion {
     return QuizQuestion(
       id: json['id']?.toString() ?? '',
       question: _parseMultiLangField(json['question']),
-      imageUrl: json['image_url']?.toString().isEmpty == true ? null : json['image_url'],
+      imageUrl: json['image_url']?.toString().isEmpty == true
+          ? null
+          : json['image_url'],
       options: parsedOptions,
       correctAnswer: correctAnswer,
       explanation: _parseMultiLangField(json['explanation']),

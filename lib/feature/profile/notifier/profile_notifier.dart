@@ -22,14 +22,14 @@ class ProfileNotifier extends Notifier<ProfileState> {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
       final response = await _repository.getUserProfile();
-      
+
       if (response.success && response.data != null) {
         // Sync with legacy service for backwards compatibility if needed
-        // but note we use UserProfile.fromJson(response.data.toJson()) 
+        // but note we use UserProfile.fromJson(response.data.toJson())
         // to pass it to legacy code that expects their version.
         // For now, let's keep the sync if it was there before.
         // Note: the original code had their own model.
-        
+
         state = state.copyWith(
           profile: response.data,
           isLoading: false,
@@ -53,7 +53,7 @@ class ProfileNotifier extends Notifier<ProfileState> {
     state = state.copyWith(isUpdating: true, clearError: true);
     try {
       final response = await _repository.updateUserProfile(name);
-      
+
       if (response.success && response.data != null) {
         state = state.copyWith(
           profile: response.data,

@@ -74,6 +74,13 @@ class ExamCategory extends Equatable {
       );
 
   @override
-  List<Object?> get props =>
-      [id, title, description, timeSeconds, successPoint, imageUrl, totalQuestions];
+  List<Object?> get props => [
+        id,
+        title,
+        description,
+        timeSeconds,
+        successPoint,
+        imageUrl,
+        totalQuestions
+      ];
 }

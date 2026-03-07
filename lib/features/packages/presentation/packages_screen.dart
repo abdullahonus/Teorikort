@@ -74,13 +74,15 @@ class _PackagesScreenState extends State<PackagesScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 48, color: Theme.of(context).colorScheme.error),
+            Icon(Icons.error_outline,
+                size: 48, color: Theme.of(context).colorScheme.error),
             const SizedBox(height: 16),
             Text(_errorMessage!),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _fetchPackages,
-              child: Text(AppLocalization.of(context).translate('common.retry')),
+              child:
+                  Text(AppLocalization.of(context).translate('common.retry')),
             ),
           ],
         ),
@@ -113,13 +115,20 @@ class _PackagesScreenState extends State<PackagesScreen> {
         borderRadius: BorderRadius.circular(24),
         gradient: isPremium
             ? LinearGradient(
-                colors: [colorScheme.primary, colorScheme.primary.withValues(alpha: 0.7)],
+                colors: [
+                  colorScheme.primary,
+                  colorScheme.primary.withValues(alpha: 0.7)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               )
             : null,
-        color: isPremium ? null : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-        border: isPremium ? null : Border.all(color: colorScheme.outline.withValues(alpha: 0.1)),
+        color: isPremium
+            ? null
+            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        border: isPremium
+            ? null
+            : Border.all(color: colorScheme.outline.withValues(alpha: 0.1)),
         boxShadow: [
           if (isPremium)
             BoxShadow(
@@ -158,22 +167,28 @@ class _PackagesScreenState extends State<PackagesScreen> {
                               package.title,
                               style: theme.textTheme.headlineSmall?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: isPremium ? Colors.white : colorScheme.onSurface,
+                                color: isPremium
+                                    ? Colors.white
+                                    : colorScheme.onSurface,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 color: isPremium
                                     ? Colors.white.withValues(alpha: 0.2)
-                                    : colorScheme.primary.withValues(alpha: 0.1),
+                                    : colorScheme.primary
+                                        .withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 package.code,
                                 style: theme.textTheme.labelSmall?.copyWith(
-                                  color: isPremium ? Colors.white : colorScheme.primary,
+                                  color: isPremium
+                                      ? Colors.white
+                                      : colorScheme.primary,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -182,7 +197,9 @@ class _PackagesScreenState extends State<PackagesScreen> {
                         ),
                       ),
                       Text(
-                        package.price == 0 ? 'FREE' : '₺${package.price.toInt()}',
+                        package.price == 0
+                            ? 'FREE'
+                            : '₺${package.price.toInt()}',
                         style: theme.textTheme.displaySmall?.copyWith(
                           fontWeight: FontWeight.w900,
                           color: isPremium ? Colors.white : colorScheme.primary,
@@ -194,7 +211,9 @@ class _PackagesScreenState extends State<PackagesScreen> {
                   Text(
                     package.description,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: isPremium ? Colors.white.withValues(alpha: 0.9) : colorScheme.onSurfaceVariant,
+                      color: isPremium
+                          ? Colors.white.withValues(alpha: 0.9)
+                          : colorScheme.onSurfaceVariant,
                       height: 1.5,
                     ),
                   ),
@@ -207,10 +226,13 @@ class _PackagesScreenState extends State<PackagesScreen> {
                         _showPackageDetail(package);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isPremium ? Colors.white : colorScheme.primary,
-                        foregroundColor: isPremium ? colorScheme.primary : Colors.white,
+                        backgroundColor:
+                            isPremium ? Colors.white : colorScheme.primary,
+                        foregroundColor:
+                            isPremium ? colorScheme.primary : Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)),
                         elevation: 0,
                       ),
                       child: Text(
@@ -251,7 +273,10 @@ class _PackagesScreenState extends State<PackagesScreen> {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .outline
+                        .withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -259,27 +284,37 @@ class _PackagesScreenState extends State<PackagesScreen> {
               const SizedBox(height: 24),
               Text(
                 package.title,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               Text(
                 package.description,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.6),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(height: 1.6),
               ),
               const SizedBox(height: 32),
               // Mock Features
-              _buildFeatureItem(Icons.check_circle, 'Full access to all topics'),
+              _buildFeatureItem(
+                  Icons.check_circle, 'Full access to all topics'),
               _buildFeatureItem(Icons.check_circle, 'Daily practice exams'),
-              _buildFeatureItem(Icons.check_circle, 'Advanced statistics & analysis'),
+              _buildFeatureItem(
+                  Icons.check_circle, 'Advanced statistics & analysis'),
               _buildFeatureItem(Icons.check_circle, 'Offline study mode'),
               const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 20),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
-                child: Text('Purchase for ${package.price == 0 ? 'Free' : '₺${package.price.toInt()}'}'),
+                child: Text(
+                    'Purchase for ${package.price == 0 ? 'Free' : '₺${package.price.toInt()}'}'),
               ),
             ],
           ),

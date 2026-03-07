@@ -27,8 +27,7 @@ class AppBootstrap {
 
   /// Sistem dilinden başlangıç locale'ini belirler.
   static String resolveInitialLocale() {
-    final systemLocale =
-        WidgetsBinding.instance.platformDispatcher.locale;
+    final systemLocale = WidgetsBinding.instance.platformDispatcher.locale;
     return systemLocale.languageCode == 'tr' ? 'tr' : 'en';
   }
 }

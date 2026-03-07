@@ -10,7 +10,8 @@ class SearchRepositoryImpl implements ISearchRepository {
   SearchRepositoryImpl(this._service);
 
   @override
-  Future<ApiResponse<List<ExamQuestion>>> searchQuestions(String query, {int page = 1}) async {
+  Future<ApiResponse<List<ExamQuestion>>> searchQuestions(String query,
+      {int page = 1}) async {
     try {
       final response = await _service.searchQuestions(query, page: page);
       if (response.success && response.data != null) {

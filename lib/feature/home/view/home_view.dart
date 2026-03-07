@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 import 'package:teorikort/feature/exam/view/exam_list_view.dart';
-import 'package:teorikort/feature/exam/view/mock_exam_difficulty_view.dart';
+import 'package:teorikort/feature/exam/view/practice_main_category_view.dart';
+
 import '../../../features/home/data/services/daily_tip_service.dart';
 import '../../../features/home/data/services/home_service.dart';
 import '../provider/home_provider.dart';
-import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class HomeView extends ConsumerWidget {
   const HomeView({super.key});
@@ -42,8 +43,8 @@ class HomeView extends ConsumerWidget {
                     ),
                     child: Text(
                       state.error!,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.error),
+                      style:
+                          TextStyle(color: Theme.of(context).colorScheme.error),
                     ),
                   ),
                 ],
@@ -54,8 +55,7 @@ class HomeView extends ConsumerWidget {
 
   Widget _buildWelcomeSection(
       BuildContext context, WidgetRef ref, HomeData? homeData) {
-    final userName =
-        ref.read(homeProvider.notifier).currentUserFirstName;
+    final userName = ref.read(homeProvider.notifier).currentUserFirstName;
     String welcomeMsg = AppLocalization.of(context)
         .translate('home.welcome_name')
         .replaceAll('%s', userName);
@@ -65,9 +65,8 @@ class HomeView extends ConsumerWidget {
       final apiMsg = homeData.welcomeMessage[lang] ??
           homeData.welcomeMessage['tr'] ??
           welcomeMsg;
-      welcomeMsg = apiMsg.contains('%s')
-          ? apiMsg.replaceAll('%s', userName)
-          : apiMsg;
+      welcomeMsg =
+          apiMsg.contains('%s') ? apiMsg.replaceAll('%s', userName) : apiMsg;
     }
 
     return Text(
@@ -104,7 +103,7 @@ class HomeView extends ConsumerWidget {
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => const MockExamDifficultyView()),
+                      builder: (_) => const PracticeMainCategoryView()),
                 ),
               ),
             ),
@@ -166,8 +165,7 @@ class HomeView extends ConsumerWidget {
   Widget _buildProgressSection(BuildContext context, HomeData? homeData) {
     final successRate = homeData?.userProgress.averageScore ?? 0.0;
     final completedTests = homeData?.userProgress.totalExams ?? 0;
-    final completedCategories =
-        homeData?.userProgress.completedCategories ?? 0;
+    final completedCategories = homeData?.userProgress.completedCategories ?? 0;
     final totalCategories = homeData?.userProgress.totalCategories ?? 4;
 
     return Container(
@@ -177,10 +175,7 @@ class HomeView extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context)
-                .colorScheme
-                .shadow
-                .withValues(alpha: 0.1),
+            color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -271,8 +266,7 @@ class HomeView extends ConsumerWidget {
       decoration: BoxDecoration(
         color: colorScheme.secondary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-            color: colorScheme.secondary.withValues(alpha: 0.3)),
+        border: Border.all(color: colorScheme.secondary.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -300,10 +294,8 @@ class HomeView extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            tip?.getContent(
-                    AppLocalization.of(context).locale.languageCode) ??
-                AppLocalization.of(context)
-                    .translate('home.no_tip_available'),
+            tip?.getContent(AppLocalization.of(context).locale.languageCode) ??
+                AppLocalization.of(context).translate('home.no_tip_available'),
             style: TextStyle(
               color: colorScheme.onSurface.withValues(alpha: 0.7),
             ),

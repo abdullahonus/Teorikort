@@ -7,11 +7,20 @@ abstract class IExamRepository {
   /// Fetches all available exam categories (topics).
   Future<ApiResponse<List<ExamCategory>>> getCategories();
 
+  /// Fetches subcategories for a specific category.
+  Future<ApiResponse<List<ExamCategory>>> getSubCategories(String categoryId);
+
+  /// Fetches tests for a specific subcategory.
+  Future<ApiResponse<List<ExamCategory>>> getTests(String subcategoryId);
+
   /// Fetches questions for a specific category.
   Future<ApiResponse<List<ExamQuestion>>> getQuestions(String categoryId);
 
+  /// Fetches questions for a specific test.
+  Future<ApiResponse<List<ExamQuestion>>> getTestQuestions(String testId,
+      {int limit = 10});
+
   /// Fetches mock exam questions based on difficulty.
-  Future<List<ExamQuestion>> getMockQuestions(String difficulty);
 
   /// Submits the result of a completed exam session.
   Future<ApiResponse<ExamResult>> submitExamResult({

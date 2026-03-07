@@ -16,15 +16,19 @@ class CategoryStatisticsView extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<CategoryStatisticsView> createState() => _CategoryStatisticsViewState();
+  ConsumerState<CategoryStatisticsView> createState() =>
+      _CategoryStatisticsViewState();
 }
 
-class _CategoryStatisticsViewState extends ConsumerState<CategoryStatisticsView> {
+class _CategoryStatisticsViewState
+    extends ConsumerState<CategoryStatisticsView> {
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
-      ref.read(statisticsProvider.notifier).loadCategoryStats(widget.categoryId);
+      ref
+          .read(statisticsProvider.notifier)
+          .loadCategoryStats(widget.categoryId);
     });
   }
 
@@ -43,7 +47,9 @@ class _CategoryStatisticsViewState extends ConsumerState<CategoryStatisticsView>
       body: state.isLoading && categoryData == null
           ? const AppLoadingWidget.fullscreen()
           : RefreshIndicator(
-              onRefresh: () async => ref.read(statisticsProvider.notifier).loadCategoryStats(widget.categoryId),
+              onRefresh: () async => ref
+                  .read(statisticsProvider.notifier)
+                  .loadCategoryStats(widget.categoryId),
               child: categoryData == null
                   ? _buildErrorState(context, state.error ?? 'Veri bulunamadı')
                   : _buildContent(context, categoryData),
@@ -57,11 +63,14 @@ class _CategoryStatisticsViewState extends ConsumerState<CategoryStatisticsView>
       children: [
         Row(
           children: [
-            _statCard(context, Icons.assignment, 'statistics.total_exams', data.totalExams.toString()),
+            _statCard(context, Icons.assignment, 'statistics.total_exams',
+                data.totalExams.toString()),
             const SizedBox(width: 12),
-            _statCard(context, Icons.analytics, 'statistics.avg_score', '${data.averageScore.toStringAsFixed(1)}%'),
+            _statCard(context, Icons.analytics, 'statistics.avg_score',
+                '${data.averageScore.toStringAsFixed(1)}%'),
             const SizedBox(width: 12),
-            _statCard(context, Icons.emoji_events, 'statistics.best_score', '${data.highestScore.toStringAsFixed(0)}%'),
+            _statCard(context, Icons.emoji_events, 'statistics.best_score',
+                '${data.highestScore.toStringAsFixed(0)}%'),
           ],
         ),
         const SizedBox(height: 24),
@@ -73,13 +82,15 @@ class _CategoryStatisticsViewState extends ConsumerState<CategoryStatisticsView>
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          ...data.recentExams.map((exam) => _buildRecentExamItem(context, exam)),
+          ...data.recentExams
+              .map((exam) => _buildRecentExamItem(context, exam)),
         ],
       ],
     );
   }
 
-  Widget _statCard(BuildContext context, IconData icon, String labelKey, String value) {
+  Widget _statCard(
+      BuildContext context, IconData icon, String labelKey, String value) {
     final colorScheme = Theme.of(context).colorScheme;
     return Expanded(
       child: Container(
@@ -93,11 +104,17 @@ class _CategoryStatisticsViewState extends ConsumerState<CategoryStatisticsView>
           children: [
             Icon(icon, color: colorScheme.primary, size: 24),
             const SizedBox(height: 8),
-            Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.blue)),
+            Text(value,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.blue)),
             const SizedBox(height: 4),
             Text(
               AppLocalization.of(context).translate(labelKey),
-              style: TextStyle(fontSize: 11, color: colorScheme.onSurface.withValues(alpha: 0.6)),
+              style: TextStyle(
+                  fontSize: 11,
+                  color: colorScheme.onSurface.withValues(alpha: 0.6)),
               textAlign: TextAlign.center,
             ),
           ],
@@ -106,7 +123,8 @@ class _CategoryStatisticsViewState extends ConsumerState<CategoryStatisticsView>
     );
   }
 
-  Widget _buildScoreRangeCard(BuildContext context, model.CategoryStatistics data) {
+  Widget _buildScoreRangeCard(
+      BuildContext context, model.CategoryStatistics data) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(20),
@@ -126,9 +144,12 @@ class _CategoryStatisticsViewState extends ConsumerState<CategoryStatisticsView>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _rangeItem(context, 'statistics.lowest', '${data.lowestScore.toStringAsFixed(0)}%', Colors.red),
-              _rangeItem(context, 'statistics.average', '${data.averageScore.toStringAsFixed(1)}%', Colors.orange),
-              _rangeItem(context, 'statistics.highest', '${data.highestScore.toStringAsFixed(0)}%', Colors.green),
+              _rangeItem(context, 'statistics.lowest',
+                  '${data.lowestScore.toStringAsFixed(0)}%', Colors.red),
+              _rangeItem(context, 'statistics.average',
+                  '${data.averageScore.toStringAsFixed(1)}%', Colors.orange),
+              _rangeItem(context, 'statistics.highest',
+                  '${data.highestScore.toStringAsFixed(0)}%', Colors.green),
             ],
           ),
           const SizedBox(height: 20),
@@ -138,7 +159,8 @@ class _CategoryStatisticsViewState extends ConsumerState<CategoryStatisticsView>
               value: data.averageScore / 100,
               minHeight: 10,
               backgroundColor: colorScheme.surfaceContainerHighest,
-              valueColor: AlwaysStoppedAnimation(data.averageScore >= 70 ? Colors.green : Colors.red),
+              valueColor: AlwaysStoppedAnimation(
+                  data.averageScore >= 70 ? Colors.green : Colors.red),
             ),
           ),
         ],
@@ -146,10 +168,13 @@ class _CategoryStatisticsViewState extends ConsumerState<CategoryStatisticsView>
     );
   }
 
-  Widget _rangeItem(BuildContext context, String labelKey, String value, Color color) {
+  Widget _rangeItem(
+      BuildContext context, String labelKey, String value, Color color) {
     return Column(
       children: [
-        Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: color)),
+        Text(value,
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 18, color: color)),
         Text(
           AppLocalization.of(context).translate(labelKey),
           style: const TextStyle(fontSize: 12, color: Colors.grey),
@@ -158,7 +183,8 @@ class _CategoryStatisticsViewState extends ConsumerState<CategoryStatisticsView>
     );
   }
 
-  Widget _buildRecentExamItem(BuildContext context, model.RecentExamResult exam) {
+  Widget _buildRecentExamItem(
+      BuildContext context, model.RecentExamResult exam) {
     final colorScheme = Theme.of(context).colorScheme;
     final color = exam.point >= 70 ? Colors.green : Colors.red;
 
@@ -204,7 +230,9 @@ class _CategoryStatisticsViewState extends ConsumerState<CategoryStatisticsView>
           Text(error),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () => ref.read(statisticsProvider.notifier).loadCategoryStats(widget.categoryId),
+            onPressed: () => ref
+                .read(statisticsProvider.notifier)
+                .loadCategoryStats(widget.categoryId),
             child: const Text('Tekrar Dene'),
           ),
         ],

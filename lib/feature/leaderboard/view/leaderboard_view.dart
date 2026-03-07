@@ -44,8 +44,7 @@ class _LeaderboardViewState extends ConsumerState<LeaderboardView> {
         actions: [
           IconButton(
             icon: Icon(Icons.refresh, color: colorScheme.primary),
-            onPressed: () =>
-                ref.read(leaderboardProvider.notifier).refresh(),
+            onPressed: () => ref.read(leaderboardProvider.notifier).refresh(),
           ),
         ],
       ),
@@ -54,15 +53,13 @@ class _LeaderboardViewState extends ConsumerState<LeaderboardView> {
               child: const AppLoadingWidget(),
             )
           : RefreshIndicator(
-              onRefresh: () =>
-                  ref.read(leaderboardProvider.notifier).refresh(),
+              onRefresh: () => ref.read(leaderboardProvider.notifier).refresh(),
               child: _buildBody(context, state),
             ),
     );
   }
 
   Widget _buildBody(BuildContext context, state) {
-
     if (state.error != null && state.entries.isEmpty) {
       return _buildErrorState(context, state.error!);
     }
@@ -164,7 +161,8 @@ class _LeaderboardViewState extends ConsumerState<LeaderboardView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppLocalization.of(context).translate('leaderboard.your_rank'),
+                  AppLocalization.of(context)
+                      .translate('leaderboard.your_rank'),
                   style: TextStyle(
                     fontSize: 12,
                     color: colorScheme.onSurface.withValues(alpha: 0.6),
@@ -223,9 +221,9 @@ class _LeaderboardViewState extends ConsumerState<LeaderboardView> {
             ),
             const SizedBox(height: 24),
             ElevatedButton(
-              onPressed: () =>
-                  ref.read(leaderboardProvider.notifier).refresh(),
-              child: Text(AppLocalization.of(context).translate('common.retry')),
+              onPressed: () => ref.read(leaderboardProvider.notifier).refresh(),
+              child:
+                  Text(AppLocalization.of(context).translate('common.retry')),
             ),
           ],
         ),
@@ -248,8 +246,10 @@ class _LeaderboardViewState extends ConsumerState<LeaderboardView> {
           ),
           const SizedBox(height: 8),
           Text(
-            AppLocalization.of(context).translate('leaderboard.take_exams_first'),
-            style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6)),
+            AppLocalization.of(context)
+                .translate('leaderboard.take_exams_first'),
+            style:
+                TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6)),
           ),
         ],
       ),
@@ -308,7 +308,8 @@ class _LeaderboardItem extends StatelessWidget {
                     height: 32,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                      color: colorScheme.surfaceContainerHighest
+                          .withValues(alpha: 0.5),
                       shape: BoxShape.circle,
                     ),
                     child: Text(

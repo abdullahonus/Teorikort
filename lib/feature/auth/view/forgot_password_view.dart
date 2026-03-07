@@ -10,8 +10,7 @@ class ForgotPasswordView extends ConsumerStatefulWidget {
   const ForgotPasswordView({super.key});
 
   @override
-  ConsumerState<ForgotPasswordView> createState() =>
-      _ForgotPasswordViewState();
+  ConsumerState<ForgotPasswordView> createState() => _ForgotPasswordViewState();
 }
 
 class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
@@ -92,8 +91,8 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
                 const SizedBox(height: 48),
                 AuthTextField(
                   controller: _emailController,
-                  hintText: AppLocalization.of(context)
-                      .translate('auth.email_hint'),
+                  hintText:
+                      AppLocalization.of(context).translate('auth.email_hint'),
                   keyboardType: TextInputType.emailAddress,
                   prefixIcon: Icons.email_outlined,
                   onChanged: (_) {},
@@ -109,8 +108,7 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
                 AuthButton(
                   onPressed: isLoading ? null : _sendResetLink,
                   isLoading: isLoading,
-                  text: AppLocalization.of(context)
-                      .translate('auth.send_code'),
+                  text: AppLocalization.of(context).translate('auth.send_code'),
                 ),
                 if (error != null) ...[
                   const SizedBox(height: 16),

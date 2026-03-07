@@ -57,6 +57,83 @@ class ExamRepositoryImpl implements IExamRepository {
   }
 
   @override
+  Future<ApiResponse<List<ExamCategory>>> getSubCategories(
+      String categoryId) async {
+    try {
+      final response = await _quizService.getExamSubCategories(categoryId);
+      if (response.success && response.data != null) {
+        final categories = response.data!
+            .map((c) => ExamCategory.fromJson({
+                  'id': c.id,
+                  'title': c.title,
+                  'description': c.description,
+                  'time_secound': c.timeSecound,
+                  'success_pint': c.successPint,
+                  'image': c.image,
+                  'total_questions': c.totalQuestions,
+                }))
+            .toList();
+
+        return ApiResponse<List<ExamCategory>>(
+          success: true,
+          statusCode: response.statusCode,
+          data: categories,
+        );
+      }
+      return ApiResponse<List<ExamCategory>>(
+        success: false,
+        message: response.message,
+        statusCode: response.statusCode,
+      );
+    } catch (e) {
+      LoggerService.error('ExamRepositoryImpl.getSubCategories', e);
+      return ApiResponse<List<ExamCategory>>(
+        success: false,
+        message: e.toString(),
+        statusCode: 500,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse<List<ExamCategory>>> getTests(String subcategoryId) async {
+    try {
+      final response = await _quizService.getExamTests(subcategoryId);
+      if (response.success && response.data != null) {
+        final categories = response.data!
+            .map((c) => ExamCategory.fromJson({
+                  'id': c.id,
+                  'title': c.title,
+                  'description': c.description,
+                  'time_secound': c.timeSecound,
+                  'success_pint': c.successPint,
+                  'image': c.image,
+                  'total_questions': c.totalQuestions,
+                }))
+            .toList();
+
+        return ApiResponse<List<ExamCategory>>(
+          success: true,
+          statusCode: response.statusCode,
+          data: categories,
+        );
+      }
+      return ApiResponse<List<ExamCategory>>(
+        success: false,
+        message: response.message,
+        statusCode: response.statusCode,
+      );
+    } catch (e) {
+      LoggerService.error('ExamRepositoryImpl.getTests', e);
+      return ApiResponse<List<ExamCategory>>(
+        success: false,
+        message: e.toString(),
+        statusCode: 500,
+      );
+    }
+  }
+
+  @override
   Future<ApiResponse<List<ExamQuestion>>> getQuestions(
       String categoryId) async {
     try {
@@ -98,13 +175,13 @@ class ExamRepositoryImpl implements IExamRepository {
   }
 
   @override
-  Future<List<ExamQuestion>> getMockQuestions(String difficulty) async {
+  Future<ApiResponse<List<ExamQuestion>>> getTestQuestions(String testId,
+      {int limit = 10}) async {
     try {
-      final response = await _quizService.getMockExamQuestions(
-        difficulty: difficulty,
-      );
+      final response =
+          await _quizService.loadTestQuestions(testId, limit: limit);
       if (response.success && response.data != null) {
-        return response.data!.questions
+        final questions = response.data!
             .map((q) => ExamQuestion.fromJson({
                   'id': q.id,
                   'question': q.question,
@@ -117,11 +194,25 @@ class ExamRepositoryImpl implements IExamRepository {
                   'explanation': q.explanation,
                 }))
             .toList();
+
+        return ApiResponse<List<ExamQuestion>>(
+          success: true,
+          statusCode: response.statusCode,
+          data: questions,
+        );
       }
-      return [];
+      return ApiResponse<List<ExamQuestion>>(
+        success: false,
+        message: response.message,
+        statusCode: response.statusCode,
+      );
     } catch (e) {
-      LoggerService.error('ExamRepositoryImpl.getMockQuestions', e);
-      return [];
+      LoggerService.error('ExamRepositoryImpl.getTestQuestions', e);
+      return ApiResponse<List<ExamQuestion>>(
+        success: false,
+        message: e.toString(),
+        statusCode: 500,
+      );
     }
   }
 

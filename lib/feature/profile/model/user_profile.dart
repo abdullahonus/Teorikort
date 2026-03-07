@@ -54,9 +54,8 @@ class UserProfile extends Equatable {
         'photo_url': photoUrl,
       };
 
-  String get fullName => lastname != null && lastname!.isNotEmpty
-      ? '$name $lastname'
-      : name;
+  String get fullName =>
+      lastname != null && lastname!.isNotEmpty ? '$name $lastname' : name;
 
   UserProfile copyWith({
     String? id,
@@ -84,6 +83,16 @@ class UserProfile extends Equatable {
       );
 
   @override
-  List<Object?> get props =>
-      [id, name, email, lastname, phone, package, createDate, createdAt, updatedAt, photoUrl];
+  List<Object?> get props => [
+        id,
+        name,
+        email,
+        lastname,
+        phone,
+        package,
+        createDate,
+        createdAt,
+        updatedAt,
+        photoUrl
+      ];
 }

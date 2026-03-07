@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
-import '../../topics/presentation/topic_detail_screen.dart';
+import '../../../../feature/topics/view/topic_detail_view.dart';
 import '../data/models/workbook_data.dart';
 import '../data/services/workbook_service.dart';
 
@@ -148,7 +148,10 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => TopicDetailScreen(topic: workbook.course),
+              builder: (context) => TopicDetailView(
+                topicId: workbook.course.id.toString(),
+                initialTopic: workbook.course,
+              ),
             ),
           );
         },

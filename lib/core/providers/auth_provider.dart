@@ -76,7 +76,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
               : null,
           token: token,
         ));
-        
+
         await UserService().updateUserFromApi(UserProfile(
           id: userData.id.toString(),
           name: userData.name,
@@ -85,7 +85,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           phone: userData.phone,
           createdAt: userData.createdAt,
         ));
-        
+
         LoggerService.info('User logged in successfully: $email');
       } else {
         throw apiResponse.message ?? 'Giriş başarısız';

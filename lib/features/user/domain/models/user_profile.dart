@@ -47,7 +47,6 @@ class UserProfile {
         'updated_at': updatedAt,
       };
 
-  String get fullName => lastname != null && lastname!.isNotEmpty
-      ? '$name $lastname'
-      : name;
+  String get fullName =>
+      lastname != null && lastname!.isNotEmpty ? '$name $lastname' : name;
 }

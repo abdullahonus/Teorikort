@@ -50,7 +50,8 @@ class Topic extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, title, description, content, createdAt, updatedAt];
+  List<Object?> get props =>
+      [id, title, description, content, createdAt, updatedAt];
 }
 
 class TopicDetail extends Equatable {

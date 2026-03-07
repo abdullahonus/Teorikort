@@ -66,7 +66,8 @@ class TopicRepositoryImpl implements ITopicRepository {
   }
 
   @override
-  Future<ApiResponse<model.TrafficSignResponse>> getTrafficSigns({int page = 1}) async {
+  Future<ApiResponse<model.TrafficSignResponse>> getTrafficSigns(
+      {int page = 1}) async {
     try {
       final response = await _trafficSignService.getSigns(page: page);
       if (response.success && response.data != null) {

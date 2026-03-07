@@ -27,7 +27,9 @@ class ExamNotifier extends Notifier<ExamState> {
       final historyResponse = responses[1] as ApiResponse;
 
       state = state.copyWith(
-        categories: categoriesResponse.success ? categoriesResponse.data : state.categories,
+        categories: categoriesResponse.success
+            ? categoriesResponse.data
+            : state.categories,
         history: historyResponse.success ? historyResponse.data : state.history,
         isLoading: false,
         error: categoriesResponse.success ? null : categoriesResponse.message,

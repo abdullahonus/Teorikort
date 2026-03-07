@@ -38,5 +38,6 @@ class TrafficSignState extends Equatable {
       );
 
   @override
-  List<Object?> get props => [isLoading, error, signs, currentPage, lastPage, total];
+  List<Object?> get props =>
+      [isLoading, error, signs, currentPage, lastPage, total];
 }

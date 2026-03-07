@@ -56,7 +56,8 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
             _buildOverallStats(context, statistics),
             const SizedBox(height: 24),
             if (statistics.categoryPerformance.isNotEmpty)
-              _buildCategoryPerformance(context, statistics.categoryPerformance),
+              _buildCategoryPerformance(
+                  context, statistics.categoryPerformance),
           ],
         ),
       ),
@@ -69,7 +70,10 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [colorScheme.primary.withValues(alpha: 0.1), colorScheme.secondary.withValues(alpha: 0.1)],
+          colors: [
+            colorScheme.primary.withValues(alpha: 0.1),
+            colorScheme.secondary.withValues(alpha: 0.1)
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -84,8 +88,10 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
               Icon(Icons.auto_graph, color: colorScheme.primary, size: 20),
               const SizedBox(width: 8),
               Text(
-                AppLocalization.of(context).translate('statistics.platform_stats'),
-                style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.primary),
+                AppLocalization.of(context)
+                    .translate('statistics.platform_stats'),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: colorScheme.primary),
               ),
             ],
           ),
@@ -93,10 +99,17 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildAnalyticsItem(context, '${data.totalUsers}', 'statistics.users', Icons.people),
-              _buildAnalyticsItem(context, '${data.totalExams}', 'statistics.exams', Icons.assignment),
-              _buildAnalyticsItem(context, '${data.totalCategories}', 'statistics.categories', Icons.category),
-              _buildAnalyticsItem(context, '${data.averageScore.toStringAsFixed(1)}%', 'statistics.avg_score', Icons.analytics),
+              _buildAnalyticsItem(context, '${data.totalUsers}',
+                  'statistics.users', Icons.people),
+              _buildAnalyticsItem(context, '${data.totalExams}',
+                  'statistics.exams', Icons.assignment),
+              _buildAnalyticsItem(context, '${data.totalCategories}',
+                  'statistics.categories', Icons.category),
+              _buildAnalyticsItem(
+                  context,
+                  '${data.averageScore.toStringAsFixed(1)}%',
+                  'statistics.avg_score',
+                  Icons.analytics),
             ],
           ),
         ],
@@ -104,16 +117,20 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
     );
   }
 
-  Widget _buildAnalyticsItem(BuildContext context, String value, String labelKey, IconData icon) {
+  Widget _buildAnalyticsItem(
+      BuildContext context, String value, String labelKey, IconData icon) {
     final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Icon(icon, size: 20, color: colorScheme.primary.withValues(alpha: 0.6)),
         const SizedBox(height: 4),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        Text(value,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         Text(
           AppLocalization.of(context).translate(labelKey),
-          style: TextStyle(fontSize: 10, color: colorScheme.onSurface.withValues(alpha: 0.5)),
+          style: TextStyle(
+              fontSize: 10,
+              color: colorScheme.onSurface.withValues(alpha: 0.5)),
         ),
       ],
     );
@@ -124,24 +141,29 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppLocalization.of(context).translate('statistics.overall_performance'),
+          AppLocalization.of(context)
+              .translate('statistics.overall_performance'),
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         Row(
           children: [
-            _buildStatCard(context, stats.totalExams.toString(), 'statistics.total_exams', Icons.assignment),
+            _buildStatCard(context, stats.totalExams.toString(),
+                'statistics.total_exams', Icons.assignment),
             const SizedBox(width: 12),
-            _buildStatCard(context, '${stats.averageScore.toStringAsFixed(1)}%', 'statistics.avg_score', Icons.analytics),
+            _buildStatCard(context, '${stats.averageScore.toStringAsFixed(1)}%',
+                'statistics.avg_score', Icons.analytics),
             const SizedBox(width: 12),
-            _buildStatCard(context, '${stats.highestScore.toStringAsFixed(0)}%', 'statistics.best_score', Icons.emoji_events),
+            _buildStatCard(context, '${stats.highestScore.toStringAsFixed(0)}%',
+                'statistics.best_score', Icons.emoji_events),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildStatCard(BuildContext context, String value, String labelKey, IconData icon) {
+  Widget _buildStatCard(
+      BuildContext context, String value, String labelKey, IconData icon) {
     final colorScheme = Theme.of(context).colorScheme;
     return Expanded(
       child: Container(
@@ -155,10 +177,14 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
           children: [
             Icon(icon, color: colorScheme.primary),
             const SizedBox(height: 8),
-            Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            Text(value,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             Text(
               AppLocalization.of(context).translate(labelKey),
-              style: TextStyle(fontSize: 12, color: colorScheme.onSurface.withValues(alpha: 0.6)),
+              style: TextStyle(
+                  fontSize: 12,
+                  color: colorScheme.onSurface.withValues(alpha: 0.6)),
               textAlign: TextAlign.center,
             ),
           ],
@@ -167,16 +193,19 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
     );
   }
 
-  Widget _buildCategoryPerformance(BuildContext context, List<CategoryPerformance> categories) {
+  Widget _buildCategoryPerformance(
+      BuildContext context, List<CategoryPerformance> categories) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppLocalization.of(context).translate('statistics.category_performance'),
+          AppLocalization.of(context)
+              .translate('statistics.category_performance'),
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
-        ...categories.map((category) => _CategoryPerformanceRow(category: category)),
+        ...categories
+            .map((category) => _CategoryPerformanceRow(category: category)),
       ],
     );
   }
@@ -195,8 +224,10 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
               Text(error, textAlign: TextAlign.center),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () => ref.read(statisticsProvider.notifier).refreshAll(),
-                child: Text(AppLocalization.of(context).translate('common.retry')),
+                onPressed: () =>
+                    ref.read(statisticsProvider.notifier).refreshAll(),
+                child:
+                    Text(AppLocalization.of(context).translate('common.retry')),
               ),
             ],
           ),
@@ -208,7 +239,8 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
   Widget _buildEmptyState(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(AppLocalization.of(context).translate('statistics.no_data')),
+        child:
+            Text(AppLocalization.of(context).translate('statistics.no_data')),
       ),
     );
   }
@@ -223,7 +255,8 @@ class _CategoryPerformanceRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final score = category.averageScore;
-    final color = score >= 80 ? Colors.green : (score >= 60 ? Colors.orange : Colors.red);
+    final color =
+        score >= 80 ? Colors.green : (score >= 60 ? Colors.orange : Colors.red);
 
     return InkWell(
       onTap: () => Navigator.push(
@@ -243,7 +276,8 @@ class _CategoryPerformanceRow extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(category.categoryName, style: const TextStyle(fontWeight: FontWeight.w600)),
+                  child: Text(category.categoryName,
+                      style: const TextStyle(fontWeight: FontWeight.w600)),
                 ),
                 Text(
                   '%${score.toStringAsFixed(1)}',

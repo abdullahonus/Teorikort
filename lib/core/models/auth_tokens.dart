@@ -4,7 +4,7 @@ class AuthTokens {
 
   AuthTokens({
     required this.accessToken,
-     this.refreshToken,
+    this.refreshToken,
   });
 
   factory AuthTokens.fromJson(Map<String, dynamic> json) {
