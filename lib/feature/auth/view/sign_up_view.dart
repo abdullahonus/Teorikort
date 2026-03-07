@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
-import 'package:teorikort/core/widgets/app_loading_widget.dart';
+import 'package:teorikort/core/widgets/auth_button.dart';
 
 import '../provider/auth_provider.dart';
 import 'sign_in_view.dart';
@@ -184,23 +184,10 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                 },
               ),
               const SizedBox(height: 24),
-              ElevatedButton(
+              AuthButton(
                 onPressed: isLoading ? null : _handleSignUp,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  textStyle: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onPrimary,
-                  ),
-                ),
-                child: isLoading
-                    ? const AppLoadingWidget()
-                    : Text(
-                        AppLocalization.of(context).translate('auth.sign_up'),
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.primary,
-                        ),
-                      ),
+                isLoading: isLoading,
+                text: AppLocalization.of(context).translate('auth.sign_up'),
               ),
               if (error != null)
                 Padding(
