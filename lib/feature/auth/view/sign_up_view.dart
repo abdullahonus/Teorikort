@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
+
 import '../provider/auth_provider.dart';
 import 'sign_in_view.dart';
-import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class SignUpView extends ConsumerStatefulWidget {
   const SignUpView({super.key});
@@ -60,9 +61,19 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,
+              color: Theme.of(context).colorScheme.primary),
+          onPressed: () => Navigator.pop(context),
+        ),
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
         backgroundColor: Theme.of(context).colorScheme.surface,
         title: Text(
-            AppLocalization.of(context).translate('auth.sign_up_title')),
+          AppLocalization.of(context).translate('auth.sign_up_title'),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -181,8 +192,8 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                 ),
                 child: isLoading
                     ? const AppLoadingWidget()
-                    : Text(AppLocalization.of(context)
-                        .translate('auth.sign_up')),
+                    : Text(
+                        AppLocalization.of(context).translate('auth.sign_up')),
               ),
               if (error != null)
                 Padding(

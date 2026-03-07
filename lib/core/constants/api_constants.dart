@@ -70,6 +70,7 @@ class ApiConstants {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
+    'app': 'taxi',
   };
 
   // Auth Headers with token
@@ -96,7 +97,7 @@ class ApiConstants {
   static const int serverError = 500;
 
   // Default Parameters
-  static const String defaultLanguage = 'tr';
+  static const String defaultLanguage = 'en';
   static const int defaultLimit = 10;
   static const int defaultPage = 1;
 }
