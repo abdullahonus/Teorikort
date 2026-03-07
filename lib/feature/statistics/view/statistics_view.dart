@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
-import '../provider/statistics_provider.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
+
 import '../model/app_analytics.dart';
 import '../model/statistics_data.dart';
+import '../provider/statistics_provider.dart';
 import 'category_statistics_view.dart';
-import 'package:teorikort/core/widgets/app_loading_widget.dart';
+import 'exam_results_view.dart';
 
 class StatisticsView extends ConsumerStatefulWidget {
   const StatisticsView({super.key});
@@ -53,6 +55,11 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
               _buildAnalyticsBanner(context, state.analytics!),
               const SizedBox(height: 24),
             ],
+
+            // "Sınav Sonuçları" Button
+            _buildExamResultsSection(context),
+            const SizedBox(height: 24),
+
             _buildOverallStats(context, statistics),
             const SizedBox(height: 24),
             if (statistics.categoryPerformance.isNotEmpty)
@@ -159,6 +166,69 @@ class _StatisticsViewState extends ConsumerState<StatisticsView> {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildExamResultsSection(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ExamResultsView()),
+        );
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        decoration: BoxDecoration(
+          color: colorScheme.secondary.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(16),
+          border:
+              Border.all(color: colorScheme.secondary.withValues(alpha: 0.2)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: colorScheme.secondary.withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.history, color: colorScheme.secondary),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppLocalization.of(context)
+                        .translate('statistics.exam_results'),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    AppLocalization.of(context)
+                            .translate('statistics.recent_exams') +
+                        ' / ' +
+                        AppLocalization.of(context)
+                            .translate('exam_list.completed_exams'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: colorScheme.onSurface.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.chevron_right, color: colorScheme.secondary),
+          ],
+        ),
+      ),
     );
   }
 

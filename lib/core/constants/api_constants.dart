@@ -39,6 +39,7 @@ class ApiConstants {
 
   // Exam Results Endpoints
   static const String examResults = '/exam-results';
+  static String examResultDetail(String id) => '/exam-results/$id';
 
   // Statistics Endpoints
   static const String statistics = '/statistics';

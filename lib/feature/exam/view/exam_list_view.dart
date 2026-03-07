@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:collection/collection.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
-import '../provider/exam_provider.dart';
-import '../model/exam_category.dart';
-import '../model/exam_result.dart';
-import 'exam_session_view.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
+
+import '../model/exam_category.dart';
+import '../provider/exam_provider.dart';
+import 'exam_session_view.dart';
 
 class ExamListView extends ConsumerWidget {
   const ExamListView({super.key});
@@ -52,14 +51,6 @@ class ExamListView extends ConsumerWidget {
                       _buildActiveExams(context, ref, state.categories)
                           .sublist(1),
                     ),
-                  const SizedBox(height: 24),
-                  _buildExamSection(
-                    context,
-                    AppLocalization.of(context)
-                        .translate('exam_list.completed_exams'),
-                    _buildCompletedExams(
-                        context, state.history, state.categories),
-                  ),
                 ],
               ),
             ),
@@ -131,48 +122,6 @@ class ExamListView extends ConsumerWidget {
       );
     }).toList();
   }
-
-  List<Widget> _buildCompletedExams(BuildContext context,
-      List<ExamResult> history, List<ExamCategory> categories) {
-    if (history.isEmpty) {
-      return [
-        Center(
-          child: Text(
-            AppLocalization.of(context)
-                .translate('exam_list.no_completed_exams'),
-            style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context)
-                  .colorScheme
-                  .onSurface
-                  .withValues(alpha: 0.6),
-            ),
-          ),
-        ),
-      ];
-    }
-
-    // Grouping logic
-    final grouped = groupBy(history, (ExamResult r) => r.categoryId.toString());
-
-    return grouped.entries.map((entry) {
-      final categoryId = entry.key;
-      final results = entry.value;
-      results.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      final latest = results.first;
-      final categoryData =
-          categories.firstWhereOrNull((c) => c.id.toString() == categoryId);
-
-      return _ExamItem(
-        title: categoryData?.title ?? latest.categoryTitle,
-        subtitle:
-            '${latest.correctCount}/${latest.totalQuestions} ${AppLocalization.of(context).translate('exam_list.correct')}',
-        duration: '${latest.score.toStringAsFixed(0)}%',
-        iconUrl: categoryData?.imageUrl ?? '',
-        isCompleted: true,
-      );
-    }).toList();
-  }
 }
 
 class _ExamItem extends StatelessWidget {
@@ -181,7 +130,6 @@ class _ExamItem extends StatelessWidget {
   final String duration;
   final String iconUrl;
   final bool isActive;
-  final bool isCompleted;
   final VoidCallback? onTap;
 
   const _ExamItem({
@@ -190,7 +138,6 @@ class _ExamItem extends StatelessWidget {
     required this.duration,
     required this.iconUrl,
     this.isActive = false,
-    this.isCompleted = false,
     this.onTap,
   });
 
@@ -299,7 +246,7 @@ class _ExamItem extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       child: Icon(
-        isCompleted ? Icons.check : Icons.play_arrow,
+        Icons.play_arrow,
         color: colorScheme.primary,
         size: 20,
       ),

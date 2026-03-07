@@ -215,7 +215,8 @@ class QuizService extends BaseApiService {
         List<dynamic> list = [];
         if (json is Map<String, dynamic>) {
           list = (json['results'] as List? ??
-              json['data'] as List? ??
+              (json['data'] is Map ? json['data']['results'] as List? : null) ??
+              (json['data'] is List ? json['data'] as List? : null) ??
               json['items'] as List? ??
               []);
         } else if (json is List) {
@@ -227,94 +228,13 @@ class QuizService extends BaseApiService {
       },
     );
   }
-}
 
-// These models are kept here for now as they are specific to the Quiz API responses
-// but renamed or adjusted to avoid collisions if necessary.
-// However, if they are exactly the same as in other files, they should be removed.
-
-class MockExamData {
-  final QuizExamInfo examInfo;
-  final List<QuizQuestion> questions;
-
-  MockExamData({
-    required this.examInfo,
-    required this.questions,
-  });
-
-  factory MockExamData.fromJson(Map<String, dynamic> json) {
-    // API response: { total_questions, questions } - exam_info yok
-    final infoJson = json.containsKey('exam_info')
-        ? json['exam_info'] as Map<String, dynamic>
-        : <String, dynamic>{
-            'total_questions': json['total_questions'] ?? 0,
-            'duration': 45,
-            'passing_score': 70,
-          };
-
-    List<dynamic> questionsRaw = json['questions'] as List? ?? [];
-    if (questionsRaw.isEmpty && json['data'] is List) {
-      questionsRaw = json['data'] as List;
-    }
-
-    final questions = questionsRaw
-        .whereType<Map<String, dynamic>>()
-        .map((q) => QuizQuestion.fromJson(q))
-        .toList();
-
-    return MockExamData(
-      examInfo: QuizExamInfo.fromJson(infoJson),
-      questions: questions,
+  // Get detailed exam result
+  Future<ApiResponse<ExamResultItem>> getExamResultDetail(int id) async {
+    return await handleResponse<ExamResultItem>(
+      get(ApiConstants.examResultDetail(id.toString())),
+      (dynamic json) => ExamResultItem.fromJson(json as Map<String, dynamic>),
     );
-  }
-}
-
-class QuizExamInfo {
-  final String id;
-  final Map<String, String> title;
-  final Map<String, String> description;
-  final int duration;
-  final int totalQuestions;
-  final int passingScore;
-  final String difficulty;
-
-  QuizExamInfo({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.duration,
-    required this.totalQuestions,
-    required this.passingScore,
-    required this.difficulty,
-  });
-
-  factory QuizExamInfo.fromJson(Map<String, dynamic> json) {
-    return QuizExamInfo(
-      id: json['id']?.toString() ?? '',
-      title: _parseMultiLangFieldStatic(json['title']),
-      description: _parseMultiLangFieldStatic(json['description']),
-      duration: json['duration'] is int
-          ? json['duration']
-          : int.tryParse(json['duration']?.toString() ?? '45') ?? 45,
-      totalQuestions: json['total_questions'] is int
-          ? json['total_questions']
-          : int.tryParse(json['total_questions']?.toString() ?? '0') ?? 0,
-      passingScore: json['passing_score'] is int
-          ? json['passing_score']
-          : int.tryParse(json['passing_score']?.toString() ?? '35') ??
-              35, // Default passing score
-      difficulty: json['difficulty']?.toString() ?? 'medium',
-    );
-  }
-
-  // Helper method for static parsing
-  static Map<String, String> _parseMultiLangFieldStatic(dynamic field) {
-    if (field is Map<String, dynamic>) {
-      return field.map((key, value) => MapEntry(key, value?.toString() ?? ''));
-    } else if (field is String) {
-      return {'tr': field, 'en': field};
-    }
-    return {'tr': field?.toString() ?? '', 'en': field?.toString() ?? ''};
   }
 }
 
