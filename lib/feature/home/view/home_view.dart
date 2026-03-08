@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
-import 'package:teorikort/feature/exam/view/exam_list_view.dart';
 import 'package:teorikort/feature/exam/view/practice_main_category_view.dart';
+import 'package:teorikort/feature/topics/view/traffic_signs_view.dart';
 
 import '../../../features/home/data/services/daily_tip_service.dart';
 import '../../../features/home/data/services/home_service.dart';
@@ -111,12 +111,12 @@ class HomeView extends ConsumerWidget {
             Expanded(
               child: _buildQuickStartCard(
                 context,
-                'home.mock_exam',
-                Icons.assignment,
+                'signs.title',
+                Icons.warning_amber_rounded,
                 Theme.of(context).colorScheme.primary,
                 () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const ExamListView()),
+                  MaterialPageRoute(builder: (_) => const TrafficSignsView()),
                 ),
               ),
             ),
