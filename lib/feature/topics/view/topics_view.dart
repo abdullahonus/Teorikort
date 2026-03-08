@@ -45,12 +45,13 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
             child: Text(
               AppLocalization.of(context).translate('topics.subtitle'),
               style: TextStyle(
                 fontSize: 14,
-                color: colorScheme.onSurface.withValues(alpha: 0.6),
+                fontWeight: FontWeight.w500,
+                color: colorScheme.onSurface.withValues(alpha: 0.5),
               ),
             ),
           ),
@@ -58,14 +59,13 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
             child: RefreshIndicator(
               onRefresh: () => ref.read(topicProvider.notifier).refresh(),
               child: ListView.separated(
-                padding: const EdgeInsets.all(16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 itemCount: state.topics.length + 1,
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 12),
                 itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return _buildSignsCard(context);
-                  }
+                  if (index == 0) return _buildSignsCard(context);
                   return _buildTopicCard(context, state.topics[index - 1]);
                 },
               ),
@@ -81,8 +81,7 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
     final l10n = AppLocalization.of(context);
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 0,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -91,12 +90,12 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
           MaterialPageRoute(builder: (_) => const TrafficSignsView()),
         ),
         child: Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
                 colorScheme.primary,
-                colorScheme.primary.withValues(alpha: 0.8)
+                colorScheme.primary.withValues(alpha: 0.85)
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -108,12 +107,12 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: const Icon(Icons.warning_amber_rounded,
-                    color: Colors.white, size: 28),
+                    color: Colors.white, size: 32),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 20),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,7 +136,7 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios,
+              const Icon(Icons.arrow_forward_ios_rounded,
                   color: Colors.white, size: 16),
             ],
           ),
@@ -152,12 +151,12 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
     return Container(
       decoration: BoxDecoration(
         color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: colorScheme.outline.withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
-            color: colorScheme.shadow.withValues(alpha: 0.05),
-            blurRadius: 10,
+            color: colorScheme.shadow.withValues(alpha: 0.04),
+            blurRadius: 12,
             offset: const Offset(0, 4),
           ),
         ],
@@ -165,30 +164,24 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) => TopicDetailView(
-                    topicId: topic.id.toString(), initialTopic: topic)),
+              builder: (_) => TopicDetailView(
+                  topicId: topic.id.toString(), initialTopic: topic),
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 Container(
-                  width: 56,
-                  height: 56,
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        colorScheme.primary.withValues(alpha: 0.1),
-                        colorScheme.primary.withValues(alpha: 0.05),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(16),
+                    color: colorScheme.primary.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(18),
                   ),
                   child: Icon(Icons.menu_book_rounded,
                       color: colorScheme.primary, size: 28),
@@ -203,15 +196,15 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                         style: const TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
-                          letterSpacing: -0.5,
+                          letterSpacing: -0.4,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 4),
                       AppHtmlText(
                         htmlData: topic.description,
                         style: TextStyle(
                           fontSize: 13,
-                          color: colorScheme.onSurface.withValues(alpha: 0.6),
+                          color: colorScheme.onSurface.withValues(alpha: 0.5),
                           height: 1.3,
                         ),
                         maxLines: 2,
@@ -223,8 +216,8 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                 const SizedBox(width: 8),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
-                  color: colorScheme.onSurface.withValues(alpha: 0.2),
-                  size: 16,
+                  color: colorScheme.onSurface.withValues(alpha: 0.15),
+                  size: 14,
                 ),
               ],
             ),
@@ -235,20 +228,23 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
   }
 
   Widget _buildErrorState(BuildContext context, String error) {
+    final l10n = AppLocalization.of(context);
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.menu_book, size: 64, color: Colors.grey),
-            const SizedBox(height: 16),
-            Text(error, textAlign: TextAlign.center),
-            const SizedBox(height: 24),
-            ElevatedButton(
+            const Icon(Icons.menu_book_rounded, size: 64, color: Colors.grey),
+            const SizedBox(height: 20),
+            Text(error,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 32),
+            FilledButton.icon(
               onPressed: () => ref.read(topicProvider.notifier).loadTopics(),
-              child:
-                  Text(AppLocalization.of(context).translate('common.retry')),
+              icon: const Icon(Icons.refresh_rounded),
+              label: Text(l10n.translate('common.retry')),
             ),
           ],
         ),

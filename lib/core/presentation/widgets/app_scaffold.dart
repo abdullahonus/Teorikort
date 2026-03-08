@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
-import 'package:teorikort/feature/home/provider/home_provider.dart';
 import 'package:teorikort/feature/home/view/home_view.dart';
+import 'package:teorikort/feature/leaderboard/view/leaderboard_view.dart';
 import 'package:teorikort/feature/profile/provider/profile_provider.dart';
 import 'package:teorikort/feature/profile/view/profile_view.dart';
-import 'package:teorikort/feature/leaderboard/view/leaderboard_view.dart';
+import 'package:teorikort/feature/search/view/search_view.dart';
 import 'package:teorikort/feature/statistics/view/statistics_view.dart';
 import 'package:teorikort/feature/topics/view/topics_view.dart';
-import 'package:teorikort/feature/search/view/search_view.dart';
 
 class AppScaffold extends ConsumerStatefulWidget {
   const AppScaffold({super.key});
@@ -19,7 +18,6 @@ class AppScaffold extends ConsumerStatefulWidget {
 
 class _AppScaffoldState extends ConsumerState<AppScaffold> {
   int _currentIndex = 0;
-  final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   late final List<Widget> _screens = [
     const HomeView(),
@@ -213,23 +211,10 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final homeState = ref.watch(homeProvider);
-
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: _buildAppBar(context, ref),
-      body: Column(
-        children: [
-          if (homeState.isLoading) const LinearProgressIndicator(),
-          Expanded(
-            child: RefreshIndicator(
-              key: _refreshKey,
-              onRefresh: () => ref.read(homeProvider.notifier).refresh(),
-              child: _screens[_currentIndex],
-            ),
-          ),
-        ],
-      ),
+      body: _screens[_currentIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (index) {
