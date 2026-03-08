@@ -1,6 +1,7 @@
 import 'package:teorikort/core/models/api_response.dart';
 import 'package:teorikort/core/services/logger_service.dart';
 import 'package:teorikort/domain/repository/i_statistics_repository.dart';
+import 'package:teorikort/feature/statistics/model/app_analytics.dart' as model;
 import 'package:teorikort/feature/statistics/model/category_statistics.dart'
     as model;
 import 'package:teorikort/feature/statistics/model/statistics_data.dart'
@@ -11,6 +12,26 @@ class StatisticsRepositoryImpl implements IStatisticsRepository {
   final StatisticsService _service;
 
   StatisticsRepositoryImpl(this._service);
+
+  @override
+  Future<ApiResponse<model.AppAnalytics>> getAnalytics() async {
+    try {
+      final response = await _service.getAppAnalyticsData();
+      if (response.success && response.data != null) {
+        final legacy = response.data!;
+        return ApiResponse.success(model.AppAnalytics(
+          totalUsers: legacy.totalUsers,
+          totalExams: legacy.totalExams,
+          totalCategories: legacy.totalCategories,
+          averageScore: legacy.averageScore,
+        ));
+      }
+      return ApiResponse.error(response.message);
+    } catch (e) {
+      LoggerService.error('StatisticsRepositoryImpl.getAnalytics', e);
+      return ApiResponse.error(e.toString());
+    }
+  }
 
   @override
   Future<ApiResponse<model.StatisticsData>> getStatistics() async {

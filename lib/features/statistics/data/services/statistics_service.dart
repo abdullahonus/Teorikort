@@ -28,4 +28,15 @@ class StatisticsService extends BaseApiService {
       CategoryStatisticsData.fromJson,
     );
   }
+
+  // GET /statistics/analytics
+  Future<ApiResponse<AppAnalyticsData>> getAppAnalyticsData({
+    BuildContext? context,
+  }) async {
+    final language = getCurrentLanguage(context);
+    return await handleResponse<AppAnalyticsData>(
+      get(ApiConstants.analytics, language: language),
+      AppAnalyticsData.fromJson,
+    );
+  }
 }

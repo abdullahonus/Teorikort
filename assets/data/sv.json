@@ -43,7 +43,10 @@
     "avg_score": "snitt. poäng",
     "best_score": "bästa poäng",
     "total_score": "totalpoäng",
-    "highest_score": "högsta"
+    "highest_score": "högsta",
+    "lowest": "Lägsta",
+    "average": "Genomsnitt",
+    "highest": "Högsta"
   },
   "common": {
     "language": "Språk",

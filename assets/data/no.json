@@ -43,7 +43,10 @@
     "avg_score": "gj.sn. poeng",
     "best_score": "beste poeng",
     "total_score": "totalpoeng",
-    "highest_score": "høyeste"
+    "highest_score": "høyeste",
+    "lowest": "Laveste",
+    "average": "Gjennomsnitt",
+    "highest": "Høyeste"
   },
   "common": {
     "language": "Språk",

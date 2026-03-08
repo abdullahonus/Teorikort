@@ -1,8 +1,12 @@
 import 'package:teorikort/core/models/api_response.dart';
+import 'package:teorikort/feature/statistics/model/app_analytics.dart';
 import 'package:teorikort/feature/statistics/model/category_statistics.dart';
 import 'package:teorikort/feature/statistics/model/statistics_data.dart';
 
 abstract class IStatisticsRepository {
+  /// Fetches platform-wide analytics.
+  Future<ApiResponse<AppAnalytics>> getAnalytics();
+
   /// Fetches user-specific statistics.
   Future<ApiResponse<StatisticsData>> getStatistics();
 

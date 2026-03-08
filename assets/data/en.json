@@ -43,7 +43,10 @@
     "avg_score": "avg. score",
     "best_score": "best score",
     "total_score": "total score",
-    "highest_score": "highest"
+    "highest_score": "highest",
+    "lowest": "Lowest",
+    "average": "Average",
+    "highest": "Highest"
   },
   "common": {
     "language": "Language",

@@ -43,6 +43,7 @@ class ApiConstants {
 
   // Statistics Endpoints
   static const String statistics = '/statistics';
+  static const String analytics = '/statistics/analytics';
   static String categoryStatistics(String categoryId) =>
       '/statistics/categories/$categoryId';
 

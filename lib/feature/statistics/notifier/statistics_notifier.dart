@@ -14,6 +14,21 @@ class StatisticsNotifier extends Notifier<StatisticsState> {
   IStatisticsRepository get _repository =>
       ref.read(statisticsRepositoryProvider);
 
+  Future<void> loadAnalytics() async {
+    state = state.copyWith(isLoading: true, clearError: true);
+    try {
+      final response = await _repository.getAnalytics();
+      if (response.success) {
+        state = state.copyWith(analytics: response.data, isLoading: false);
+      } else {
+        state = state.copyWith(error: response.message, isLoading: false);
+      }
+    } catch (e) {
+      LoggerService.error('StatisticsNotifier.loadAnalytics', e);
+      state = state.copyWith(error: e.toString(), isLoading: false);
+    }
+  }
+
   Future<void> loadUserStatistics() async {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
@@ -60,6 +75,7 @@ class StatisticsNotifier extends Notifier<StatisticsState> {
 
   Future<void> refreshAll() async {
     await Future.wait([
+      loadAnalytics(),
       loadUserStatistics(),
     ]);
   }

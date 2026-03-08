@@ -43,7 +43,10 @@
     "avg_score": "ort. puan",
     "best_score": "en iyi puan",
     "total_score": "toplam puan",
-    "highest_score": "en yüksek"
+    "highest_score": "en yüksek",
+    "lowest": "En düşük",
+    "average": "Ortalama",
+    "highest": "En yüksek"
   },
   "common": {
     "language": "Dil",
