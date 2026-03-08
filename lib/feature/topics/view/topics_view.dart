@@ -57,9 +57,11 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: () => ref.read(topicProvider.notifier).refresh(),
-              child: ListView.builder(
+              child: ListView.separated(
                 padding: const EdgeInsets.all(16),
                 itemCount: state.topics.length + 1,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     return _buildSignsCard(context);
@@ -147,60 +149,85 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
   Widget _buildTopicCard(BuildContext context, Topic topic) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 0,
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => TopicDetailView(
-                  topicId: topic.id.toString(), initialTopic: topic)),
-        ),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            border:
-                Border.all(color: colorScheme.outline.withValues(alpha: 0.1)),
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.1)),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.shadow.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: colorScheme.primary.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(Icons.book, color: colorScheme.primary, size: 24),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      topic.title,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w600),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => TopicDetailView(
+                    topicId: topic.id.toString(), initialTopic: topic)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        colorScheme.primary.withValues(alpha: 0.1),
+                        colorScheme.primary.withValues(alpha: 0.05),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                    const SizedBox(height: 4),
-                    AppHtmlText(
-                      htmlData: topic.description,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: colorScheme.onSurface.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(Icons.menu_book_rounded,
+                      color: colorScheme.primary, size: 28),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        topic.title,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: -0.5,
+                        ),
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                      const SizedBox(height: 6),
+                      AppHtmlText(
+                        htmlData: topic.description,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: colorScheme.onSurface.withValues(alpha: 0.6),
+                          height: 1.3,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Icon(Icons.chevron_right,
-                  color: colorScheme.onSurface.withValues(alpha: 0.2)),
-            ],
+                const SizedBox(width: 8),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: colorScheme.onSurface.withValues(alpha: 0.2),
+                  size: 16,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../exam/model/exam_question.dart';
+
 /// Spec: STATE MODEL PATTERN — Equatable + copyWith
 class Topic extends Equatable {
   final int id;
@@ -56,7 +58,7 @@ class Topic extends Equatable {
 
 class TopicDetail extends Equatable {
   final Topic topic;
-  final List<dynamic> questions; // Placeholder until specific model needed
+  final List<ExamQuestion> questions;
 
   const TopicDetail({
     required this.topic,
@@ -66,7 +68,9 @@ class TopicDetail extends Equatable {
   factory TopicDetail.fromJson(Map<String, dynamic> json) {
     return TopicDetail(
       topic: Topic.fromJson(json['course'] ?? {}),
-      questions: json['questions'] as List? ?? [],
+      questions: (json['questions'] as List? ?? [])
+          .map((q) => ExamQuestion.fromJson(q as Map<String, dynamic>))
+          .toList(),
     );
   }
 

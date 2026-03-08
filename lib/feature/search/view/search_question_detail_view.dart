@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/feature/exam/model/exam_question.dart';
 import 'package:teorikort/features/reports/data/services/report_service.dart';
 
@@ -94,8 +95,8 @@ class SearchQuestionDetailView extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Question text
-            Text(
-              question.question,
+            AppHtmlText(
+              htmlData: question.question,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 height: 1.5,
@@ -104,8 +105,15 @@ class SearchQuestionDetailView extends ConsumerWidget {
             const SizedBox(height: 32),
 
             // Options
-            ...question.options.map((option) {
-              final bool isCorrect = option.id == question.correctAnswer;
+            ...question.options.asMap().entries.map((entry) {
+              final int index = entry.key;
+              final option = entry.value;
+
+              final int? correctVal = int.tryParse(question.correctAnswer);
+              final bool isCorrect = option.id == question.correctAnswer ||
+                  (correctVal != null &&
+                      (index + 1 == correctVal || index == correctVal));
+
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(16),
@@ -146,8 +154,8 @@ class SearchQuestionDetailView extends ConsumerWidget {
                     ),
                     const SizedBox(width: 16),
                     Expanded(
-                      child: Text(
-                        option.text,
+                      child: AppHtmlText(
+                        htmlData: option.text,
                         style: TextStyle(
                           color: isCorrect
                               ? colorScheme.primary
@@ -199,8 +207,8 @@ class SearchQuestionDetailView extends ConsumerWidget {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  Text(
-                    question.explanation,
+                  AppHtmlText(
+                    htmlData: question.explanation,
                     style: theme.textTheme.bodyLarge?.copyWith(
                       height: 1.6,
                       color: colorScheme.onSurface,

@@ -1,8 +1,9 @@
 import '../../../core/models/api_response.dart';
 import '../../../core/services/logger_service.dart';
 import '../../../domain/repository/i_topic_repository.dart';
-import '../../../feature/topics/model/topic.dart' as model;
-import '../../../feature/topics/model/traffic_sign.dart' as model;
+import '../../../feature/exam/model/exam_question.dart';
+import '../../../feature/topics/model/topic.dart' as topic_model;
+import '../../../feature/topics/model/traffic_sign.dart' as sign_model;
 import '../../../features/topics/data/services/topic_service.dart';
 import '../../../features/topics/data/services/traffic_sign_service.dart';
 
@@ -17,12 +18,12 @@ class TopicRepositoryImpl implements ITopicRepository {
         _trafficSignService = trafficSignService;
 
   @override
-  Future<ApiResponse<List<model.Topic>>> getTopics() async {
+  Future<ApiResponse<List<topic_model.Topic>>> getTopics() async {
     try {
       final response = await _topicService.getTopics();
       if (response.success && response.data != null) {
         final topics = response.data!
-            .map((t) => model.Topic(
+            .map((t) => topic_model.Topic(
                   id: t.id,
                   title: t.title,
                   description: t.description,
@@ -41,13 +42,14 @@ class TopicRepositoryImpl implements ITopicRepository {
   }
 
   @override
-  Future<ApiResponse<model.TopicDetail>> getTopicById(String topicId) async {
+  Future<ApiResponse<topic_model.TopicDetail>> getTopicById(
+      String topicId) async {
     try {
       final response = await _topicService.getTopicById(topicId);
       if (response.success && response.data != null) {
         final legacyDetail = response.data!;
-        return ApiResponse.success(model.TopicDetail(
-          topic: model.Topic(
+        return ApiResponse.success(topic_model.TopicDetail(
+          topic: topic_model.Topic(
             id: legacyDetail.course.id,
             title: legacyDetail.course.title,
             description: legacyDetail.course.description,
@@ -55,7 +57,9 @@ class TopicRepositoryImpl implements ITopicRepository {
             createdAt: legacyDetail.course.createdAt,
             updatedAt: legacyDetail.course.updatedAt,
           ),
-          questions: legacyDetail.questions,
+          questions: legacyDetail.questions
+              .map((q) => ExamQuestion.fromJson(q as Map<String, dynamic>))
+              .toList(),
         ));
       }
       return ApiResponse.error(response.message);
@@ -66,15 +70,15 @@ class TopicRepositoryImpl implements ITopicRepository {
   }
 
   @override
-  Future<ApiResponse<model.TrafficSignResponse>> getTrafficSigns(
+  Future<ApiResponse<sign_model.TrafficSignResponse>> getTrafficSigns(
       {int page = 1}) async {
     try {
       final response = await _trafficSignService.getSigns(page: page);
       if (response.success && response.data != null) {
         final legacyRes = response.data!;
-        return ApiResponse.success(model.TrafficSignResponse(
+        return ApiResponse.success(sign_model.TrafficSignResponse(
           signs: legacyRes.signs
-              .map((s) => model.TrafficSign(
+              .map((s) => sign_model.TrafficSign(
                     id: s.id,
                     title: s.title,
                     slug: s.slug,
@@ -82,7 +86,7 @@ class TopicRepositoryImpl implements ITopicRepository {
                     imageUrl: s.imageUrl,
                   ))
               .toList(),
-          pagination: model.PaginationData(
+          pagination: sign_model.PaginationData(
             currentPage: legacyRes.pagination.currentPage,
             lastPage: legacyRes.pagination.lastPage,
             total: legacyRes.pagination.total,
@@ -97,12 +101,13 @@ class TopicRepositoryImpl implements ITopicRepository {
   }
 
   @override
-  Future<ApiResponse<model.TrafficSign>> getTrafficSignById(String id) async {
+  Future<ApiResponse<sign_model.TrafficSign>> getTrafficSignById(
+      String id) async {
     try {
       final response = await _trafficSignService.getSignById(id);
       if (response.success && response.data != null) {
         final s = response.data!;
-        return ApiResponse.success(model.TrafficSign(
+        return ApiResponse.success(sign_model.TrafficSign(
           id: s.id,
           title: s.title,
           slug: s.slug,

@@ -92,32 +92,29 @@ class HomeView extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 16),
-        Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: _buildQuickStartCard(
+            _buildQuickStartCard(
+              context,
+              'home.practice_exam',
+              Icons.play_circle,
+              Theme.of(context).colorScheme.primary,
+              () => Navigator.push(
                 context,
-                'home.practice_exam',
-                Icons.play_circle,
-                Theme.of(context).colorScheme.primary,
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => const PracticeMainCategoryView()),
-                ),
+                MaterialPageRoute(
+                    builder: (_) => const PracticeMainCategoryView()),
               ),
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: _buildQuickStartCard(
+            const SizedBox(height: 16),
+            _buildQuickStartCard(
+              context,
+              'signs.title',
+              Icons.warning_amber_rounded,
+              Theme.of(context).colorScheme.primary,
+              () => Navigator.push(
                 context,
-                'signs.title',
-                Icons.warning_amber_rounded,
-                Theme.of(context).colorScheme.primary,
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const TrafficSignsView()),
-                ),
+                MaterialPageRoute(builder: (_) => const TrafficSignsView()),
               ),
             ),
           ],
