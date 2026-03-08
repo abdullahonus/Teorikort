@@ -1,13 +1,16 @@
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
+
 import '../../core/constants/api_constants.dart';
 import '../../core/constants/app_config.dart';
 import '../../core/exceptions/api_exception.dart';
 import '../../core/models/api_response.dart';
+import '../../core/providers/locale_provider.dart';
 import '../../core/services/logger_service.dart';
-import '../../core/localization/app_localization.dart';
 
 /// Spec'teki `NetworkManager` karşılığı.
 /// Tüm servisler bu sınıftan extend eder veya inject alır.
@@ -16,10 +19,12 @@ import '../../core/localization/app_localization.dart';
 class NetworkManager {
   late final Dio _dio;
   final FlutterSecureStorage _storage;
+  final Ref? _ref;
   static const String _tokenKey = 'auth_token';
 
-  NetworkManager({FlutterSecureStorage? storage})
-      : _storage = storage ?? const FlutterSecureStorage() {
+  NetworkManager({FlutterSecureStorage? storage, Ref? ref})
+      : _storage = storage ?? const FlutterSecureStorage(),
+        _ref = ref {
     _initializeDio();
   }
 
@@ -42,8 +47,16 @@ class NetworkManager {
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
         }
+
+        // ─── Dynamic Language Configuration ───
+        // Get current language from Riverpod state
+        final languageCode = _ref?.read(localeProvider).languageCode ??
+            ApiConstants.defaultLanguage;
+
+        options.headers['Accept-Language'] = languageCode;
+
         if (!options.queryParameters.containsKey('language')) {
-          options.queryParameters['language'] = ApiConstants.defaultLanguage;
+          options.queryParameters['language'] = languageCode;
         }
         if (AppConfig.enableApiLogging) {
           LoggerService.api('REQUEST', options.path, {

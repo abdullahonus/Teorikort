@@ -1,13 +1,15 @@
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:teorikort/core/localization/app_localization.dart';
+
 import '../constants/api_constants.dart';
 import '../constants/app_config.dart';
-import '../models/api_response.dart';
 import '../exceptions/api_exception.dart';
+import '../models/api_response.dart';
 import 'logger_service.dart';
-import '../localization/app_localization.dart';
-import 'package:flutter/material.dart';
 
 class BaseApiService {
   late final Dio _dio;
@@ -22,9 +24,9 @@ class BaseApiService {
     _dio = Dio(BaseOptions(
       baseUrl: ApiConstants.baseUrl,
       headers: ApiConstants.headers,
-      connectTimeout: Duration(seconds: AppConfig.apiTimeoutSeconds),
-      receiveTimeout: Duration(seconds: AppConfig.apiTimeoutSeconds),
-      sendTimeout: Duration(seconds: AppConfig.apiTimeoutSeconds),
+      connectTimeout: const Duration(seconds: AppConfig.apiTimeoutSeconds),
+      receiveTimeout: const Duration(seconds: AppConfig.apiTimeoutSeconds),
+      sendTimeout: const Duration(seconds: AppConfig.apiTimeoutSeconds),
     ));
 
     _setupInterceptors();
@@ -40,9 +42,16 @@ class BaseApiService {
           options.headers['Authorization'] = 'Bearer $token';
         }
 
+        // ─── Dynamic Language Configuration ───
+        final prefs = await SharedPreferences.getInstance();
+        final languageCode =
+            prefs.getString('locale') ?? ApiConstants.defaultLanguage;
+
+        options.headers['Accept-Language'] = languageCode;
+
         // Auto-add language parameter if not exists
         if (!options.queryParameters.containsKey('language')) {
-          options.queryParameters['language'] = ApiConstants.defaultLanguage;
+          options.queryParameters['language'] = languageCode;
         }
 
         if (AppConfig.enableApiLogging) {

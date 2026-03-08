@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
-import '../provider/leaderboard_provider.dart';
-import '../model/leaderboard_entry.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
+
+import '../model/leaderboard_entry.dart';
+import '../provider/leaderboard_provider.dart';
 
 class LeaderboardView extends ConsumerStatefulWidget {
   const LeaderboardView({super.key});
@@ -31,13 +32,14 @@ class _LeaderboardViewState extends ConsumerState<LeaderboardView> {
         backgroundColor: colorScheme.surface,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back,
+              color: Theme.of(context).colorScheme.primary),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           AppLocalization.of(context).translate('leaderboard.screen_title'),
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
               ),
         ),
         centerTitle: true,
@@ -49,8 +51,8 @@ class _LeaderboardViewState extends ConsumerState<LeaderboardView> {
         ],
       ),
       body: state.isLoading && state.entries.isEmpty
-          ? Center(
-              child: const AppLoadingWidget(),
+          ? const Center(
+              child: AppLoadingWidget(),
             )
           : RefreshIndicator(
               onRefresh: () => ref.read(leaderboardProvider.notifier).refresh(),

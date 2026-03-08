@@ -28,8 +28,20 @@ class ExamResultDetailView extends ConsumerWidget {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: Text(l10n.translate('quiz_result.detailed_results')),
-        backgroundColor: colorScheme.surface,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,
+              color: Theme.of(context).colorScheme.primary),
+          onPressed: () => Navigator.pop(context),
+        ),
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        title: Text(
+          AppLocalization.of(context).translate('quiz_result.detailed_results'),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        elevation: 0,
       ),
       body: asyncValue.when(
         loading: () => const AppLoadingWidget.fullscreen(),

@@ -42,7 +42,7 @@ import '../network/network_manager.dart';
 // ──────────────────────────────────────────────────────────────────────────────
 
 final networkManagerProvider = Provider<NetworkManager>((ref) {
-  final manager = NetworkManager();
+  final manager = NetworkManager(ref: ref);
   ref.onDispose(manager.dispose);
   return manager;
 });

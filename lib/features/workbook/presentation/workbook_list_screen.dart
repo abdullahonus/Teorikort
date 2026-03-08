@@ -32,22 +32,20 @@ class _WorkbookListScreenState extends ConsumerState<WorkbookListScreen> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: Text(l10n.translate('workbook.title')),
-        backgroundColor: colorScheme.surface,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,
+              color: Theme.of(context).colorScheme.primary),
+          onPressed: () => Navigator.pop(context),
+        ),
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        title: Text(
+          AppLocalization.of(context).translate('workbook.title'),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
         elevation: 0,
-        actions: [
-          if (state.isLoading)
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Center(
-                child: SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
-              ),
-            ),
-        ],
       ),
       body: RefreshIndicator(
         onRefresh: () =>
