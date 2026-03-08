@@ -407,7 +407,9 @@
     "in_progress": "In Progress",
     "no_workbooks": "You don't have any workbooks yet.",
     "no_workbooks_desc": "You don't have any workbooks yet.",
-    "minutes": "min"
+    "minutes": "min",
+    "subtitle": "My Saved Studies",
+    "delete_confirm": "Are you sure you want to delete this study record?"
   },
   "report": {
     "title": "Report Question",

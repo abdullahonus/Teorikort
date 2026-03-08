@@ -397,7 +397,9 @@
     "in_progress": "Pågår",
     "no_workbooks": "Du har inga arbetsböcker än.",
     "no_workbooks_desc": "Du har inga arbetsböcker än.",
-    "minutes": "min"
+    "minutes": "min",
+    "subtitle": "Mina sparade studier",
+    "delete_confirm": "Är du säker på att du vill ta bort den här studieposten?"
   },
   "report": {
     "title": "Rapportera fråga",

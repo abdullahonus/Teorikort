@@ -1,67 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 import '../../../../feature/topics/view/topic_detail_view.dart';
 import '../data/models/workbook_data.dart';
-import '../data/services/workbook_service.dart';
+import 'provider/workbook_provider.dart';
 
-class WorkbookListScreen extends StatefulWidget {
+class WorkbookListScreen extends ConsumerStatefulWidget {
   const WorkbookListScreen({super.key});
 
   @override
-  State<WorkbookListScreen> createState() => _WorkbookListScreenState();
+  ConsumerState<WorkbookListScreen> createState() => _WorkbookListScreenState();
 }
 
-class _WorkbookListScreenState extends State<WorkbookListScreen> {
-  final WorkbookService _workbookService = WorkbookService();
-  List<Workbook> _workbooks = [];
-  bool _isLoading = true;
-  String? _errorMessage;
-  bool _isFirstLoad = true;
-
+class _WorkbookListScreenState extends ConsumerState<WorkbookListScreen> {
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_isFirstLoad) {
-      _isFirstLoad = false;
-      _fetchWorkbooks();
-    }
-  }
-
-  Future<void> _fetchWorkbooks() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-
-    try {
-      final response = await _workbookService.getWorkbooks(context: context);
-      if (mounted) {
-        setState(() {
-          _workbooks = response.data?.workbooks ?? [];
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = e.toString();
-        });
-      }
-    }
+    Future.microtask(
+        () => ref.read(workbookListProvider.notifier).fetchWorkbooks());
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final state = ref.watch(workbookListProvider);
+    final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalization.of(context);
 
     return Scaffold(
@@ -70,20 +34,34 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
         title: Text(l10n.translate('workbook.title')),
         backgroundColor: colorScheme.surface,
         elevation: 0,
+        actions: [
+          if (state.isLoading)
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Center(
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              ),
+            ),
+        ],
       ),
       body: RefreshIndicator(
-        onRefresh: _fetchWorkbooks,
-        child: _buildBody(),
+        onRefresh: () =>
+            ref.read(workbookListProvider.notifier).fetchWorkbooks(),
+        child: _buildBody(state),
       ),
     );
   }
 
-  Widget _buildBody() {
-    if (_isLoading) {
+  Widget _buildBody(WorkbookListState state) {
+    if (state.isLoading && state.workbooks.isEmpty) {
       return const AppLoadingWidget.fullscreen();
     }
 
-    if (_errorMessage != null) {
+    if (state.error != null && state.workbooks.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -91,10 +69,11 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
             Icon(Icons.error_outline,
                 size: 48, color: Theme.of(context).colorScheme.error),
             const SizedBox(height: 16),
-            Text(_errorMessage!),
+            Text(state.error!),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: _fetchWorkbooks,
+              onPressed: () =>
+                  ref.read(workbookListProvider.notifier).fetchWorkbooks(),
               child:
                   Text(AppLocalization.of(context).translate('common.retry')),
             ),
@@ -103,7 +82,7 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
       );
     }
 
-    if (_workbooks.isEmpty) {
+    if (state.workbooks.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -124,9 +103,9 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: _workbooks.length,
+      itemCount: state.workbooks.length,
       itemBuilder: (context, index) {
-        final workbook = _workbooks[index];
+        final workbook = state.workbooks[index];
         return _buildWorkbookCard(workbook);
       },
     );
@@ -136,81 +115,122 @@ class _WorkbookListScreenState extends State<WorkbookListScreen> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Card(
-      elevation: 0,
-      margin: const EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.1)),
+    return Dismissible(
+      key: Key(workbook.id.toString()),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(
+          color: colorScheme.error,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: const Icon(Icons.delete_outline, color: Colors.white),
       ),
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TopicDetailView(
-                topicId: workbook.course.id.toString(),
-                initialTopic: workbook.course,
+      confirmDismiss: (direction) async {
+        return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title:
+                Text(AppLocalization.of(context).translate('common.confirm')),
+            content: Text(AppLocalization.of(context)
+                .translate('workbook.delete_confirm')),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(
+                    AppLocalization.of(context).translate('common.cancel')),
               ),
-            ),
-          );
-        },
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: colorScheme.primary.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(Icons.menu_book,
-                        color: colorScheme.primary, size: 24),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          workbook.course.title,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          workbook.course.description,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  _buildStatusBadge(workbook.passed),
-                ],
-              ),
-              const SizedBox(height: 16),
-              const Divider(),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildInfoItem(Icons.timer_outlined,
-                      '${(workbook.time / 60).floor()} ${AppLocalization.of(context).translate('workbook.minutes')}'),
-                  _buildInfoItem(Icons.calendar_today_outlined,
-                      '${workbook.updatedAt.day}.${workbook.updatedAt.month}.${workbook.updatedAt.year}'),
-                ],
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: Text(
+                  AppLocalization.of(context).translate('common.delete'),
+                  style: TextStyle(color: colorScheme.error),
+                ),
               ),
             ],
+          ),
+        );
+      },
+      onDismissed: (direction) {
+        ref.read(workbookListProvider.notifier).deleteWorkbook(workbook.id);
+      },
+      child: Card(
+        elevation: 0,
+        margin: const EdgeInsets.only(bottom: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.1)),
+        ),
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TopicDetailView(
+                  topicId: workbook.course.id.toString(),
+                  initialTopic: workbook.course,
+                ),
+              ),
+            );
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: colorScheme.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(Icons.menu_book,
+                          color: colorScheme.primary, size: 24),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            workbook.course.title,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            workbook.course.description,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    _buildStatusBadge(workbook.passed),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Divider(),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildInfoItem(Icons.timer_outlined,
+                        '${(workbook.time / 60).floor()} ${AppLocalization.of(context).translate('workbook.minutes')}'),
+                    _buildInfoItem(Icons.calendar_today_outlined,
+                        '${workbook.updatedAt.day}.${workbook.updatedAt.month}.${workbook.updatedAt.year}'),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 import 'package:teorikort/features/reports/data/services/report_service.dart';
+import 'package:teorikort/features/workbook/presentation/provider/workbook_provider.dart';
 import 'package:teorikort/product/provider/service_providers.dart';
 
 import '../../exam/model/exam_question.dart';
@@ -101,6 +102,9 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
     _studyTimer = Stopwatch()..start();
     Future.microtask(() {
       ref.read(topicProvider.notifier).loadTopicDetail(widget.topicId);
+      if (ref.read(workbookListProvider).workbooks.isEmpty) {
+        ref.read(workbookListProvider.notifier).fetchWorkbooks();
+      }
     });
   }
 
@@ -125,6 +129,7 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
 
       if (mounted) {
         if (response.success) {
+          ref.read(workbookListProvider.notifier).fetchWorkbooks();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content: Text(AppLocalization.of(context)
@@ -349,21 +354,32 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
 
   Widget _buildCompleteButton(BuildContext context, Topic topic) {
     final colorScheme = Theme.of(context).colorScheme;
+    final workbookState = ref.watch(workbookListProvider);
+    final isAlreadyCompleted =
+        workbookState.workbooks.any((w) => w.courseId == topic.id);
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: colorScheme.primary.withValues(alpha: 0.1),
+            color: isAlreadyCompleted
+                ? Colors.transparent
+                : colorScheme.primary.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
         ],
       ),
       child: FilledButton(
-        onPressed: _isSaving ? null : () => _completeStudy(topic),
+        onPressed: (_isSaving || isAlreadyCompleted)
+            ? null
+            : () => _completeStudy(topic),
         style: FilledButton.styleFrom(
           minimumSize: const Size(double.infinity, 64),
+          backgroundColor: isAlreadyCompleted
+              ? colorScheme.surfaceContainerHighest
+              : colorScheme.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -374,13 +390,24 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
             if (_isSaving)
               const AppLoadingWidget.small()
             else
-              const Icon(Icons.check_circle_rounded),
+              Icon(isAlreadyCompleted
+                  ? Icons.check_circle_rounded
+                  : Icons.check_circle_outline_rounded),
             const SizedBox(width: 12),
             Text(
-              AppLocalization.of(context)
-                  .translate('topics.complete_study')
-                  .toUpperCase(),
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              isAlreadyCompleted
+                  ? AppLocalization.of(context)
+                      .translate('workbook.completed')
+                      .toUpperCase()
+                  : AppLocalization.of(context)
+                      .translate('topics.complete_study')
+                      .toUpperCase(),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: isAlreadyCompleted
+                    ? colorScheme.onSurfaceVariant
+                    : colorScheme.onPrimary,
+              ),
             ),
           ],
         ),

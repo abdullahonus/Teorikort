@@ -51,4 +51,17 @@ class WorkbookService extends BaseApiService {
       Workbook.fromJson,
     );
   }
+
+  // DELETE /workbooks/{id}
+  Future<ApiResponse<void>> deleteWorkbook({
+    required int workbookId,
+    BuildContext? context,
+  }) async {
+    return await handleResponse<void>(
+      delete(
+        '${ApiConstants.workbooks}/$workbookId',
+      ),
+      (_) {},
+    );
+  }
 }

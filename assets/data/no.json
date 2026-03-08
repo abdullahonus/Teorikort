@@ -397,7 +397,9 @@
     "in_progress": "Pågår",
     "no_workbooks": "Du har ingen arbeidsbøker ennå.",
     "no_workbooks_desc": "Du har ingen arbeidsbøker ennå.",
-    "minutes": "min"
+    "minutes": "min",
+    "subtitle": "Lagrede studier",
+    "delete_confirm": "Er du sikker på at du vil slette denne studieposten?"
   },
   "report": {
     "title": "Rapporter spørsmål",

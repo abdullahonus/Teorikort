@@ -4,10 +4,10 @@ import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
+import '../../../../features/workbook/presentation/workbook_list_screen.dart';
 import '../model/topic.dart';
 import '../provider/topic_provider.dart';
 import 'topic_detail_view.dart';
-import 'traffic_signs_view.dart';
 
 class TopicsView extends ConsumerStatefulWidget {
   const TopicsView({super.key});
@@ -65,7 +65,7 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 12),
                 itemBuilder: (context, index) {
-                  if (index == 0) return _buildSignsCard(context);
+                  if (index == 0) return _buildWorkbookCard(context);
                   return _buildTopicCard(context, state.topics[index - 1]);
                 },
               ),
@@ -76,7 +76,7 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
     );
   }
 
-  Widget _buildSignsCard(BuildContext context) {
+  Widget _buildWorkbookCard(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalization.of(context);
 
@@ -87,15 +87,15 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
       child: InkWell(
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const TrafficSignsView()),
+          MaterialPageRoute(builder: (_) => const WorkbookListScreen()),
         ),
         child: Container(
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                colorScheme.primary,
-                colorScheme.primary.withValues(alpha: 0.85)
+                colorScheme.secondary,
+                colorScheme.secondary.withValues(alpha: 0.85)
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -109,7 +109,7 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Icon(Icons.warning_amber_rounded,
+                child: const Icon(Icons.menu_book_rounded,
                     color: Colors.white, size: 32),
               ),
               const SizedBox(width: 20),
@@ -118,7 +118,7 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.translate('signs.title'),
+                      l10n.translate('workbook.title'),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -127,7 +127,7 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      l10n.translate('signs.subtitle'),
+                      l10n.translate('workbook.subtitle'),
                       style: TextStyle(
                         fontSize: 13,
                         color: Colors.white.withValues(alpha: 0.8),

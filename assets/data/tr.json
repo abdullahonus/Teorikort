@@ -397,7 +397,9 @@
     "in_progress": "Devam Ediyor",
     "no_workbooks": "Henüz çalışma kitabınız bulunmuyor.",
     "no_workbooks_desc": "Henüz bir çalışma kitabınız bulunmuyor.",
-    "minutes": "dk"
+    "minutes": "dk",
+    "subtitle": "Kayıtlı Çalışmalarım",
+    "delete_confirm": "Bu çalışma kaydını silmek istediğinizden emin misiniz?"
   },
   "report": {
     "title": "Soru Rapor Et",
