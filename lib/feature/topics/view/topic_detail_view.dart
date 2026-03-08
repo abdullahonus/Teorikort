@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 import 'package:teorikort/product/provider/service_providers.dart';
 
@@ -126,8 +127,8 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
                 border: Border.all(
                     color: colorScheme.primary.withValues(alpha: 0.2)),
               ),
-              child: Text(
-                topic.description,
+              child: AppHtmlText(
+                htmlData: topic.description,
                 style: TextStyle(
                     fontStyle: FontStyle.italic,
                     color: colorScheme.primary,
@@ -140,11 +141,10 @@ class _TopicDetailViewState extends ConsumerState<TopicDetailView> {
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            Text(
-              topic.content,
+            AppHtmlText(
+              htmlData: topic.content,
               style: TextStyle(
                 fontSize: 16,
-                height: 1.6,
                 color: colorScheme.onSurface.withValues(alpha: 0.8),
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 import '../model/exam_category.dart';
@@ -108,8 +109,8 @@ class _PracticeMainCategoryViewState
                     ),
                     if (category.description.isNotEmpty) ...[
                       const SizedBox(height: 4),
-                      Text(
-                        category.description,
+                      AppHtmlText(
+                        htmlData: category.description,
                         style: TextStyle(
                             color:
                                 colorScheme.onSurface.withValues(alpha: 0.7)),

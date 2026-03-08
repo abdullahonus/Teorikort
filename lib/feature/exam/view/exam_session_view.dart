@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 import '../model/exam_question.dart';
@@ -126,8 +127,8 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
                         ),
                       ),
                     ),
-                  Text(
-                    currentQuestion.question,
+                  AppHtmlText(
+                    htmlData: currentQuestion.question,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 24),
@@ -273,8 +274,8 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Text(
-                  option.text,
+                child: AppHtmlText(
+                  htmlData: option.text,
                   style: TextStyle(
                     color: isSelected
                         ? colorScheme.onPrimary

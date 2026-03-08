@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
+import 'package:teorikort/core/widgets/app_html_text.dart';
 
 import '../model/exam_question.dart';
 import '../model/exam_result.dart';
@@ -264,8 +265,8 @@ class ExamResultView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        q.question,
+                      AppHtmlText(
+                        htmlData: q.question,
                         style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
@@ -326,8 +327,8 @@ class ExamResultView extends StatelessWidget {
                                           fontSize: 13),
                                     ),
                                     const SizedBox(height: 6),
-                                    Text(
-                                      q.explanation,
+                                    AppHtmlText(
+                                      htmlData: q.explanation,
                                       style: TextStyle(
                                           height: 1.5,
                                           color: theme
@@ -382,8 +383,8 @@ class ExamResultView extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  text,
+                AppHtmlText(
+                  htmlData: text,
                   style: TextStyle(
                       color: color, fontWeight: FontWeight.w600, fontSize: 14),
                 ),

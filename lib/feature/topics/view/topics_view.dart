@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 import '../model/topic.dart';
@@ -185,8 +186,8 @@ class _TopicsViewState extends ConsumerState<TopicsView> {
                           fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      topic.description,
+                    AppHtmlText(
+                      htmlData: topic.description,
                       style: TextStyle(
                         fontSize: 12,
                         color: colorScheme.onSurface.withValues(alpha: 0.6),

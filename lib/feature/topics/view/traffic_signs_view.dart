@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_html_text.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 import '../model/traffic_sign.dart';
 import '../provider/topic_provider.dart';
-import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class TrafficSignsView extends ConsumerStatefulWidget {
   const TrafficSignsView({super.key});
@@ -51,7 +52,7 @@ class _TrafficSignsViewState extends ConsumerState<TrafficSignsView> {
             const Center(
               child: Padding(
                 padding: EdgeInsets.all(16),
-                child: const AppLoadingWidget.small(),
+                child: AppLoadingWidget.small(),
               ),
             ),
         ],
@@ -174,8 +175,10 @@ class _TrafficSignCard extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
-              Text(sign.description,
-                  style: const TextStyle(fontSize: 15, height: 1.6)),
+              AppHtmlText(
+                htmlData: sign.description,
+                style: const TextStyle(fontSize: 15, height: 1.6),
+              ),
             ],
           ),
         ),
