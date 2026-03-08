@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 import '../../../../feature/topics/view/topic_detail_view.dart';
@@ -203,8 +204,8 @@ class _WorkbookListScreenState extends ConsumerState<WorkbookListScreen> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text(
-                            workbook.course.description,
+                          AppHtmlText(
+                            htmlData: workbook.course.description,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: theme.textTheme.bodySmall?.copyWith(

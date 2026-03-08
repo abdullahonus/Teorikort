@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_html_text.dart';
+import 'package:teorikort/core/widgets/app_loading_widget.dart';
+
 import '../data/models/package.dart';
 import '../data/services/package_service.dart';
-import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 class PackagesScreen extends StatefulWidget {
   const PackagesScreen({super.key});
@@ -208,8 +210,8 @@ class _PackagesScreenState extends State<PackagesScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    package.description,
+                  AppHtmlText(
+                    htmlData: package.description,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: isPremium
                           ? Colors.white.withValues(alpha: 0.9)
@@ -290,8 +292,8 @@ class _PackagesScreenState extends State<PackagesScreen> {
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              Text(
-                package.description,
+              AppHtmlText(
+                htmlData: package.description,
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge
