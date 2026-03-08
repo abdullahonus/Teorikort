@@ -92,9 +92,10 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      /*   const SizedBox(width: 8),
                       Icon(Icons.notifications_none_outlined,
                           color: Theme.of(context).colorScheme.primary),
+                   */
                     ],
                   ),
                 ),
