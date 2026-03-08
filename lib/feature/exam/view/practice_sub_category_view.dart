@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 import '../model/exam_category.dart';
@@ -23,8 +24,8 @@ class PracticeSubCategoryView extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        title: Text(mainCategory.title),
+      appBar: AppHeader(
+        title: mainCategory.title,
       ),
       body: subCategoriesAsync.when(
         loading: () => const AppLoadingWidget.fullscreen(),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
+import '../../../core/widgets/app_bar_widget.dart';
 import '../model/leaderboard_entry.dart';
 import '../provider/leaderboard_provider.dart';
 
@@ -28,21 +29,9 @@ class _LeaderboardViewState extends ConsumerState<LeaderboardView> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: colorScheme.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: Theme.of(context).colorScheme.primary),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          AppLocalization.of(context).translate('leaderboard.screen_title'),
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-        ),
-        centerTitle: true,
+      appBar: AppHeader(
+        title:
+            AppLocalization.of(context).translate('leaderboard.screen_title'),
         actions: [
           IconButton(
             icon: Icon(Icons.refresh, color: colorScheme.primary),

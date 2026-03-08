@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
 import '../model/exam_category.dart';
@@ -17,17 +18,8 @@ class ExamListView extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: colorScheme.surface,
-        title: Text(
-          AppLocalization.of(context).translate('exam_list.screen_title'),
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: colorScheme.onSurface,
-          ),
-        ),
-        foregroundColor: colorScheme.onSurface,
+      appBar: AppHeader(
+        title: AppLocalization.of(context).translate('exam_list.screen_title'),
       ),
       body: Stack(
         children: [

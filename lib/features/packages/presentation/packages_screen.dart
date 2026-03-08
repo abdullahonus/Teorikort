@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
@@ -57,10 +58,8 @@ class _PackagesScreenState extends State<PackagesScreen> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        title: Text(l10n.translate('packages.title')),
-        backgroundColor: colorScheme.surface,
-        elevation: 0,
+      appBar: AppHeader(
+        title: l10n.translate('packages.title'),
       ),
       body: _buildBody(),
     );

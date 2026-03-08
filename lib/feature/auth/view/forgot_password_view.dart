@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
-import 'package:teorikort/core/widgets/auth_text_field.dart';
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/auth_button.dart';
+import 'package:teorikort/core/widgets/auth_text_field.dart';
+
 import '../provider/auth_provider.dart';
 import 'otp_verification_view.dart';
 
@@ -54,13 +56,8 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
-        ),
+      appBar: AppHeader(
+        title: AppLocalization.of(context).translate('auth.forgot_password'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

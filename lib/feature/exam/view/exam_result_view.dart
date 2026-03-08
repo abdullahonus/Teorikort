@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_html_text.dart';
 
 import '../model/exam_question.dart';
@@ -26,10 +27,10 @@ class ExamResultView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        title: Text(
-            AppLocalization.of(context).translate('quiz_result.screen_title')),
-        automaticallyImplyLeading: false,
+      appBar: AppHeader(
+        title:
+            AppLocalization.of(context).translate('quiz_result.screen_title'),
+        showBackButton: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.close),

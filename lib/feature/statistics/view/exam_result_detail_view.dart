@@ -4,6 +4,8 @@ import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 import 'package:teorikort/features/quiz/data/services/quiz_service.dart';
 
+import '../../../core/widgets/app_bar_widget.dart';
+
 final examResultDetailProvider =
     FutureProvider.family<ExamResultItem, int>((ref, id) async {
   final service = QuizService();
@@ -23,25 +25,12 @@ class ExamResultDetailView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncValue = ref.watch(examResultDetailProvider(resultId));
     final colorScheme = Theme.of(context).colorScheme;
-    final l10n = AppLocalization.of(context);
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: Theme.of(context).colorScheme.primary),
-          onPressed: () => Navigator.pop(context),
-        ),
-        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        title: Text(
-          AppLocalization.of(context).translate('quiz_result.detailed_results'),
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-        elevation: 0,
+      appBar: AppHeader(
+        title: AppLocalization.of(context)
+            .translate('quiz_result.detailed_results'),
       ),
       body: asyncValue.when(
         loading: () => const AppLoadingWidget.fullscreen(),

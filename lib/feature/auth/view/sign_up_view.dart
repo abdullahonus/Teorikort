@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/auth_button.dart';
 
 import '../provider/auth_provider.dart';
@@ -60,20 +61,8 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: Theme.of(context).colorScheme.primary),
-          onPressed: () => Navigator.pop(context),
-        ),
-        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        title: Text(
-          AppLocalization.of(context).translate('auth.sign_up_title'),
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
+      appBar: AppHeader(
+        title: AppLocalization.of(context).translate('auth.sign_up_title'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

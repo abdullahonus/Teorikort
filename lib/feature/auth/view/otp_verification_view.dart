@@ -1,9 +1,12 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/auth_button.dart';
+
 import '../provider/auth_provider.dart';
 
 class OtpVerificationView extends ConsumerStatefulWidget {
@@ -140,13 +143,8 @@ class _OtpVerificationViewState extends ConsumerState<OtpVerificationView> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
-        ),
+      appBar: AppHeader(
+        title: AppLocalization.of(context).translate('auth.otp_title'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

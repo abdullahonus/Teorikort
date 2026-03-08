@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
-import '../provider/statistics_provider.dart';
-import '../model/category_statistics.dart' as model;
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
+
+import '../model/category_statistics.dart' as model;
+import '../provider/statistics_provider.dart';
 
 class CategoryStatisticsView extends ConsumerStatefulWidget {
   final String categoryId;
@@ -40,9 +42,8 @@ class _CategoryStatisticsViewState
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: colorScheme.surface,
-        title: Text(widget.categoryTitle),
+      appBar: AppHeader(
+        title: widget.categoryTitle,
       ),
       body: state.isLoading && categoryData == null
           ? const AppLoadingWidget.fullscreen()

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
@@ -75,8 +76,8 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
     if (currentQuestion == null) return const Scaffold();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.examTitle),
+      appBar: AppHeader(
+        title: widget.examTitle,
         actions: [
           _buildTimer(context, state.remainingSeconds),
         ],

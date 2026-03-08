@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 import 'package:teorikort/feature/exam/model/exam_result.dart';
 import 'package:teorikort/feature/exam/provider/exam_provider.dart';
@@ -30,9 +31,8 @@ class _ExamResultsViewState extends ConsumerState<ExamResultsView> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        title: Text(l10n.translate('statistics.exam_results')),
-        backgroundColor: colorScheme.surface,
+      appBar: AppHeader(
+        title: l10n.translate('statistics.exam_results'),
       ),
       body: RefreshIndicator(
         onRefresh: () => ref.read(examProvider.notifier).refresh(),

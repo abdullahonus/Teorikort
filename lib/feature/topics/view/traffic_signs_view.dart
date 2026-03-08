@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
@@ -45,10 +46,8 @@ class _TrafficSignsViewState extends ConsumerState<TrafficSignsView> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        title: Text(l10n.translate('signs.title')),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
+      appBar: AppHeader(
+        title: l10n.translate('signs.title'),
       ),
       body: state.isLoading && state.signs.isEmpty
           ? const AppLoadingWidget.fullscreen()

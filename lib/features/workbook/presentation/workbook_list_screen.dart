@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
@@ -31,21 +32,8 @@ class _WorkbookListScreenState extends ConsumerState<WorkbookListScreen> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: Theme.of(context).colorScheme.primary),
-          onPressed: () => Navigator.pop(context),
-        ),
-        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        title: Text(
-          AppLocalization.of(context).translate('workbook.title'),
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-        elevation: 0,
+      appBar: AppHeader(
+        title: l10n.translate('workbook.title'),
       ),
       body: RefreshIndicator(
         onRefresh: () =>

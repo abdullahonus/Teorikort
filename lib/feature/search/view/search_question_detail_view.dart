@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/feature/exam/model/exam_question.dart';
 import 'package:teorikort/features/reports/data/services/report_service.dart';
@@ -77,11 +78,8 @@ class SearchQuestionDetailView extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        title: Text(
-            AppLocalization.of(context).translate('search.question_detail')),
-        backgroundColor: colorScheme.surface,
-        elevation: 0,
+      appBar: AppHeader(
+        title: AppLocalization.of(context).translate('search.question_detail'),
         actions: [
           IconButton(
             icon: Icon(Icons.report_gmailerrorred, color: colorScheme.error),
