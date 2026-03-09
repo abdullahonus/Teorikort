@@ -177,16 +177,6 @@ class QuizService extends BaseApiService {
       'duration_seconds': durationSeconds ?? 0,
       'completed_at': completedAt.toIso8601String(),
       'answers': answers ?? [],
-
-      // Legacy fields for backward compatibility if needed
-      'cat_id': int.tryParse(category) ?? 1,
-      'point': scorePercentage.round(),
-      'results': jsonEncode({
-        'correct': correctAnswers,
-        'wrong': wrongAnswers,
-        'empty': emptyAnswers,
-      }),
-      'send_time': completedAt.millisecondsSinceEpoch ~/ 1000,
     };
 
     return await handleResponse<ExamResultResponse>(

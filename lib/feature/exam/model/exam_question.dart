@@ -109,3 +109,25 @@ class ExamOption extends Equatable {
   @override
   List<Object?> get props => [id, text, imageUrl];
 }
+
+class QuestionListResponse {
+  final List<ExamQuestion> questions;
+  final bool isDemo;
+  final int totalQuestions;
+
+  QuestionListResponse({
+    required this.questions,
+    this.isDemo = false,
+    this.totalQuestions = 0,
+  });
+
+  factory QuestionListResponse.fromJson(Map<String, dynamic> json) {
+    return QuestionListResponse(
+      questions: (json['questions'] as List? ?? [])
+          .map((q) => ExamQuestion.fromJson(q as Map<String, dynamic>))
+          .toList(),
+      isDemo: json['demo'] ?? false,
+      totalQuestions: json['total_questions'] ?? 0,
+    );
+  }
+}

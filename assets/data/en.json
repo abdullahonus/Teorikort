@@ -454,5 +454,11 @@
     "validation_error": "Validation Error",
     "forbidden": "Access Denied",
     "bad_request": "Bad Request"
+  },
+  "demo": {
+    "limit_title": "You've Reached the Demo Limit",
+    "limit_desc": "To access all questions and see your results, please upgrade to a premium package.",
+    "go_to_packages": "Upgrade to Premium",
+    "back_to_home": "Back to Home"
   }
 }

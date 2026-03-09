@@ -14,10 +14,10 @@ abstract class IExamRepository {
   Future<ApiResponse<List<ExamCategory>>> getTests(String subcategoryId);
 
   /// Fetches questions for a specific category.
-  Future<ApiResponse<List<ExamQuestion>>> getQuestions(String categoryId);
+  Future<ApiResponse<QuestionListResponse>> getQuestions(String categoryId);
 
   /// Fetches questions for a specific test.
-  Future<ApiResponse<List<ExamQuestion>>> getTestQuestions(String testId,
+  Future<ApiResponse<QuestionListResponse>> getTestQuestions(String testId,
       {int limit = 10});
 
   /// Fetches mock exam questions based on difficulty.
@@ -31,6 +31,7 @@ abstract class IExamRepository {
     required int emptyAnswers,
     required Duration duration,
     String examType = 'final',
+    List<Map<String, dynamic>>? answers,
   });
 
   /// Fetches the user's exam history.

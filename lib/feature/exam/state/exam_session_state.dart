@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import '../model/exam_question.dart';
 import '../model/exam_result.dart';
 
@@ -12,6 +13,8 @@ class ExamSessionState extends Equatable {
   final bool isLoading;
   final String? error;
   final ExamResult? lastResult;
+  final bool isDemo;
+  final int initialSeconds;
 
   const ExamSessionState({
     this.questions = const [],
@@ -22,6 +25,8 @@ class ExamSessionState extends Equatable {
     this.isLoading = false,
     this.error,
     this.lastResult,
+    this.isDemo = false,
+    this.initialSeconds = 0,
   });
 
   ExamQuestion? get currentQuestion =>
@@ -66,6 +71,8 @@ class ExamSessionState extends Equatable {
     bool? isLoading,
     String? error,
     ExamResult? lastResult,
+    bool? isDemo,
+    int? initialSeconds,
     bool clearError = false,
   }) =>
       ExamSessionState(
@@ -77,6 +84,8 @@ class ExamSessionState extends Equatable {
         isLoading: isLoading ?? this.isLoading,
         error: clearError ? null : (error ?? this.error),
         lastResult: lastResult ?? this.lastResult,
+        isDemo: isDemo ?? this.isDemo,
+        initialSeconds: initialSeconds ?? this.initialSeconds,
       );
 
   @override
@@ -88,6 +97,8 @@ class ExamSessionState extends Equatable {
         isFinished,
         isLoading,
         error,
-        lastResult
+        lastResult,
+        isDemo,
+        initialSeconds,
       ];
 }

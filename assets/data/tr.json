@@ -444,5 +444,11 @@
     "validation_error": "Doğrulama Hatası",
     "forbidden": "Erişim Reddedildi",
     "bad_request": "Geçersiz İstek"
+  },
+  "demo": {
+    "limit_title": "Demo Sınırına Ulaştınız",
+    "limit_desc": "Tüm sorulara erişmek ve sonuçlarınızı görmek için lütfen premium pakete yükseltin.",
+    "go_to_packages": "Premium'a Geç",
+    "back_to_home": "Ana Sayfaya Dön"
   }
 }

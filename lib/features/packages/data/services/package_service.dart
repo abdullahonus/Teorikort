@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../../core/services/base_api_service.dart';
+
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/models/api_response.dart';
+import '../../../../core/services/base_api_service.dart';
 import '../models/package.dart';
+import '../models/payment_response.dart';
 
 class PackageService extends BaseApiService {
   // GET /packages
@@ -23,6 +25,17 @@ class PackageService extends BaseApiService {
     return await handleResponse<Package>(
       get(ApiConstants.packageDetail(id)),
       Package.fromJson,
+    );
+  }
+
+  // POST /swish/create
+  Future<ApiResponse<PaymentResponse>> createPayment(int packageId) async {
+    return await handleResponse<PaymentResponse>(
+      post(
+        ApiConstants.swishCreate,
+        data: {'package_id': packageId},
+      ),
+      PaymentResponse.fromJson,
     );
   }
 }

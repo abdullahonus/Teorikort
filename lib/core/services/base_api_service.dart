@@ -49,10 +49,7 @@ class BaseApiService {
 
         options.headers['Accept-Language'] = languageCode;
 
-        // Auto-add language parameter if not exists
-        if (!options.queryParameters.containsKey('language')) {
-          options.queryParameters['language'] = languageCode;
-        }
+        options.headers['Accept-Language'] = languageCode;
 
         if (AppConfig.enableApiLogging) {
           LoggerService.api('REQUEST', options.path, {
@@ -134,6 +131,7 @@ class BaseApiService {
           statusCode: statusCode,
           message: description,
           data: data != null ? fromJson(data) : null,
+          rawJson: responseData,
         );
       } else {
         String? message = description;
@@ -149,6 +147,7 @@ class BaseApiService {
           success: false,
           statusCode: statusCode,
           message: message ?? description,
+          rawJson: responseData,
         );
       }
     } on DioException catch (e) {
@@ -219,6 +218,7 @@ class BaseApiService {
           message: description,
           data: parsedItems,
           pagination: data is Map<String, dynamic> ? data['pagination'] : null,
+          rawJson: responseData,
         );
       } else {
         String? message = description;
@@ -234,6 +234,7 @@ class BaseApiService {
           success: false,
           statusCode: statusCode,
           message: message ?? description,
+          rawJson: responseData,
         );
       }
     } on DioException catch (e) {

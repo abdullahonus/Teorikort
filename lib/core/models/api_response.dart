@@ -4,6 +4,7 @@ class ApiResponse<T> {
   final T? data;
   final int statusCode;
   final Map<String, dynamic>? pagination;
+  final Map<String, dynamic>? rawJson;
 
   ApiResponse({
     required this.success,
@@ -11,6 +12,7 @@ class ApiResponse<T> {
     this.data,
     required this.statusCode,
     this.pagination,
+    this.rawJson,
   });
 
   factory ApiResponse.success(T data,
@@ -21,6 +23,7 @@ class ApiResponse<T> {
       message: message,
       statusCode: 200,
       pagination: pagination,
+      rawJson: null,
     );
   }
 
@@ -29,6 +32,7 @@ class ApiResponse<T> {
       success: false,
       message: message,
       statusCode: statusCode,
+      rawJson: null,
     );
   }
 
@@ -45,6 +49,7 @@ class ApiResponse<T> {
           data != null && data is Map<String, dynamic> ? fromJson(data) : null,
       statusCode: statusCode,
       pagination: json['pagination'] as Map<String, dynamic>?,
+      rawJson: json,
     );
   }
 

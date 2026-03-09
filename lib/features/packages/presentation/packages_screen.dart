@@ -18,6 +18,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
   final PackageService _packageService = PackageService();
   List<Package> _packages = [];
   bool _isLoading = true;
+  bool _isPurchasing = false;
   String? _errorMessage;
 
   @override
@@ -61,7 +62,18 @@ class _PackagesScreenState extends State<PackagesScreen> {
       appBar: AppHeader(
         title: l10n.translate('packages.title'),
       ),
-      body: _buildBody(),
+      body: Stack(
+        children: [
+          _buildBody(),
+          if (_isPurchasing)
+            Container(
+              color: Colors.black45,
+              child: const Center(
+                child: AppLoadingWidget(size: 80),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -72,32 +84,70 @@ class _PackagesScreenState extends State<PackagesScreen> {
 
     if (_errorMessage != null) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline,
-                size: 48, color: Theme.of(context).colorScheme.error),
-            const SizedBox(height: 16),
-            Text(_errorMessage!),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _fetchPackages,
-              child:
-                  Text(AppLocalization.of(context).translate('common.retry')),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .errorContainer
+                      .withValues(alpha: 0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.error_outline,
+                    size: 64, color: Theme.of(context).colorScheme.error),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                _errorMessage!,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton.icon(
+                onPressed: _fetchPackages,
+                icon: const Icon(Icons.refresh),
+                label:
+                    Text(AppLocalization.of(context).translate('common.retry')),
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
 
     if (_packages.isEmpty) {
       return Center(
-        child: Text(AppLocalization.of(context).translate('common.no_data')),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.inventory_2_outlined,
+                size: 64, color: Theme.of(context).colorScheme.outline),
+            const SizedBox(height: 16),
+            Text(
+              AppLocalization.of(context).translate('common.no_data'),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: Theme.of(context).colorScheme.outline),
+            ),
+          ],
+        ),
       );
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       itemCount: _packages.length,
       itemBuilder: (context, index) {
         return _buildPackageCard(_packages[index]);
@@ -108,17 +158,20 @@ class _PackagesScreenState extends State<PackagesScreen> {
   Widget _buildPackageCard(Package package) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isPremium = package.code == 'PREMIUM' || package.code == 'VIP';
+    final isPremium = package.code.toUpperCase().contains('PREMIUM') ||
+        package.code.toUpperCase().contains('VIP') ||
+        package.price > 0;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 24),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(32),
         gradient: isPremium
             ? LinearGradient(
                 colors: [
                   colorScheme.primary,
-                  colorScheme.primary.withValues(alpha: 0.7)
+                  colorScheme.primary.withValues(alpha: 0.8),
+                  colorScheme.secondary.withValues(alpha: 0.9),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -126,123 +179,189 @@ class _PackagesScreenState extends State<PackagesScreen> {
             : null,
         color: isPremium
             ? null
-            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
         border: isPremium
             ? null
             : Border.all(color: colorScheme.outline.withValues(alpha: 0.1)),
         boxShadow: [
-          if (isPremium)
-            BoxShadow(
-              color: colorScheme.primary.withValues(alpha: 0.3),
-              blurRadius: 15,
-              offset: const Offset(0, 8),
-            ),
+          BoxShadow(
+            color: (isPremium ? colorScheme.primary : colorScheme.shadow)
+                .withValues(alpha: isPremium ? 0.3 : 0.05),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(32),
         child: Stack(
           children: [
-            if (isPremium)
+            if (isPremium) ...[
               Positioned(
-                right: -20,
-                top: -20,
+                right: -30,
+                top: -30,
                 child: CircleAvatar(
-                  radius: 60,
-                  backgroundColor: Colors.white.withValues(alpha: 0.1),
+                  radius: 80,
+                  backgroundColor: Colors.white.withValues(alpha: 0.08),
                 ),
               ),
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Positioned(
+                left: -20,
+                bottom: -40,
+                child: CircleAvatar(
+                  radius: 60,
+                  backgroundColor: Colors.white.withValues(alpha: 0.05),
+                ),
+              ),
+            ],
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => _showPackageDetail(package),
+                child: Padding(
+                  padding: const EdgeInsets.all(28),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              package.title,
-                              style: theme.textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: isPremium
-                                    ? Colors.white
-                                    : colorScheme.onSurface,
-                              ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (isPremium)
+                                  Container(
+                                    margin: const EdgeInsets.only(bottom: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.2),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Text(
+                                      'POPULAR CHOICE',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 1),
+                                    ),
+                                  ),
+                                Text(
+                                  package.title,
+                                  style:
+                                      theme.textTheme.headlineSmall?.copyWith(
+                                    fontWeight: FontWeight.w900,
+                                    color: isPremium
+                                        ? Colors.white
+                                        : colorScheme.onSurface,
+                                    letterSpacing: -0.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: isPremium
+                                        ? Colors.white.withValues(alpha: 0.15)
+                                        : colorScheme.primary
+                                            .withValues(alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    package.code,
+                                    style:
+                                        theme.textTheme.labelMedium?.copyWith(
+                                      color: isPremium
+                                          ? Colors.white
+                                          : colorScheme.primary,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 4),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: isPremium
-                                    ? Colors.white.withValues(alpha: 0.2)
-                                    : colorScheme.primary
-                                        .withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                package.code,
-                                style: theme.textTheme.labelSmall?.copyWith(
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                package.price == 0
+                                    ? 'FREE'
+                                    : '₺${package.price.toInt()}',
+                                style: theme.textTheme.headlineLarge?.copyWith(
+                                  fontWeight: FontWeight.w900,
                                   color: isPremium
                                       ? Colors.white
                                       : colorScheme.primary,
-                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: -1,
                                 ),
                               ),
-                            ),
-                          ],
+                              if (package.price > 0)
+                                Text(
+                                  'One-time payment',
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: isPremium
+                                        ? Colors.white70
+                                        : colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      Divider(
+                          color: isPremium
+                              ? Colors.white24
+                              : colorScheme.outline.withValues(alpha: 0.1)),
+                      const SizedBox(height: 16),
+                      AppHtmlText(
+                        htmlData: package.description,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: isPremium
+                              ? Colors.white.withValues(alpha: 0.9)
+                              : colorScheme.onSurfaceVariant,
+                          height: 1.6,
                         ),
                       ),
-                      Text(
-                        package.price == 0
-                            ? 'FREE'
-                            : '₺${package.price.toInt()}',
-                        style: theme.textTheme.displaySmall?.copyWith(
-                          fontWeight: FontWeight.w900,
-                          color: isPremium ? Colors.white : colorScheme.primary,
+                      const SizedBox(height: 28),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: _isPurchasing
+                              ? null
+                              : () => _handlePurchase(package),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                isPremium ? Colors.white : colorScheme.primary,
+                            foregroundColor:
+                                isPremium ? colorScheme.primary : Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            elevation: isPremium ? 0 : 2,
+                            shadowColor:
+                                colorScheme.primary.withValues(alpha: 0.3),
+                          ),
+                          child: Text(
+                            package.price == 0
+                                ? 'START FOR FREE'
+                                : 'UPGRADE NOW',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 16,
+                                letterSpacing: 0.5),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  AppHtmlText(
-                    htmlData: package.description,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: isPremium
-                          ? Colors.white.withValues(alpha: 0.9)
-                          : colorScheme.onSurfaceVariant,
-                      height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Navigate to detail or start payment
-                        _showPackageDetail(package);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            isPremium ? Colors.white : colorScheme.primary,
-                        foregroundColor:
-                            isPremium ? colorScheme.primary : Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
-                        elevation: 0,
-                      ),
-                      child: Text(
-                        package.price == 0 ? 'START NOW' : 'GET STARTED',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ],
@@ -251,71 +370,197 @@ class _PackagesScreenState extends State<PackagesScreen> {
     );
   }
 
+  Future<void> _handlePurchase(Package package) async {
+    if (_isPurchasing) return;
+
+    setState(() => _isPurchasing = true);
+
+    try {
+      final response = await _packageService.createPayment(package.id);
+      if (mounted) {
+        setState(() => _isPurchasing = false);
+        if (response.success && response.data != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  const Icon(Icons.check_circle, color: Colors.white),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text(response.message ?? 'Ödeme başlatıldı')),
+                ],
+              ),
+              backgroundColor: Colors.green.shade700,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              margin: const EdgeInsets.all(16),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  const Icon(Icons.error, color: Colors.white),
+                  const SizedBox(width: 12),
+                  Expanded(
+                      child: Text(response.message ?? 'Ödeme başlatılamadı')),
+                ],
+              ),
+              backgroundColor: Colors.red.shade700,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              margin: const EdgeInsets.all(16),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isPurchasing = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Hata: $e'),
+            backgroundColor: Colors.red.shade700,
+            behavior: SnackBarBehavior.floating,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            margin: const EdgeInsets.all(16),
+          ),
+        );
+      }
+    }
+  }
+
   void _showPackageDetail(Package package) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isPremium = package.code.toUpperCase().contains('PREMIUM') ||
+        package.code.toUpperCase().contains('VIP') ||
+        package.price > 0;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.5,
-        maxChildSize: 0.9,
-        minChildSize: 0.3,
+        initialChildSize: 0.6,
+        maxChildSize: 0.95,
+        minChildSize: 0.4,
         builder: (_, controller) => Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+            color: colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
           ),
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(28, 12, 28, 28),
           child: ListView(
             controller: controller,
             children: [
               Center(
                 child: Container(
-                  width: 40,
-                  height: 4,
+                  width: 48,
+                  height: 6,
                   decoration: BoxDecoration(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .outline
-                        .withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(2),
+                    color: colorScheme.outline.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(3),
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          package.title,
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: -1,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          package.code,
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            color: isPremium
+                                ? colorScheme.primary
+                                : colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    package.price == 0 ? 'FREE' : '₺${package.price.toInt()}',
+                    style: theme.textTheme.headlineLarge?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      color: isPremium
+                          ? colorScheme.primary
+                          : colorScheme.onSurface,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 32),
               Text(
-                package.title,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
+                AppLocalization.of(context).translate('packages.features'),
+                style: theme.textTheme.titleMedium
+                    ?.copyWith(fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 16),
               AppHtmlText(
                 htmlData: package.description,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(height: 1.6),
+                style: theme.textTheme.bodyLarge?.copyWith(
+                    height: 1.6, color: colorScheme.onSurfaceVariant),
               ),
-              const SizedBox(height: 32),
-              // Mock Features
+              const SizedBox(height: 24),
+              _buildFeatureItem(Icons.verified_user_rounded,
+                  'Full access to all topics & subtopics'),
               _buildFeatureItem(
-                  Icons.check_circle, 'Full access to all topics'),
-              _buildFeatureItem(Icons.check_circle, 'Daily practice exams'),
+                  Icons.analytics_rounded, 'Detailed AI-powered statistics'),
               _buildFeatureItem(
-                  Icons.check_circle, 'Advanced statistics & analysis'),
-              _buildFeatureItem(Icons.check_circle, 'Offline study mode'),
-              const SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
+                  Icons.offline_bolt_rounded, 'Offline study mode enabled'),
+              _buildFeatureItem(
+                  Icons.support_agent_rounded, 'Priority technical support'),
+              const SizedBox(height: 48),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _isPurchasing
+                      ? null
+                      : () {
+                          Navigator.pop(context);
+                          _handlePurchase(package);
+                        },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                  child: Text(
+                    _isPurchasing
+                        ? 'PROCESSING...'
+                        : (package.price == 0
+                            ? 'START NOW'
+                            : 'GET PREMIUM ACCESS'),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w900, fontSize: 16),
+                  ),
                 ),
+              ),
+              const SizedBox(height: 12),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
                 child: Text(
-                    'Purchase for ${package.price == 0 ? 'Free' : '₺${package.price.toInt()}'}'),
+                  AppLocalization.of(context).translate('common.close'),
+                  style: TextStyle(
+                      color: colorScheme.outline, fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),
@@ -326,12 +571,34 @@ class _PackagesScreenState extends State<PackagesScreen> {
 
   Widget _buildFeatureItem(IconData icon, String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 16),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
-          const SizedBox(width: 12),
-          Text(text, style: const TextStyle(fontSize: 16)),
+          Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color:
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon,
+                color: Theme.of(context).colorScheme.primary, size: 18),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.8),
+              ),
+            ),
+          ),
         ],
       ),
     );

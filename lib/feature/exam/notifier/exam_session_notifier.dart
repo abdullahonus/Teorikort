@@ -31,8 +31,10 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
           : await _repository.getQuestions(categoryId);
       if (response.success && response.data != null) {
         state = state.copyWith(
-          questions: response.data,
+          questions: response.data!.questions,
+          isDemo: response.data!.isDemo,
           remainingSeconds: initialSeconds,
+          initialSeconds: initialSeconds,
           isLoading: false,
           userAnswers: {},
           currentQuestionIndex: 0,
@@ -93,6 +95,17 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
 
     try {
       final score = (state.correctCount / state.questions.length) * 100;
+
+      // Prepare answers for API
+      final answers = state.questions.map((q) {
+        final selectedOptionId = state.userAnswers[q.id];
+        return {
+          'question_id': q.id,
+          'selected_option': selectedOptionId ?? '',
+          'is_correct': selectedOptionId == q.correctAnswer,
+        };
+      }).toList();
+
       final response = await _repository.submitExamResult(
         categoryId: categoryId,
         scorePercentage: score,
@@ -100,8 +113,9 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
         wrongAnswers: state.wrongCount,
         emptyAnswers: state.emptyCount,
         duration:
-            Duration(seconds: 2700 - state.remainingSeconds), // Assume 45min
+            Duration(seconds: state.initialSeconds - state.remainingSeconds),
         examType: examType,
+        answers: answers,
       );
 
       state = state.copyWith(

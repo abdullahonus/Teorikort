@@ -134,12 +134,12 @@ class ExamRepositoryImpl implements IExamRepository {
   }
 
   @override
-  Future<ApiResponse<List<ExamQuestion>>> getQuestions(
+  Future<ApiResponse<QuestionListResponse>> getQuestions(
       String categoryId) async {
     try {
       final response = await _quizService.loadQuizQuestions(categoryId);
       if (response.success && response.data != null) {
-        final questions = response.data!
+        final List<ExamQuestion> questions = response.data!
             .map((q) => ExamQuestion.fromJson({
                   'id': q.id,
                   'question': q.question,
@@ -153,20 +153,28 @@ class ExamRepositoryImpl implements IExamRepository {
                 }))
             .toList();
 
-        return ApiResponse<List<ExamQuestion>>(
+        return ApiResponse<QuestionListResponse>(
           success: true,
           statusCode: response.statusCode,
-          data: questions,
+          data: QuestionListResponse(
+            questions: questions,
+            isDemo: response.rawJson?['demo'] ??
+                response.rawJson?['data']?['demo'] ??
+                false,
+            totalQuestions: response.rawJson?['total_questions'] ??
+                response.rawJson?['data']?['total_questions'] ??
+                questions.length,
+          ),
         );
       }
-      return ApiResponse<List<ExamQuestion>>(
+      return ApiResponse<QuestionListResponse>(
         success: false,
         message: response.message,
         statusCode: response.statusCode,
       );
     } catch (e) {
       LoggerService.error('ExamRepositoryImpl.getQuestions', e);
-      return ApiResponse<List<ExamQuestion>>(
+      return ApiResponse<QuestionListResponse>(
         success: false,
         message: e.toString(),
         statusCode: 500,
@@ -175,13 +183,13 @@ class ExamRepositoryImpl implements IExamRepository {
   }
 
   @override
-  Future<ApiResponse<List<ExamQuestion>>> getTestQuestions(String testId,
+  Future<ApiResponse<QuestionListResponse>> getTestQuestions(String testId,
       {int limit = 10}) async {
     try {
       final response =
           await _quizService.loadTestQuestions(testId, limit: limit);
       if (response.success && response.data != null) {
-        final questions = response.data!
+        final List<ExamQuestion> questions = response.data!
             .map((q) => ExamQuestion.fromJson({
                   'id': q.id,
                   'question': q.question,
@@ -195,20 +203,28 @@ class ExamRepositoryImpl implements IExamRepository {
                 }))
             .toList();
 
-        return ApiResponse<List<ExamQuestion>>(
+        return ApiResponse<QuestionListResponse>(
           success: true,
           statusCode: response.statusCode,
-          data: questions,
+          data: QuestionListResponse(
+            questions: questions,
+            isDemo: response.rawJson?['demo'] ??
+                response.rawJson?['data']?['demo'] ??
+                false,
+            totalQuestions: response.rawJson?['total_questions'] ??
+                response.rawJson?['data']?['total_questions'] ??
+                questions.length,
+          ),
         );
       }
-      return ApiResponse<List<ExamQuestion>>(
+      return ApiResponse<QuestionListResponse>(
         success: false,
         message: response.message,
         statusCode: response.statusCode,
       );
     } catch (e) {
       LoggerService.error('ExamRepositoryImpl.getTestQuestions', e);
-      return ApiResponse<List<ExamQuestion>>(
+      return ApiResponse<QuestionListResponse>(
         success: false,
         message: e.toString(),
         statusCode: 500,
@@ -267,6 +283,7 @@ class ExamRepositoryImpl implements IExamRepository {
     required Duration duration,
     String examType = 'final',
     String difficulty = 'medium',
+    List<Map<String, dynamic>>? answers,
   }) async {
     try {
       final response = await _quizService.submitExamResult(
@@ -279,6 +296,7 @@ class ExamRepositoryImpl implements IExamRepository {
         examType: examType,
         difficulty: difficulty,
         durationSeconds: duration.inSeconds,
+        answers: answers,
       );
 
       if (response.success && response.data != null) {

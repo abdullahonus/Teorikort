@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
+import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
 import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
+import 'package:teorikort/features/packages/presentation/packages_screen.dart';
 
 import '../model/exam_question.dart';
 import '../provider/exam_provider.dart';
@@ -314,7 +316,11 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
           ElevatedButton(
             onPressed: () {
               if (isLast) {
-                _showFinishConfirmation(context, ref);
+                if (state.isDemo) {
+                  _showDemoAlert();
+                } else {
+                  _showFinishConfirmation(context, ref);
+                }
               } else {
                 ref.read(examSessionProvider.notifier).nextQuestion();
               }
@@ -351,6 +357,71 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
             },
             child: Text(
                 AppLocalization.of(context).translate('quiz.finish_button')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDemoAlert() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: Text(
+          AppLocalization.of(context).translate('demo.limit_title'),
+          style: const TextStyle(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          AppLocalization.of(context).translate('demo.limit_desc'),
+          textAlign: TextAlign.center,
+        ),
+        actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+        actions: [
+          Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close dialog
+                    Navigator.pop(context); // Close exam session
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const PackagesScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                  ),
+                  child: Text(AppLocalization.of(context)
+                      .translate('demo.go_to_packages')),
+                ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (_) => const AppScaffold()),
+                      (route) => false,
+                    );
+                  },
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                  ),
+                  child: Text(AppLocalization.of(context)
+                      .translate('demo.back_to_home')),
+                ),
+              ),
+            ],
           ),
         ],
       ),
