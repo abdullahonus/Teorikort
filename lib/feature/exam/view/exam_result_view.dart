@@ -23,23 +23,16 @@ class ExamResultView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isSuccess = result.score >= 70;
-
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppHeader(
         title:
             AppLocalization.of(context).translate('quiz_result.screen_title'),
-        showBackButton: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (_) => const AppScaffold()),
-              (route) => false,
-            ),
-          ),
-        ],
+        showBackButton: true,
+        onBackPress: () => Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const AppScaffold()),
+          (route) => false,
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -47,35 +40,20 @@ class ExamResultView extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
             Container(
-              width: 160,
-              height: 160,
+              width: 140,
+              height: 140,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: (isSuccess ? Colors.green : Colors.red)
-                    .withValues(alpha: 0.1),
+                color: colorScheme.primaryContainer,
               ),
               child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '${result.score.toStringAsFixed(0)}%',
-                      style: theme.textTheme.headlineLarge?.copyWith(
-                        color: isSuccess ? Colors.green : Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      isSuccess
-                          ? AppLocalization.of(context)
-                              .translate('quiz_result.success')
-                          : AppLocalization.of(context)
-                              .translate('quiz_result.fail'),
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: isSuccess ? Colors.green : Colors.red,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  '${result.score.toStringAsFixed(0)} Puan',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    color: colorScheme.onPrimaryContainer,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -131,6 +109,20 @@ class ExamResultView extends StatelessWidget {
               '${result.emptyCount}',
               Icons.radio_button_unchecked,
               Colors.orange),
+          if (result.durationSeconds > 0) ...[
+            const SizedBox(height: 12),
+            _buildResultItem(
+                context,
+                l10n.translate('quiz_result.time_taken') ==
+                        'quiz_result.time_taken'
+                    ? 'Geçen Süre'
+                    : l10n.translate('quiz_result.time_taken'),
+                result.durationSeconds > 60
+                    ? '${result.durationSeconds ~/ 60} ${l10n.translate('quiz_result.minutes')} ${result.durationSeconds % 60} ${l10n.translate('quiz_result.seconds')}'
+                    : '${result.durationSeconds} ${l10n.translate('quiz_result.seconds')}',
+                Icons.timer,
+                Colors.blue),
+          ],
         ],
       ),
     );
@@ -151,8 +143,9 @@ class ExamResultView extends StatelessWidget {
   }
 
   Widget _buildWrongAnswersContext(BuildContext context) {
-    if (questions.isEmpty || userAnswers.isEmpty)
+    if (questions.isEmpty || userAnswers.isEmpty) {
       return const SizedBox.shrink();
+    }
 
     final wrongQuestions = questions.where((q) {
       final ans = userAnswers[q.id];

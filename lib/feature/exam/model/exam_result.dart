@@ -11,6 +11,7 @@ class ExamResult extends Equatable {
   final int wrongCount;
   final int emptyCount;
   final int totalQuestions;
+  final int durationSeconds;
   final String createdAt;
 
   const ExamResult({
@@ -23,6 +24,7 @@ class ExamResult extends Equatable {
     required this.wrongCount,
     required this.emptyCount,
     required this.totalQuestions,
+    this.durationSeconds = 0,
     required this.createdAt,
   });
 
@@ -44,6 +46,7 @@ class ExamResult extends Equatable {
       wrongCount: _parseInt(json['wrong_answers'] ?? results['wrong']),
       emptyCount: _parseInt(json['empty_answers'] ?? results['empty']),
       totalQuestions: _parseInt(json['total_questions']),
+      durationSeconds: _parseInt(json['duration_seconds']),
       createdAt: json['created_at'] ?? '',
     );
   }
@@ -69,6 +72,7 @@ class ExamResult extends Equatable {
     int? wrongCount,
     int? emptyCount,
     int? totalQuestions,
+    int? durationSeconds,
     String? createdAt,
   }) =>
       ExamResult(
@@ -81,6 +85,7 @@ class ExamResult extends Equatable {
         wrongCount: wrongCount ?? this.wrongCount,
         emptyCount: emptyCount ?? this.emptyCount,
         totalQuestions: totalQuestions ?? this.totalQuestions,
+        durationSeconds: durationSeconds ?? this.durationSeconds,
         createdAt: createdAt ?? this.createdAt,
       );
 
@@ -95,6 +100,7 @@ class ExamResult extends Equatable {
         wrongCount,
         emptyCount,
         totalQuestions,
+        durationSeconds,
         createdAt
       ];
 }

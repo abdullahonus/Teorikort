@@ -33,6 +33,14 @@ class ExamSessionView extends ConsumerStatefulWidget {
 }
 
 class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
+  final ScrollController _questionListController = ScrollController();
+
+  @override
+  void dispose() {
+    _questionListController.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -60,6 +68,11 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
             ),
           ),
         );
+      }
+
+      // Auto-scroll logic for question list
+      if (previous?.currentQuestionIndex != next.currentQuestionIndex) {
+        _scrollToCurrentQuestion(next.currentQuestionIndex);
       }
     });
 
@@ -101,7 +114,8 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
                           'quiz.question_count'
                       ? AppLocalization.of(context)
                           .translate('quiz.question_count')
-                          .replaceAll('%d', '${state.currentQuestionIndex + 1}')
+                          .replaceFirst(
+                              '%d', '${state.currentQuestionIndex + 1}')
                           .replaceFirst('%d', '${state.questions.length}')
                       : 'Soru ${state.currentQuestionIndex + 1} / ${state.questions.length}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
@@ -150,6 +164,29 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
     );
   }
 
+  void _scrollToCurrentQuestion(int index) {
+    if (!_questionListController.hasClients) return;
+
+    // Each item is 44width + 8margin = 52px
+    const itemSize = 52.0;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Calculate scroll offset to center the current item
+    final targetOffset =
+        (index * itemSize) - (screenWidth / 2) + (itemSize / 2);
+
+    // Ensure offset is within bounds
+    final maxScroll = _questionListController.position.maxScrollExtent;
+    final minScroll = _questionListController.position.minScrollExtent;
+    final scrollOffset = targetOffset.clamp(minScroll, maxScroll);
+
+    _questionListController.animateTo(
+      scrollOffset,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   Widget _buildTimer(BuildContext context, int seconds) {
     final minutes = seconds ~/ 60;
     final remainingSecs = seconds % 60;
@@ -187,6 +224,7 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
     return SizedBox(
       height: 60,
       child: ListView.builder(
+          controller: _questionListController,
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           itemCount: state.questions.length,
@@ -243,9 +281,17 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: InkWell(
-        onTap: () => ref
-            .read(examSessionProvider.notifier)
-            .selectOption(questionId, option.id),
+        onTap: () {
+          ref
+              .read(examSessionProvider.notifier)
+              .selectOption(questionId, option.id);
+
+          Future.delayed(const Duration(milliseconds: 400), () {
+            if (context.mounted) {
+              ref.read(examSessionProvider.notifier).nextQuestion();
+            }
+          });
+        },
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -349,10 +395,17 @@ class _ExamSessionViewState extends ConsumerState<ExamSessionView> {
                   Text(AppLocalization.of(context).translate('quiz.cancel'))),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context); // Close confirmation dialog
               ref.read(examSessionProvider.notifier).finishExam(
                     categoryId: widget.categoryId,
                     examType: widget.examType,
+                    onConfirm: () {
+                      if (context.mounted) {
+                        Navigator.pop(context); // Go back to categories
+                      }
+                    },
+                    buttonText: 'Kategoriye Geri Dön',
+                    barrierDismissible: false,
                   );
             },
             child: Text(

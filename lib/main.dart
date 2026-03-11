@@ -2,6 +2,7 @@ import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:teorikort/core/services/navigation_service.dart';
 
 import 'core/localization/app_localization.dart';
 import 'core/providers/locale_provider.dart';
@@ -44,6 +45,7 @@ class MyApp extends ConsumerWidget {
     }
 
     return MaterialApp(
+      navigatorKey: NavigationService.navigatorKey,
       title: 'Teorikort',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,

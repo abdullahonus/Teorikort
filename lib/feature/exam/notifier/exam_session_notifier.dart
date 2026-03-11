@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/services/logger_service.dart';
@@ -86,8 +87,13 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
     state = state.copyWith(userAnswers: updatedAnswers);
   }
 
-  Future<void> finishExam(
-      {String categoryId = '1', String examType = 'final'}) async {
+  Future<void> finishExam({
+    String categoryId = '1',
+    String examType = 'final',
+    VoidCallback? onConfirm,
+    String? buttonText,
+    bool barrierDismissible = true,
+  }) async {
     _timer?.cancel();
     if (state.isFinished) return;
 
@@ -99,10 +105,21 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
       // Prepare answers for API
       final answers = state.questions.map((q) {
         final selectedOptionId = state.userAnswers[q.id];
+
+        // Convert 'a', 'b', 'c', 'd' to '1', '2', '3', '4'
+        String numericAnswer = '';
+        if (selectedOptionId != null && selectedOptionId.isNotEmpty) {
+          final charCode = selectedOptionId.toLowerCase().codeUnitAt(0);
+          // 'a' is 97, so 97 - 96 = 1
+          final index = charCode - 96;
+          if (index >= 1 && index <= 5) {
+            numericAnswer = index.toString();
+          }
+        }
+
         return {
           'question_id': q.id,
-          'selected_option': selectedOptionId ?? '',
-          'is_correct': selectedOptionId == q.correctAnswer,
+          'selected_answer': numericAnswer,
         };
       }).toList();
 
@@ -116,6 +133,9 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
             Duration(seconds: state.initialSeconds - state.remainingSeconds),
         examType: examType,
         answers: answers,
+        onConfirm: onConfirm,
+        buttonText: buttonText,
+        barrierDismissible: barrierDismissible,
       );
 
       state = state.copyWith(

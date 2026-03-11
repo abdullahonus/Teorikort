@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:teorikort/core/models/api_response.dart';
 import 'package:teorikort/feature/exam/model/exam_category.dart';
 import 'package:teorikort/feature/exam/model/exam_question.dart';
@@ -32,6 +33,9 @@ abstract class IExamRepository {
     required Duration duration,
     String examType = 'final',
     List<Map<String, dynamic>>? answers,
+    VoidCallback? onConfirm,
+    String? buttonText,
+    bool barrierDismissible = true,
   });
 
   /// Fetches the user's exam history.

@@ -159,6 +159,9 @@ class QuizService extends BaseApiService {
     String difficulty = 'medium',
     int? durationSeconds,
     List<Map<String, dynamic>>? answers,
+    VoidCallback? onConfirm,
+    String? buttonText,
+    bool barrierDismissible = true,
   }) async {
     // Current backend might still expect the old format,
     // but the documentation specifies a new more detailed format.
@@ -166,6 +169,7 @@ class QuizService extends BaseApiService {
 
     final requestData = {
       'exam_id': examId ?? 'exam_${DateTime.now().millisecondsSinceEpoch}',
+      'cat_id': int.tryParse(category) ?? 0,
       'category': category,
       'exam_type': examType,
       'difficulty': difficulty,
@@ -177,11 +181,20 @@ class QuizService extends BaseApiService {
       'duration_seconds': durationSeconds ?? 0,
       'completed_at': completedAt.toIso8601String(),
       'answers': answers ?? [],
+      'point': scorePercentage.round(),
+      'results': jsonEncode({
+        'correct': correctAnswers,
+        'wrong': wrongAnswers,
+        'empty': emptyAnswers,
+      }),
     };
 
     return await handleResponse<ExamResultResponse>(
       post(ApiConstants.examResults, data: requestData),
       ExamResultResponse.fromJson,
+      onConfirm: onConfirm,
+      buttonText: buttonText,
+      barrierDismissible: barrierDismissible,
     );
   }
 
@@ -244,18 +257,22 @@ class ExamResultResponse {
   });
 
   factory ExamResultResponse.fromJson(Map<String, dynamic> json) {
+    final data = json['result'] is Map<String, dynamic>
+        ? json['result'] as Map<String, dynamic>
+        : json;
+
     return ExamResultResponse(
-      id: json['id'] is int
-          ? json['id']
-          : int.tryParse(json['id']?.toString() ?? '0') ?? 0,
-      userId: json['user_id'] is int
-          ? json['user_id']
-          : int.tryParse(json['user_id']?.toString() ?? '0') ?? 0,
-      catId: json['cat_id'] is int
-          ? json['cat_id']
-          : int.tryParse(json['cat_id']?.toString() ?? '0') ?? 0,
-      point: (json['point'] ?? 0).toDouble(),
-      createdAt: json['created_at'] ?? '',
+      id: data['id'] is int
+          ? data['id']
+          : int.tryParse(data['id']?.toString() ?? '0') ?? 0,
+      userId: data['user_id'] is int
+          ? data['user_id']
+          : int.tryParse(data['user_id']?.toString() ?? '0') ?? 0,
+      catId: data['cat_id'] is int
+          ? data['cat_id']
+          : int.tryParse(data['cat_id']?.toString() ?? '0') ?? 0,
+      point: (data['point'] ?? 0).toDouble(),
+      createdAt: data['created_at'] ?? '',
     );
   }
 }

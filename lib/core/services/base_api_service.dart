@@ -10,6 +10,7 @@ import '../constants/app_config.dart';
 import '../exceptions/api_exception.dart';
 import '../models/api_response.dart';
 import 'logger_service.dart';
+import 'navigation_service.dart';
 
 class BaseApiService {
   late final Dio _dio;
@@ -105,8 +106,11 @@ class BaseApiService {
   // Generic API Response Handler
   Future<ApiResponse<T>> handleResponse<T>(
     Future<Response> apiCall,
-    T Function(Map<String, dynamic>) fromJson,
-  ) async {
+    T Function(Map<String, dynamic>) fromJson, {
+    VoidCallback? onConfirm,
+    String? buttonText,
+    bool barrierDismissible = true,
+  }) async {
     try {
       final response = await apiCall;
 
@@ -143,17 +147,49 @@ class BaseApiService {
           message = responseData['message']?.toString();
         }
 
+        final errorMessage = message ?? description;
+
+        // Build details string if available
+        Map<String, dynamic>? details;
+        if (data is Map<String, dynamic> && data.containsKey('details')) {
+          details = data['details'] as Map<String, dynamic>;
+        }
+
+        NavigationService.showAlertDialog(
+          title: 'Hata ($statusCode)',
+          message: errorMessage,
+          details: details,
+          onConfirm: onConfirm,
+          buttonText: buttonText,
+          barrierDismissible: barrierDismissible,
+        );
+
         return ApiResponse<T>(
           success: false,
           statusCode: statusCode,
-          message: message ?? description,
+          message: errorMessage,
           rawJson: responseData,
         );
       }
     } on DioException catch (e) {
-      return _handleDioError<T>(e);
+      final dioError = _handleDioError<T>(e);
+      NavigationService.showAlertDialog(
+        title: 'Hata (${dioError.statusCode})',
+        message: dioError.message ?? 'Bilinmeyen bir hata oluştu',
+        onConfirm: onConfirm,
+        buttonText: buttonText,
+        barrierDismissible: barrierDismissible,
+      );
+      return dioError;
     } catch (e) {
       LoggerService.error('Unexpected API Error:', e);
+      NavigationService.showAlertDialog(
+        title: 'Hata (500)',
+        message: 'Beklenmeyen bir hata oluştu',
+        onConfirm: onConfirm,
+        buttonText: buttonText,
+        barrierDismissible: barrierDismissible,
+      );
       return ApiResponse<T>(
         success: false,
         statusCode: 500,
@@ -165,8 +201,11 @@ class BaseApiService {
   // Generic API Response Handler for Lists
   Future<ApiResponse<List<T>>> handleListResponse<T>(
     Future<Response> apiCall,
-    T Function(Map<String, dynamic>) fromJson,
-  ) async {
+    T Function(Map<String, dynamic>) fromJson, {
+    VoidCallback? onConfirm,
+    String? buttonText,
+    bool barrierDismissible = true,
+  }) async {
     try {
       final response = await apiCall;
       Map<String, dynamic> responseData = response.data as Map<String, dynamic>;
@@ -230,17 +269,49 @@ class BaseApiService {
           message = responseData['message']?.toString();
         }
 
+        final errorMessage = message ?? description;
+
+        // Build details string if available
+        Map<String, dynamic>? details;
+        if (data is Map<String, dynamic> && data.containsKey('details')) {
+          details = data['details'] as Map<String, dynamic>;
+        }
+
+        NavigationService.showAlertDialog(
+          title: 'Hata ($statusCode)',
+          message: errorMessage,
+          details: details,
+          onConfirm: onConfirm,
+          buttonText: buttonText,
+          barrierDismissible: barrierDismissible,
+        );
+
         return ApiResponse<List<T>>(
           success: false,
           statusCode: statusCode,
-          message: message ?? description,
+          message: errorMessage,
           rawJson: responseData,
         );
       }
     } on DioException catch (e) {
-      return _handleDioError<List<T>>(e);
+      final dioError = _handleDioError<List<T>>(e);
+      NavigationService.showAlertDialog(
+        title: 'Hata (${dioError.statusCode})',
+        message: dioError.message ?? 'Bilinmeyen bir hata oluştu',
+        onConfirm: onConfirm,
+        buttonText: buttonText,
+        barrierDismissible: barrierDismissible,
+      );
+      return dioError;
     } catch (e) {
       LoggerService.error('Unexpected API Error:', e);
+      NavigationService.showAlertDialog(
+        title: 'Hata (500)',
+        message: 'Beklenmeyen bir hata oluştu',
+        onConfirm: onConfirm,
+        buttonText: buttonText,
+        barrierDismissible: barrierDismissible,
+      );
       return ApiResponse<List<T>>(
         success: false,
         statusCode: 500,

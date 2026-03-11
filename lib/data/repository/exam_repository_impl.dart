@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:teorikort/core/models/api_response.dart';
 import 'package:teorikort/core/services/logger_service.dart';
 import 'package:teorikort/domain/repository/i_exam_repository.dart';
@@ -284,6 +285,9 @@ class ExamRepositoryImpl implements IExamRepository {
     String examType = 'final',
     String difficulty = 'medium',
     List<Map<String, dynamic>>? answers,
+    VoidCallback? onConfirm,
+    String? buttonText,
+    bool barrierDismissible = true,
   }) async {
     try {
       final response = await _quizService.submitExamResult(
@@ -297,6 +301,9 @@ class ExamRepositoryImpl implements IExamRepository {
         difficulty: difficulty,
         durationSeconds: duration.inSeconds,
         answers: answers,
+        onConfirm: onConfirm,
+        buttonText: buttonText,
+        barrierDismissible: barrierDismissible,
       );
 
       if (response.success && response.data != null) {
@@ -313,6 +320,7 @@ class ExamRepositoryImpl implements IExamRepository {
             'wrong_answers': wrongAnswers,
             'empty_answers': emptyAnswers,
             'total_questions': correctAnswers + wrongAnswers + emptyAnswers,
+            'duration_seconds': duration.inSeconds,
           }),
         );
       }
