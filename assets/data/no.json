@@ -137,7 +137,8 @@
     "all_questions_answered_title": "Feil",
     "all_questions_answered_message": "Du har besvart alle spørsmål knyttet til denne eksamenen.",
     "all_questions_answered_error": "Ingen spørsmål funnet",
-    "go_back": "Gå tilbake"
+    "go_back": "Gå tilbake",
+    "start_new_test": "Start en ny test"
   },
   "profile": {
     "title": "Profil",
@@ -482,6 +483,7 @@
     "back_to_home": "Back to Home"
   },
   "error": {
+    "error_title": "Feil",
     "unexpected_exception": "En uventet feil oppstod",
     "unknown_exception": "En ukjent feil oppstod",
     "connection_timeout": "Tilkoblingen ble tidsavbrutt",

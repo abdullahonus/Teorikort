@@ -137,7 +137,8 @@
     "all_questions_answered_title": "Hata",
     "all_questions_answered_message": "Bu sınav ile ilgili tüm soruları cevapladınız.",
     "all_questions_answered_error": "Soru bulunmuyor",
-    "go_back": "Geri Dön"
+    "go_back": "Geri Dön",
+    "start_new_test": "Yeni Teste Başla"
   },
   "profile": {
     "title": "Profil",
@@ -482,6 +483,7 @@
     "back_to_home": "Ana Sayfaya Dön"
   },
   "error": {
+    "error_title": "Hata",
     "unexpected_exception": "Beklenmeyen bir hata oluştu",
     "unknown_exception": "Bilinmeyen bir hata oluştu",
     "connection_timeout": "Bağlantı zaman aşımına uğradı",

@@ -137,7 +137,8 @@
     "all_questions_answered_title": "خطا",
     "all_questions_answered_message": "شما به تمام سوالات مربوط به این آزمون پاسخ داده اید.",
     "all_questions_answered_error": "سوالی یافت نشد",
-    "go_back": "برگرد"
+    "go_back": "برگرد",
+    "start_new_test": "شروع آزمون جدید"
   },
   "profile": {
     "title": "پروفایل",
@@ -482,6 +483,7 @@
     "back_to_home": "Back to Home"
   },
   "error": {
+    "error_title": "خطا",
     "unexpected_exception": "An unexpected error occurred",
     "unknown_exception": "An unknown error occurred",
     "connection_timeout": "Connection timed out",

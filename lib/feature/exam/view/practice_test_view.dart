@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
+import 'package:teorikort/core/widgets/custom_elevated_button.dart';
 
 import '../model/exam_category.dart';
 import '../provider/practice_provider.dart';
@@ -46,99 +47,33 @@ class PracticeTestView extends ConsumerWidget {
                   AppLocalization.of(context).translate('exam_list.no_data')),
             );
           }
-          return RefreshIndicator(
-            onRefresh: () async {
-              return ref.refresh(
-                  practiceTestsProvider(subCategory.id.toString()).future);
-            },
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: tests.length,
-              itemBuilder: (context, index) {
-                final test = tests[index];
-                return _buildTestCard(context, test, colorScheme);
-              },
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Center(
+                  child: CustomElevatedButton(
+                    onPressed: () {
+                      final randomOptions = tests.toList();
+                      randomOptions.shuffle();
+                      final randomTest = randomOptions.first;
+                      _confirmAndStart(context, randomTest);
+                    },
+                    text: AppLocalization.of(context)
+                        .translate('exam.start_new_test'),
+                    icon: Icons.play_arrow_rounded,
+                    borderRadius: 16.0,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 16,
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildTestCard(
-      BuildContext context, ExamCategory test, ColorScheme colorScheme) {
-    return Card(
-      elevation: 0,
-      margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.1)),
-      ),
-      color: colorScheme.surface,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () => _confirmAndStart(context, test),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: colorScheme.tertiary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(Icons.assignment, color: Colors.orange),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      test.title,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Icon(Icons.help_outline,
-                            size: 14,
-                            color:
-                                colorScheme.onSurface.withValues(alpha: 0.6)),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${test.totalQuestions} Questions', // Better use localization here if available
-                          style: TextStyle(
-                              color:
-                                  colorScheme.onSurface.withValues(alpha: 0.6),
-                              fontSize: 12),
-                        ),
-                        const SizedBox(width: 12),
-                        Icon(Icons.timer_outlined,
-                            size: 14,
-                            color:
-                                colorScheme.onSurface.withValues(alpha: 0.6)),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${test.timeSeconds ~/ 60}m',
-                          style: TextStyle(
-                              color:
-                                  colorScheme.onSurface.withValues(alpha: 0.6),
-                              fontSize: 12),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Icon(Icons.play_circle_fill,
-                  color: colorScheme.primary, size: 28),
-            ],
-          ),
-        ),
       ),
     );
   }

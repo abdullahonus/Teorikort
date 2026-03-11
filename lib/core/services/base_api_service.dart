@@ -177,8 +177,8 @@ class BaseApiService {
       final dioError = _handleDioError<T>(e);
       final ctx = NavigationService.context;
       final title = ctx != null
-          ? '${AppLocalization.of(ctx).translate('error.error_title')} (${dioError.statusCode})'
-          : 'Hata (${dioError.statusCode})';
+          ? AppLocalization.of(ctx).translate('error.error_title')
+          : 'Hata';
       final fallbackMsg = ctx != null
           ? AppLocalization.of(ctx).translate('error.unknown_exception')
           : 'Bilinmeyen bir hata oluştu';

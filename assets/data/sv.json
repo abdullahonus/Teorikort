@@ -137,7 +137,8 @@
     "all_questions_answered_title": "Fel",
     "all_questions_answered_message": "Du har besvarat alla frågor relaterade till detta prov.",
     "all_questions_answered_error": "Inga frågor hittades",
-    "go_back": "Gå tillbaka"
+    "go_back": "Gå tillbaka",
+    "start_new_test": "Starta ett nytt test"
   },
   "profile": {
     "title": "Profil",
@@ -482,6 +483,7 @@
     "back_to_home": "Back to Home"
   },
   "error": {
+    "error_title": "Fel",
     "unexpected_exception": "Ett oväntat fel inträffade",
     "unknown_exception": "Ett okänt fel inträffade",
     "connection_timeout": "Anslutningen gjorde en timeout",

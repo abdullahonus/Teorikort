@@ -137,7 +137,8 @@
     "all_questions_answered_title": "Error",
     "all_questions_answered_message": "You have answered all questions related to this exam.",
     "all_questions_answered_error": "No questions found",
-    "go_back": "Go Back"
+    "go_back": "Go Back",
+    "start_new_test": "Start a New Test"
   },
   "profile": {
     "title": "Profile",
@@ -482,6 +483,7 @@
     "back_to_home": "Back to Home"
   },
   "error": {
+    "error_title": "Error",
     "unexpected_exception": "An unexpected error occurred",
     "unknown_exception": "An unknown error occurred",
     "connection_timeout": "Connection timed out",
