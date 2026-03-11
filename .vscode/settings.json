@@ -1,6 +1,7 @@
 {
-    "docwriter.hotkey.mac": "⌥ + .",
-    "cSpell.words": [
-        "lastname"
-    ]
+  "docwriter.hotkey.mac": "⌥ + .",
+  "cSpell.words": [
+    "lastname"
+  ],
+  "dart.flutterSdkPath": ".fvm/versions/3.35.4"
 }
