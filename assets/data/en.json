@@ -70,7 +70,8 @@
     },
     "close": "Close",
     "confirm": "Confirm",
-    "description": "Description"
+    "description": "Description",
+    "ok": "OK"
   },
   "home": {
     "welcome": "Welcome",
@@ -464,5 +465,22 @@
     "limit_desc": "To access all questions and see your results, please upgrade to a premium package.",
     "go_to_packages": "Upgrade to Premium",
     "back_to_home": "Back to Home"
+  },
+  "error": {
+    "unexpected_exception": "An unexpected error occurred",
+    "unknown_exception": "An unknown error occurred",
+    "connection_timeout": "Connection timed out",
+    "send_timeout": "Request send timeout",
+    "receive_timeout": "Response receive timeout",
+    "no_internet": "Please check your internet connection",
+    "bad_request": "Invalid request",
+    "unauthorized": "You are not authorized for this action",
+    "not_found": "Requested resource not found",
+    "conflict": "Conflict occurred",
+    "unprocessable": "Invalid data input",
+    "server_error": "Server error occurred",
+    "service_unavailable": "Service temporarily unavailable",
+    "login_failed": "Login failed",
+    "details": "Details:"
   }
 }

@@ -70,7 +70,8 @@
     },
     "close": "Kapat",
     "confirm": "Onayla",
-    "description": "Açıklama"
+    "description": "Açıklama",
+    "ok": "Tamam"
   },
   "home": {
     "welcome": "Hoş Geldiniz",
@@ -454,5 +455,22 @@
     "limit_desc": "Tüm sorulara erişmek ve sonuçlarınızı görmek için lütfen premium pakete yükseltin.",
     "go_to_packages": "Premium'a Geç",
     "back_to_home": "Ana Sayfaya Dön"
+  },
+  "error": {
+    "unexpected_exception": "Beklenmeyen bir hata oluştu",
+    "unknown_exception": "Bilinmeyen bir hata oluştu",
+    "connection_timeout": "Bağlantı zaman aşımına uğradı",
+    "send_timeout": "İstek gönderilirken zaman aşımı",
+    "receive_timeout": "Yanıt alınırken zaman aşımı",
+    "no_internet": "İnternet bağlantısını kontrol edin",
+    "bad_request": "Geçersiz istek",
+    "unauthorized": "Bu işlem için yetkiniz yok",
+    "not_found": "İstenen kaynak bulunamadı",
+    "conflict": "Çakışma oluştu",
+    "unprocessable": "Geçersiz veri girişi",
+    "server_error": "Sunucu hatası oluştu",
+    "service_unavailable": "Servis geçici olarak kullanılamıyor",
+    "login_failed": "Giriş başarısız",
+    "details": "Detaylar:"
   }
 }

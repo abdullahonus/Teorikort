@@ -63,7 +63,7 @@
     "clear": "Rensa",
     "save": "Spara",
     "error": "Ett fel uppstod",
-    "retry": "Försök igen",
+    "retry": "Försök Igen",
     "languages": {
       "turkish": "Türkçe",
       "english": "English",
@@ -72,7 +72,8 @@
     },
     "close": "Stäng",
     "confirm": "Bekräfta",
-    "description": "Beskrivning"
+    "description": "Beskrivning",
+    "ok": "OK"
   },
   "home": {
     "welcome": "Välkommen",
@@ -448,5 +449,22 @@
     "validation_error": "Valideringsfel",
     "forbidden": "Åtkomst nekad",
     "bad_request": "Ogiltig förfrågan"
+  },
+  "error": {
+    "unexpected_exception": "Ett oväntat fel inträffade",
+    "unknown_exception": "Ett okänt fel inträffade",
+    "connection_timeout": "Anslutningen gjorde en timeout",
+    "send_timeout": "Timeout vid sändning av förfrågan",
+    "receive_timeout": "Timeout vid mottagning av svar",
+    "no_internet": "Kontrollera din internetanslutning",
+    "bad_request": "Ogiltig förfrågan",
+    "unauthorized": "Du är inte behörig för denna åtgärd",
+    "not_found": "Den begärda resursen hittades inte",
+    "conflict": "En konflikt inträffade",
+    "unprocessable": "Ogiltig inmatning av data",
+    "server_error": "Ett serverfel inträffade",
+    "service_unavailable": "Tjänsten är tillfälligt otillgänglig",
+    "login_failed": "Inloggningen misslyckades",
+    "details": "Detaljer:"
   }
 }

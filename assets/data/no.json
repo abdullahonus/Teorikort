@@ -63,7 +63,7 @@
     "clear": "Tøm",
     "save": "Lagre",
     "error": "En feil oppstod",
-    "retry": "Prøv igjen",
+    "retry": "Prøv Igjen",
     "languages": {
       "turkish": "Türkçe",
       "english": "English",
@@ -72,7 +72,8 @@
     },
     "close": "Lukk",
     "confirm": "Bekreft",
-    "description": "Beskrivelse"
+    "description": "Beskrivelse",
+    "ok": "OK"
   },
   "home": {
     "welcome": "Velkommen",
@@ -448,5 +449,22 @@
     "validation_error": "Valideringsfeil",
     "forbidden": "Tilgang nektet",
     "bad_request": "Ugyldig forespørsel"
+  },
+  "error": {
+    "unexpected_exception": "En uventet feil oppstod",
+    "unknown_exception": "En ukjent feil oppstod",
+    "connection_timeout": "Tilkoblingen ble tidsavbrutt",
+    "send_timeout": "Tidsavbrudd for sending av forespørsel",
+    "receive_timeout": "Tidsavbrudd for mottak av svar",
+    "no_internet": "Sjekk internettforbindelsen din",
+    "bad_request": "Ugyldig forespørsel",
+    "unauthorized": "Du er ikke autorisert for denne handlingen",
+    "not_found": "Den forespurte ressursen ble ikke funnet",
+    "conflict": "En konflikt oppstod",
+    "unprocessable": "Ugyldig datainndata",
+    "server_error": "En serverfeil oppstod",
+    "service_unavailable": "Tjenesten er midlertidig utilgjengelig",
+    "login_failed": "Innlogging mislyktes",
+    "details": "Detaljer:"
   }
 }

@@ -435,5 +435,6 @@
     "validation_error": "خطای اعتبارسنجی",
     "forbidden": "دسترسی محروم شده",
     "bad_request": "درخواست نامعتبر"
-  }
+  },
+  "error": {}
 }

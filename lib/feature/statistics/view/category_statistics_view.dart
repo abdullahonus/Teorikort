@@ -234,7 +234,7 @@ class _CategoryStatisticsViewState
             onPressed: () => ref
                 .read(statisticsProvider.notifier)
                 .loadCategoryStats(widget.categoryId),
-            child: const Text('Tekrar Dene'),
+            child: Text(AppLocalization.of(context).translate('common.retry')),
           ),
         ],
       ),

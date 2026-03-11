@@ -173,9 +173,19 @@ class BaseApiService {
       }
     } on DioException catch (e) {
       final dioError = _handleDioError<T>(e);
+      final ctx = NavigationService.context;
+      final title = ctx != null
+          ? '${AppLocalization.of(ctx).translate('error.error_title') ?? 'Hata'} (${dioError.statusCode})'
+          : 'Hata (${dioError.statusCode})';
+      final fallbackMsg = ctx != null
+          ? AppLocalization.of(ctx).translate('error.unknown_exception') ??
+              'Bilinmeyen bir hata oluştu'
+          : 'Bilinmeyen bir hata oluştu';
+      final message = dioError.message ?? fallbackMsg;
+
       NavigationService.showAlertDialog(
-        title: 'Hata (${dioError.statusCode})',
-        message: dioError.message ?? 'Bilinmeyen bir hata oluştu',
+        title: title,
+        message: message,
         onConfirm: onConfirm,
         buttonText: buttonText,
         barrierDismissible: barrierDismissible,
@@ -183,9 +193,18 @@ class BaseApiService {
       return dioError;
     } catch (e) {
       LoggerService.error('Unexpected API Error:', e);
+      final ctx = NavigationService.context;
+      final title = ctx != null
+          ? '${AppLocalization.of(ctx).translate('error.error_title') ?? 'Hata'} (500)'
+          : 'Hata (500)';
+      final message = ctx != null
+          ? AppLocalization.of(ctx).translate('error.unexpected_exception') ??
+              'Beklenmeyen bir hata oluştu'
+          : 'Beklenmeyen bir hata oluştu';
+
       NavigationService.showAlertDialog(
-        title: 'Hata (500)',
-        message: 'Beklenmeyen bir hata oluştu',
+        title: title,
+        message: message,
         onConfirm: onConfirm,
         buttonText: buttonText,
         barrierDismissible: barrierDismissible,
@@ -193,7 +212,7 @@ class BaseApiService {
       return ApiResponse<T>(
         success: false,
         statusCode: 500,
-        message: 'Beklenmeyen bir hata oluştu',
+        message: message,
       );
     }
   }
@@ -321,24 +340,30 @@ class BaseApiService {
   }
 
   ApiResponse<T> _handleDioError<T>(DioException error) {
+    final ctx = NavigationService.context;
+    final l10n = ctx != null ? AppLocalization.of(ctx) : null;
+
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
         return ApiResponse<T>(
           success: false,
           statusCode: 408,
-          message: 'Bağlantı zaman aşımına uğradı',
+          message: l10n?.translate('error.connection_timeout') ??
+              'Bağlantı zaman aşımına uğradı',
         );
       case DioExceptionType.sendTimeout:
         return ApiResponse<T>(
           success: false,
           statusCode: 408,
-          message: 'İstek gönderilirken zaman aşımı',
+          message: l10n?.translate('error.send_timeout') ??
+              'İstek gönderilirken zaman aşımı',
         );
       case DioExceptionType.receiveTimeout:
         return ApiResponse<T>(
           success: false,
           statusCode: 408,
-          message: 'Yanıt alınırken zaman aşımı',
+          message: l10n?.translate('error.receive_timeout') ??
+              'Yanıt alınırken zaman aşımı',
         );
       case DioExceptionType.badResponse:
         final statusCode = error.response?.statusCode ?? 500;
@@ -368,39 +393,49 @@ class BaseApiService {
         return ApiResponse<T>(
           success: false,
           statusCode: 503,
-          message: 'İnternet bağlantısını kontrol edin',
+          message: l10n?.translate('error.no_internet') ??
+              'İnternet bağlantısını kontrol edin',
         );
       default:
         return ApiResponse<T>(
           success: false,
           statusCode: 500,
-          message: 'Bilinmeyen bir hata oluştu',
+          message: l10n?.translate('error.unknown_exception') ??
+              'Bilinmeyen bir hata oluştu',
         );
     }
   }
 
   String _getErrorMessage(int statusCode) {
+    final ctx = NavigationService.context;
+    final l10n = ctx != null ? AppLocalization.of(ctx) : null;
+
     switch (statusCode) {
       case 400:
-        return 'Geçersiz istek';
+        return l10n?.translate('error.bad_request') ?? 'Geçersiz istek';
       case 401:
-        return 'Oturum süreniz dolmuş. Lütfen tekrar giriş yapın';
+        return l10n?.translate('error.unauthorized') ??
+            'Oturum süreniz dolmuş. Lütfen tekrar giriş yapın';
       case 403:
-        return 'Bu işlem için yetkiniz yok';
+        return l10n?.translate('error.unauthorized') ??
+            'Bu işlem için yetkiniz yok';
       case 404:
-        return 'İstenen kaynak bulunamadı';
+        return l10n?.translate('error.not_found') ??
+            'İstenen kaynak bulunamadı';
       case 409:
-        return 'Çakışma oluştu';
+        return l10n?.translate('error.conflict') ?? 'Çakışma oluştu';
       case 422:
-        return 'Geçersiz veri girişi';
+        return l10n?.translate('error.unprocessable') ?? 'Geçersiz veri girişi';
       case 429:
-        return 'Çok fazla istek. Lütfen bekleyin';
+        return l10n?.translate('error.too_many_requests') ??
+            'Çok fazla istek. Lütfen bekleyin';
       case 500:
-        return 'Sunucu hatası oluştu';
+        return l10n?.translate('error.server_error') ?? 'Sunucu hatası oluştu';
       case 503:
-        return 'Servis geçici olarak kullanılamıyor';
+        return l10n?.translate('error.service_unavailable') ??
+            'Servis geçici olarak kullanılamıyor';
       default:
-        return 'Bir hata oluştu';
+        return l10n?.translate('error.unknown_exception') ?? 'Bir hata oluştu';
     }
   }
 
