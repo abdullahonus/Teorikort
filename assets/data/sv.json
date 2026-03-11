@@ -448,7 +448,10 @@
     "end_date": "End Date",
     "remaining_time": "Remaining Time",
     "days": "Days",
-    "hours": "Hours"
+    "hours": "Hours",
+    "months_package_desc": "Månaders Utbildningspaket",
+    "one_time_payment": "Engångsbetalning",
+    "current_plan": "AKTUELL PLAN"
   },
   "signs": {
     "title": "Vägmärken",

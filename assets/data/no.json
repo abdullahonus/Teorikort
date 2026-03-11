@@ -448,7 +448,10 @@
     "end_date": "End Date",
     "remaining_time": "Remaining Time",
     "days": "Days",
-    "hours": "Hours"
+    "hours": "Hours",
+    "months_package_desc": "Måneders Opplæringspakke",
+    "one_time_payment": "Engangsbetaling",
+    "current_plan": "NÅVÆRENDE PLAN"
   },
   "signs": {
     "title": "Trafikkskilt",

@@ -448,7 +448,10 @@
     "end_date": "End Date",
     "remaining_time": "Remaining Time",
     "days": "Days",
-    "hours": "Hours"
+    "hours": "Hours",
+    "months_package_desc": "ماهه بسته آموزشی",
+    "one_time_payment": "پرداخت یک‌باره",
+    "current_plan": "طرح فعلی شما"
   },
   "signs": {
     "title": "علائم راهنمایی",

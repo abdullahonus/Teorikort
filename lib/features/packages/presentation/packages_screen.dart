@@ -259,9 +259,10 @@ class _PackagesScreenState extends State<PackagesScreen> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isPremium = package.price > 0;
+    final canPurchase = package.canPurchase;
+    final isActive = package.isActive;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+    Widget card = Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         gradient: isPremium
@@ -315,7 +316,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
             Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: () => _showPackageDetail(package),
+                onTap: canPurchase ? () => _showPackageDetail(package) : null,
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
@@ -340,7 +341,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: const Text(
-                                      'POPULAR CHOICE',
+                                      'PREMIUM',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 10,
@@ -401,7 +402,8 @@ class _PackagesScreenState extends State<PackagesScreen> {
                               ),
                               if (package.price > 0)
                                 Text(
-                                  'One-time payment',
+                                  AppLocalization.of(context)
+                                      .translate('packages.one_time_payment'),
                                   style: theme.textTheme.labelSmall?.copyWith(
                                     color: isPremium
                                         ? Colors.white70
@@ -419,7 +421,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                               : colorScheme.outline.withValues(alpha: 0.1)),
                       const SizedBox(height: 16),
                       Text(
-                        '${package.durationMonth} Aylık Eğitim Paketi',
+                        '${package.durationMonth} ${AppLocalization.of(context).translate('packages.months_package_desc')}',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: isPremium
                               ? Colors.white.withValues(alpha: 0.9)
@@ -431,7 +433,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: _isPurchasing
+                          onPressed: (!canPurchase || _isPurchasing)
                               ? null
                               : () => _handlePurchase(package),
                           style: ElevatedButton.styleFrom(
@@ -439,17 +441,26 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                 isPremium ? Colors.white : colorScheme.primary,
                             foregroundColor:
                                 isPremium ? colorScheme.primary : Colors.white,
+                            disabledBackgroundColor: isPremium
+                                ? Colors.white.withValues(alpha: 0.4)
+                                : colorScheme.onSurface.withValues(alpha: 0.12),
+                            disabledForegroundColor: isPremium
+                                ? colorScheme.primary.withValues(alpha: 0.5)
+                                : colorScheme.onSurface.withValues(alpha: 0.38),
                             padding: const EdgeInsets.symmetric(vertical: 18),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            elevation: isPremium ? 0 : 2,
+                            elevation: isPremium && canPurchase ? 0 : 2,
                             shadowColor:
                                 colorScheme.primary.withValues(alpha: 0.3),
                           ),
                           child: Text(
-                            package.price == 0
-                                ? 'START FOR FREE'
-                                : 'UPGRADE NOW',
+                            isActive
+                                ? AppLocalization.of(context)
+                                    .translate('packages.current_plan')
+                                : (package.price == 0
+                                    ? 'START FOR FREE'
+                                    : 'UPGRADE NOW'),
                             style: const TextStyle(
                                 fontWeight: FontWeight.w900,
                                 fontSize: 16,
@@ -464,6 +475,81 @@ class _PackagesScreenState extends State<PackagesScreen> {
             ),
           ],
         ),
+      ),
+    );
+
+    if (!canPurchase) {
+      card = ColorFiltered(
+        colorFilter: const ColorFilter.matrix(<double>[
+          0.2126,
+          0.7152,
+          0.0722,
+          0,
+          0,
+          0.2126,
+          0.7152,
+          0.0722,
+          0,
+          0,
+          0.2126,
+          0.7152,
+          0.0722,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6,
+          0,
+        ]),
+        child: card,
+      );
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Stack(
+        children: [
+          card,
+          if (isActive)
+            Positioned(
+              top: 16,
+              right: 16,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.green.shade600,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.check_circle,
+                        color: Colors.white, size: 14),
+                    const SizedBox(width: 6),
+                    Text(
+                      AppLocalization.of(context)
+                          .translate('packages.active_package')
+                          .toUpperCase(),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

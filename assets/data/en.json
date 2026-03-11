@@ -448,7 +448,10 @@
     "end_date": "End Date",
     "remaining_time": "Remaining Time",
     "days": "Days",
-    "hours": "Hours"
+    "hours": "Hours",
+    "months_package_desc": "Months Training Package",
+    "one_time_payment": "One-time payment",
+    "current_plan": "CURRENT PLAN"
   },
   "signs": {
     "title": "Traffic Signs",

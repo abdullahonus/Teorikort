@@ -5,6 +5,9 @@ class Package {
   final String name;
   final int durationMonth;
   final double price;
+  final bool canPurchase;
+  final bool isActive;
+  final String? statusText;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -15,6 +18,9 @@ class Package {
     required this.name,
     required this.durationMonth,
     required this.price,
+    required this.canPurchase,
+    required this.isActive,
+    this.statusText,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -27,6 +33,9 @@ class Package {
       name: json['name'] ?? '',
       durationMonth: json['duration_month'] ?? 0,
       price: (json['price'] ?? 0).toDouble(),
+      canPurchase: json['can_purchase'] ?? false,
+      isActive: json['is_active'] ?? false,
+      statusText: json['status_text'],
       createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
       updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
     );
@@ -40,6 +49,9 @@ class Package {
       'name': name,
       'duration_month': durationMonth,
       'price': price,
+      'can_purchase': canPurchase,
+      'is_active': isActive,
+      'status_text': statusText,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
