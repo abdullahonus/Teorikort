@@ -1,12 +1,13 @@
-import 'package:teorikort/core/constants/api_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../services/auth_service.dart';
-import '../models/auth_tokens.dart';
-import '../../features/auth/data/models/auth_user.dart';
-import '../services/logger_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../services/user_service.dart';
+import 'package:teorikort/core/constants/api_constants.dart';
+
+import '../../features/auth/data/models/auth_user.dart';
 import '../../features/user/domain/models/user_profile.dart';
+import '../models/auth_tokens.dart';
+import '../services/auth_service.dart';
+import '../services/logger_service.dart';
+import '../services/user_service.dart';
 
 part 'auth_provider.g.dart';
 
@@ -108,21 +109,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> sendOTP(String email) async {
     try {
       state = const AuthState.loading();
-      // TODO: Call actual API
       await Future.delayed(const Duration(seconds: 2));
 
       LoggerService.info('OTP sent to: $email');
       state = const AuthState.unauthenticated();
     } catch (e) {
       LoggerService.error('Failed to send OTP', e);
-      state = AuthState.error('Failed to send verification code');
+      state = const AuthState.error('Failed to send verification code');
     }
   }
 
   Future<void> verifyOTP(String email, String otp) async {
     try {
       state = const AuthState.loading();
-      // TODO: Call actual API
+      //
       await Future.delayed(const Duration(seconds: 2));
 
       if (otp == '123456') {
@@ -134,7 +134,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
     } catch (e) {
       LoggerService.error('OTP verification failed', e);
-      state = AuthState.error('Invalid verification code');
+      state = const AuthState.error('Invalid verification code');
     }
   }
 }

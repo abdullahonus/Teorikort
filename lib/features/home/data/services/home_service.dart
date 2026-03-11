@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../../../../core/services/base_api_service.dart';
+
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/models/api_response.dart';
+import '../../../../core/services/base_api_service.dart';
 import 'daily_tip_service.dart';
 
 class HomeService extends BaseApiService {

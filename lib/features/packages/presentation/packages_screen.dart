@@ -185,11 +185,11 @@ class _PackagesScreenState extends State<PackagesScreen> {
     final isRejected = _activePackage!.status == 2;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 24),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
             color: isActive
                 ? Colors.green.withValues(alpha: 0.5)
@@ -232,18 +232,18 @@ class _PackagesScreenState extends State<PackagesScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           if (isActive || _activePackage!.status == 0) ...[
             Text(
               '${AppLocalization.of(context).translate('packages.remaining_use')}: ${_activePackage!.limitUse}',
               style: theme.textTheme.bodyMedium,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               '${AppLocalization.of(context).translate('packages.end_date')}: ${_activePackage!.expiresAt.toString().split(' ')[0]}',
               style: theme.textTheme.bodyMedium,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             if (!_activePackage!.expired)
               Text(
                 '${AppLocalization.of(context).translate('packages.remaining_time')}: ${_activePackage!.remainingDays.toInt()} ${AppLocalization.of(context).translate('packages.days')} ${_activePackage!.remainingHours} ${AppLocalization.of(context).translate('packages.hours')}',
@@ -264,7 +264,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
 
     Widget card = Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         gradient: isPremium
             ? LinearGradient(
                 colors: [
@@ -286,30 +286,22 @@ class _PackagesScreenState extends State<PackagesScreen> {
           BoxShadow(
             color: (isPremium ? colorScheme.primary : colorScheme.shadow)
                 .withValues(alpha: isPremium ? 0.3 : 0.05),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         child: Stack(
           children: [
             if (isPremium) ...[
               Positioned(
-                right: -30,
-                top: -30,
+                right: -40,
+                top: -40,
                 child: CircleAvatar(
-                  radius: 80,
+                  radius: 70,
                   backgroundColor: Colors.white.withValues(alpha: 0.08),
-                ),
-              ),
-              Positioned(
-                left: -20,
-                bottom: -40,
-                child: CircleAvatar(
-                  radius: 60,
-                  backgroundColor: Colors.white.withValues(alpha: 0.05),
                 ),
               ),
             ],
@@ -318,7 +310,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
               child: InkWell(
                 onTap: canPurchase ? () => _showPackageDetail(package) : null,
                 child: Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -332,9 +324,9 @@ class _PackagesScreenState extends State<PackagesScreen> {
                               children: [
                                 if (isPremium)
                                   Container(
-                                    margin: const EdgeInsets.only(bottom: 8),
+                                    margin: const EdgeInsets.only(bottom: 6),
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 4),
+                                        horizontal: 8, vertical: 2),
                                     decoration: BoxDecoration(
                                       color:
                                           Colors.white.withValues(alpha: 0.2),
@@ -344,15 +336,14 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                       'PREMIUM',
                                       style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 10,
+                                          fontSize: 9,
                                           fontWeight: FontWeight.bold,
                                           letterSpacing: 1),
                                     ),
                                   ),
                                 Text(
                                   package.name,
-                                  style:
-                                      theme.textTheme.headlineSmall?.copyWith(
+                                  style: theme.textTheme.titleLarge?.copyWith(
                                     fontWeight: FontWeight.w900,
                                     color: isPremium
                                         ? Colors.white
@@ -360,26 +351,14 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                     letterSpacing: -0.5,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 4),
-                                  decoration: BoxDecoration(
+                                const SizedBox(height: 4),
+                                Text(
+                                  isPremium ? 'PREMIUM' : 'FREE',
+                                  style: theme.textTheme.labelSmall?.copyWith(
                                     color: isPremium
-                                        ? Colors.white.withValues(alpha: 0.15)
-                                        : colorScheme.primary
-                                            .withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Text(
-                                    isPremium ? 'PREMIUM' : 'FREE',
-                                    style:
-                                        theme.textTheme.labelMedium?.copyWith(
-                                      color: isPremium
-                                          ? Colors.white
-                                          : colorScheme.primary,
-                                      fontWeight: FontWeight.w800,
-                                    ),
+                                        ? Colors.white70
+                                        : colorScheme.primary,
+                                    fontWeight: FontWeight.w800,
                                   ),
                                 ),
                               ],
@@ -392,12 +371,12 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                 package.price == 0
                                     ? 'FREE'
                                     : '₺${package.price.toInt()}',
-                                style: theme.textTheme.headlineLarge?.copyWith(
+                                style: theme.textTheme.titleLarge?.copyWith(
                                   fontWeight: FontWeight.w900,
                                   color: isPremium
                                       ? Colors.white
                                       : colorScheme.primary,
-                                  letterSpacing: -1,
+                                  letterSpacing: -0.5,
                                 ),
                               ),
                               if (package.price > 0)
@@ -405,6 +384,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                   AppLocalization.of(context)
                                       .translate('packages.one_time_payment'),
                                   style: theme.textTheme.labelSmall?.copyWith(
+                                    fontSize: 10,
                                     color: isPremium
                                         ? Colors.white70
                                         : colorScheme.onSurfaceVariant,
@@ -414,22 +394,22 @@ class _PackagesScreenState extends State<PackagesScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 12),
                       Divider(
+                          height: 1,
                           color: isPremium
                               ? Colors.white24
                               : colorScheme.outline.withValues(alpha: 0.1)),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
                       Text(
                         '${package.durationMonth} ${AppLocalization.of(context).translate('packages.months_package_desc')}',
-                        style: theme.textTheme.bodyMedium?.copyWith(
+                        style: theme.textTheme.bodySmall?.copyWith(
                           color: isPremium
                               ? Colors.white.withValues(alpha: 0.9)
                               : colorScheme.onSurfaceVariant,
-                          height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 16),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -447,12 +427,10 @@ class _PackagesScreenState extends State<PackagesScreen> {
                             disabledForegroundColor: isPremium
                                 ? colorScheme.primary.withValues(alpha: 0.5)
                                 : colorScheme.onSurface.withValues(alpha: 0.38),
-                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            elevation: isPremium && canPurchase ? 0 : 2,
-                            shadowColor:
-                                colorScheme.primary.withValues(alpha: 0.3),
+                                borderRadius: BorderRadius.circular(16)),
+                            elevation: isPremium && canPurchase ? 0 : 1,
                           ),
                           child: Text(
                             isActive
@@ -463,7 +441,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                     : 'UPGRADE NOW'),
                             style: const TextStyle(
                                 fontWeight: FontWeight.w900,
-                                fontSize: 16,
+                                fontSize: 14,
                                 letterSpacing: 0.5),
                           ),
                         ),
@@ -507,23 +485,22 @@ class _PackagesScreenState extends State<PackagesScreen> {
     }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 12),
       child: Stack(
         children: [
           card,
           if (isActive)
             Positioned(
-              top: 16,
-              right: 16,
+              top: 10,
+              right: 10,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: Colors.green.shade600,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.2),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -533,15 +510,15 @@ class _PackagesScreenState extends State<PackagesScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(Icons.check_circle,
-                        color: Colors.white, size: 14),
-                    const SizedBox(width: 6),
+                        color: Colors.white, size: 10),
+                    const SizedBox(width: 4),
                     Text(
                       AppLocalization.of(context)
                           .translate('packages.active_package')
                           .toUpperCase(),
                       style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 11,
+                          fontSize: 8,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 0.5),
                     ),
@@ -627,29 +604,29 @@ class _PackagesScreenState extends State<PackagesScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        maxChildSize: 0.95,
+        initialChildSize: 0.5,
+        maxChildSize: 0.9,
         minChildSize: 0.4,
         builder: (_, controller) => Container(
           decoration: BoxDecoration(
             color: colorScheme.surface,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
           ),
-          padding: const EdgeInsets.fromLTRB(28, 12, 28, 28),
+          padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
           child: ListView(
             controller: controller,
             children: [
               Center(
                 child: Container(
-                  width: 48,
-                  height: 6,
+                  width: 40,
+                  height: 4,
                   decoration: BoxDecoration(
                     color: colorScheme.outline.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(3),
+                    borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -659,15 +636,14 @@ class _PackagesScreenState extends State<PackagesScreen> {
                       children: [
                         Text(
                           package.name,
-                          style: theme.textTheme.headlineMedium?.copyWith(
+                          style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.w900,
-                            letterSpacing: -1,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 4),
                         Text(
                           isPremium ? 'PREMIUM' : 'FREE',
-                          style: theme.textTheme.labelLarge?.copyWith(
+                          style: theme.textTheme.labelMedium?.copyWith(
                             color: isPremium
                                 ? colorScheme.primary
                                 : colorScheme.onSurfaceVariant,
@@ -679,7 +655,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                   ),
                   Text(
                     package.price == 0 ? 'FREE' : '₺${package.price.toInt()}',
-                    style: theme.textTheme.headlineLarge?.copyWith(
+                    style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w900,
                       color: isPremium
                           ? colorScheme.primary
@@ -688,28 +664,43 @@ class _PackagesScreenState extends State<PackagesScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 32),
-              Text(
-                AppLocalization.of(context).translate('packages.features'),
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                '${package.durationMonth} Aylık Eğitim Paketi',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                    height: 1.6, color: colorScheme.onSurfaceVariant),
-              ),
               const SizedBox(height: 24),
-              _buildFeatureItem(Icons.verified_user_rounded,
-                  'Full access to all topics & subtopics'),
-              _buildFeatureItem(
-                  Icons.analytics_rounded, 'Detailed AI-powered statistics'),
-              _buildFeatureItem(
-                  Icons.offline_bolt_rounded, 'Offline study mode enabled'),
-              _buildFeatureItem(
-                  Icons.support_agent_rounded, 'Priority technical support'),
-              const SizedBox(height: 48),
+              Divider(color: colorScheme.outline.withValues(alpha: 0.1)),
+              const SizedBox(height: 24),
+              Text(
+                '${package.durationMonth} ${AppLocalization.of(context).translate('packages.months_package_desc')}',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                    height: 1.5, color: colorScheme.onSurfaceVariant),
+              ),
+              if (package.statusText != null) ...[
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                        color: colorScheme.primary.withValues(alpha: 0.1)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_outline,
+                          color: colorScheme.primary, size: 18),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          package.statusText!,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              const SizedBox(height: 32),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -720,9 +711,9 @@ class _PackagesScreenState extends State<PackagesScreen> {
                           _handlePurchase(package);
                         },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(16)),
                   ),
                   child: Text(
                     _isPurchasing
@@ -731,57 +722,24 @@ class _PackagesScreenState extends State<PackagesScreen> {
                             ? 'START NOW'
                             : 'GET PREMIUM ACCESS'),
                     style: const TextStyle(
-                        fontWeight: FontWeight.w900, fontSize: 16),
+                        fontWeight: FontWeight.w900, fontSize: 15),
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text(
                   AppLocalization.of(context).translate('common.close'),
                   style: TextStyle(
-                      color: colorScheme.outline, fontWeight: FontWeight.bold),
+                      color: colorScheme.outline,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13),
                 ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildFeatureItem(IconData icon, String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color:
-                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon,
-                color: Theme.of(context).colorScheme.primary, size: 18),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withValues(alpha: 0.8),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
