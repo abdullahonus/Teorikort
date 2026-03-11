@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/models/api_response.dart';
 import '../../../../core/services/base_api_service.dart';
+import '../models/active_package.dart';
 import '../models/package.dart';
 import '../models/payment_response.dart';
 
@@ -36,6 +37,16 @@ class PackageService extends BaseApiService {
         data: {'package_id': packageId},
       ),
       PaymentResponse.fromJson,
+    );
+  }
+
+  // GET /subscription/active-package
+  Future<ApiResponse<ActivePackage>> getActivePackage({
+    BuildContext? context,
+  }) async {
+    return await handleResponse<ActivePackage>(
+      get(ApiConstants.activePackage),
+      ActivePackage.fromJson,
     );
   }
 }

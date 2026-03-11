@@ -66,7 +66,10 @@
     "retry": "Try Again",
     "languages": {
       "turkish": "Türkçe",
-      "english": "English"
+      "english": "English",
+      "swedish": "Svenska",
+      "norwegian": "Norsk",
+      "persian": "فارسی"
     },
     "close": "Close",
     "confirm": "Confirm",
@@ -407,7 +410,9 @@
     "reset_success": "Password Reset Successful",
     "password_length": "Password must be at least 6 characters.",
     "reset_password_button": "Reset Password",
-    "new_password": "New Password"
+    "new_password": "New Password",
+    "password_requirements": "Şifre en az 8 karakter olmalı ve büyük harf, küçük harf, rakam içermeli",
+    "reset_error": "Şifre değiştirme başarısız"
   },
   "workbook": {
     "title": "Workbook",
@@ -432,7 +437,17 @@
     "select": "Select Package",
     "features": "Features",
     "purchase": "Purchase",
-    "free": "Free"
+    "free": "Free",
+    "other_packages": "Other Packages",
+    "active_package": "Active Package",
+    "active": "Active",
+    "pending": "Pending",
+    "rejected": "Rejected",
+    "remaining_use": "Remaining Usage",
+    "end_date": "End Date",
+    "remaining_time": "Remaining Time",
+    "days": "Days",
+    "hours": "Hours"
   },
   "signs": {
     "title": "Traffic Signs",

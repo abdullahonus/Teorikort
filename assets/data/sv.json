@@ -68,7 +68,8 @@
       "turkish": "Türkçe",
       "english": "English",
       "swedish": "Svenska",
-      "norwegian": "Norsk"
+      "norwegian": "Norsk",
+      "persian": "فارسی"
     },
     "close": "Stäng",
     "confirm": "Bekräfta",
@@ -97,6 +98,18 @@
       "physics_quiz": "Trafikregler Quiz",
       "duration": "45 minuter"
     },
+    "today_exams": "Today's Exams",
+    "notifications": "Notifications",
+    "messages": "Messages",
+    "menu": "Menu",
+    "search": "Search exam...",
+    "view_all": "View All",
+    "continue_exam": "Continue",
+    "start_exam": "Start Exam",
+    "exam_progress": "Exam Progress",
+    "completed": "Completed",
+    "upcoming_exams": "Upcoming Exams",
+    "recent_activities": "Recent Activities",
     "welcome_name": "Hej, %s",
     "motivation_message": "Är du redo att lära dig nya ämnen idag?",
     "quick_start": "Snabbstart",
@@ -397,7 +410,9 @@
     "reset_success": "Lösenordet återställt",
     "password_length": "Lösenordet måste vara minst 6 tecken.",
     "reset_password_button": "Återställ lösenord",
-    "new_password": "Nytt lösenord"
+    "new_password": "Nytt lösenord",
+    "password_requirements": "Şifre en az 8 karakter olmalı ve büyük harf, küçük harf, rakam içermeli",
+    "reset_error": "Şifre değiştirme başarısız"
   },
   "workbook": {
     "title": "Arbetsbok",
@@ -422,7 +437,17 @@
     "select": "Välj paket",
     "features": "Funktioner",
     "purchase": "Köp",
-    "free": "Gratis"
+    "free": "Gratis",
+    "other_packages": "Other Packages",
+    "active_package": "Active Package",
+    "active": "Active",
+    "pending": "Pending",
+    "rejected": "Rejected",
+    "remaining_use": "Remaining Usage",
+    "end_date": "End Date",
+    "remaining_time": "Remaining Time",
+    "days": "Days",
+    "hours": "Hours"
   },
   "signs": {
     "title": "Vägmärken",
@@ -449,6 +474,12 @@
     "validation_error": "Valideringsfel",
     "forbidden": "Åtkomst nekad",
     "bad_request": "Ogiltig förfrågan"
+  },
+  "demo": {
+    "limit_title": "You've Reached the Demo Limit",
+    "limit_desc": "To access all questions and see your results, please upgrade to a premium package.",
+    "go_to_packages": "Upgrade to Premium",
+    "back_to_home": "Back to Home"
   },
   "error": {
     "unexpected_exception": "Ett oväntat fel inträffade",

@@ -43,7 +43,10 @@
     "avg_score": "میانگین امتیاز",
     "best_score": "بهترین امتیاز",
     "total_score": "مجموع امتیاز",
-    "highest_score": "بیشترین"
+    "highest_score": "بیشترین",
+    "lowest": "Lowest",
+    "average": "Average",
+    "highest": "Highest"
   },
   "common": {
     "language": "زبان",
@@ -70,7 +73,8 @@
     },
     "close": "بستن",
     "confirm": "تأیید",
-    "description": "توضیحات"
+    "description": "توضیحات",
+    "ok": "OK"
   },
   "home": {
     "welcome": "خوش آمدید",
@@ -94,6 +98,18 @@
       "physics_quiz": "کوییز قوانین راهنمایی",
       "duration": "۴۵ دقیقه"
     },
+    "today_exams": "Today's Exams",
+    "notifications": "Notifications",
+    "messages": "Messages",
+    "menu": "Menu",
+    "search": "Search exam...",
+    "view_all": "View All",
+    "continue_exam": "Continue",
+    "start_exam": "Start Exam",
+    "exam_progress": "Exam Progress",
+    "completed": "Completed",
+    "upcoming_exams": "Upcoming Exams",
+    "recent_activities": "Recent Activities",
     "welcome_name": "سلام، %s",
     "motivation_message": "آیا آماده‌اید امروز مطالب جدید یاد بگیرید؟",
     "quick_start": "شروع سریع",
@@ -394,7 +410,9 @@
     "reset_success": "رمز عبور با موفقیت بازنشانی شد",
     "password_length": "رمز عبور باید حداقل ۶ کاراکتر باشد.",
     "reset_password_button": "بازنشانی رمز عبور",
-    "new_password": "رمز عبور جدید"
+    "new_password": "رمز عبور جدید",
+    "password_requirements": "Şifre en az 8 karakter olmalı ve büyük harf, küçük harf, rakam içermeli",
+    "reset_error": "Şifre değiştirme başarısız"
   },
   "workbook": {
     "title": "کتاب کار",
@@ -402,7 +420,9 @@
     "in_progress": "در حال انجام",
     "no_workbooks": "هنوز کتاب کاری ندارید.",
     "no_workbooks_desc": "هنوز کتاب کاری ندارید.",
-    "minutes": "دقیقه"
+    "minutes": "دقیقه",
+    "subtitle": "My Saved Studies",
+    "delete_confirm": "Are you sure you want to delete this study record?"
   },
   "report": {
     "title": "گزارش سوال",
@@ -417,12 +437,31 @@
     "select": "انتخاب بسته",
     "features": "ویژگی‌ها",
     "purchase": "خرید",
-    "free": "رایگان"
+    "free": "رایگان",
+    "other_packages": "Other Packages",
+    "active_package": "Active Package",
+    "active": "Active",
+    "pending": "Pending",
+    "rejected": "Rejected",
+    "remaining_use": "Remaining Usage",
+    "end_date": "End Date",
+    "remaining_time": "Remaining Time",
+    "days": "Days",
+    "hours": "Hours"
   },
   "signs": {
     "title": "علائم راهنمایی",
     "no_data": "علامت راهنمایی‌ای یافت نشد.",
     "subtitle": "همه علائم راهنمایی"
+  },
+  "splash": {
+    "maintenance_title": "Maintenance",
+    "maintenance_desc": "We are working to serve you better. Please try again later.",
+    "update_title": "Update Required",
+    "update_desc": "A new version is available. Please update to continue.",
+    "error_title": "An Error Occurred",
+    "error_desc": "A problem occurred during connection.",
+    "retry": "Try Again"
   },
   "errors": {
     "not_found": "یافت نشد",
@@ -436,5 +475,27 @@
     "forbidden": "دسترسی محروم شده",
     "bad_request": "درخواست نامعتبر"
   },
-  "error": {}
+  "demo": {
+    "limit_title": "You've Reached the Demo Limit",
+    "limit_desc": "To access all questions and see your results, please upgrade to a premium package.",
+    "go_to_packages": "Upgrade to Premium",
+    "back_to_home": "Back to Home"
+  },
+  "error": {
+    "unexpected_exception": "An unexpected error occurred",
+    "unknown_exception": "An unknown error occurred",
+    "connection_timeout": "Connection timed out",
+    "send_timeout": "Request send timeout",
+    "receive_timeout": "Response receive timeout",
+    "no_internet": "Please check your internet connection",
+    "bad_request": "Invalid request",
+    "unauthorized": "You are not authorized for this action",
+    "not_found": "Requested resource not found",
+    "conflict": "Conflict occurred",
+    "unprocessable": "Invalid data input",
+    "server_error": "Server error occurred",
+    "service_unavailable": "Service temporarily unavailable",
+    "login_failed": "Login failed",
+    "details": "Details:"
+  }
 }

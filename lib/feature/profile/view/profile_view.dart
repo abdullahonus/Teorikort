@@ -22,6 +22,15 @@ class ProfileView extends ConsumerStatefulWidget {
 class _ProfileViewState extends ConsumerState<ProfileView> {
   final TextEditingController _nameController = TextEditingController();
 
+  String _getInitials(String name) {
+    if (name.trim().isEmpty) return '?';
+    final parts = name.trim().split(RegExp(r'\s+'));
+    if (parts.length > 1) {
+      return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
+    }
+    return parts[0][0].toUpperCase();
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -30,14 +39,15 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
 
   Future<void> _editProfilePhoto() async {
     final messenger = ScaffoldMessenger.of(context);
+    final String inactiveMsg =
+        AppLocalization.of(context).translate('profile.photo_upload_inactive');
+
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
       messenger.showSnackBar(
-        SnackBar(
-            content: Text(AppLocalization.of(context)
-                .translate('profile.photo_upload_inactive'))),
+        SnackBar(content: Text(inactiveMsg)),
       );
     }
   }
@@ -118,25 +128,15 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: colorScheme.primary.withValues(alpha: 0.2),
-                        width: 2,
-                      ),
-                    ),
-                    child: ClipOval(
-                      child: Image.network(
-                        ref.read(profileProvider.notifier).currentUserPhoto,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Icon(
-                          Icons.person,
-                          size: 50,
-                          color: colorScheme.primary,
-                        ),
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: colorScheme.primaryContainer,
+                    child: Text(
+                      _getInitials(state.profile?.fullName ?? ''),
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.onPrimaryContainer,
                       ),
                     ),
                   ),
@@ -195,15 +195,15 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
         _buildSettingsCard(
           context,
           children: [
-            _buildSettingsTile(
-              context,
-              title: AppLocalization.of(context).translate('workbook.title'),
-              trailing: IconButton(
-                icon: const Icon(Icons.arrow_forward_ios, size: 16),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const WorkbookListScreen()),
-                ),
+            InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const WorkbookListScreen()),
+              ),
+              child: _buildSettingsTile(
+                context,
+                title: AppLocalization.of(context).translate('workbook.title'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
               ),
             ),
           ],
@@ -215,15 +215,15 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
         _buildSettingsCard(
           context,
           children: [
-            _buildSettingsTile(
-              context,
-              title: AppLocalization.of(context).translate('packages.title'),
-              trailing: IconButton(
-                icon: const Icon(Icons.arrow_forward_ios, size: 16),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const PackagesScreen()),
-                ),
+            InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const PackagesScreen()),
+              ),
+              child: _buildSettingsTile(
+                context,
+                title: AppLocalization.of(context).translate('packages.title'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
               ),
             ),
           ],
@@ -275,8 +275,9 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                         ),
                       ],
                       onChanged: (value) {
-                        if (value != null)
+                        if (value != null) {
                           ref.read(localeProvider.notifier).setLocale(value);
+                        }
                       },
                     );
                   }
@@ -298,8 +299,9 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                       );
                     }).toList(),
                     onChanged: (value) {
-                      if (value != null)
+                      if (value != null) {
                         ref.read(localeProvider.notifier).setLocale(value);
+                      }
                     },
                   );
                 },

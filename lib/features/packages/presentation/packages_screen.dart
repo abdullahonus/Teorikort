@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/widgets/app_bar_widget.dart';
-import 'package:teorikort/core/widgets/app_html_text.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
+import '../data/models/active_package.dart';
 import '../data/models/package.dart';
 import '../data/services/package_service.dart';
 
@@ -17,6 +17,7 @@ class PackagesScreen extends StatefulWidget {
 class _PackagesScreenState extends State<PackagesScreen> {
   final PackageService _packageService = PackageService();
   List<Package> _packages = [];
+  ActivePackage? _activePackage;
   bool _isLoading = true;
   bool _isPurchasing = false;
   String? _errorMessage;
@@ -34,10 +35,19 @@ class _PackagesScreenState extends State<PackagesScreen> {
     });
 
     try {
-      final response = await _packageService.getPackages(context: context);
+      final responseFuture = _packageService.getPackages(context: context);
+      final activeRespFuture =
+          _packageService.getActivePackage(context: context);
+
+      final results = await Future.wait([responseFuture, activeRespFuture]);
+
       if (mounted) {
         setState(() {
-          _packages = response.data ?? [];
+          _packages = (results[0].data as List<dynamic>?)
+                  ?.map((e) => e as Package)
+                  .toList() ??
+              [];
+          _activePackage = results[1].data as ActivePackage?;
           _isLoading = false;
         });
       }
@@ -146,26 +156,114 @@ class _PackagesScreenState extends State<PackagesScreen> {
       );
     }
 
-    return ListView.builder(
+    return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      itemCount: _packages.length,
-      itemBuilder: (context, index) {
-        return _buildPackageCard(_packages[index]);
-      },
+      children: [
+        if (_activePackage != null) ...[
+          _buildActivePackageCard(),
+          const SizedBox(height: 16),
+          Text(
+            AppLocalization.of(context).translate('packages.other_packages'),
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+        ],
+        ..._packages.map((package) => _buildPackageCard(package)),
+      ],
+    );
+  }
+
+  Widget _buildActivePackageCard() {
+    if (_activePackage == null) return const SizedBox.shrink();
+
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isActive = _activePackage!.status == 1;
+    final isRejected = _activePackage!.status == 2;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+            color: isActive
+                ? Colors.green.withValues(alpha: 0.5)
+                : (isRejected
+                    ? Colors.red.withValues(alpha: 0.5)
+                    : Colors.orange.withValues(alpha: 0.5))),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppLocalization.of(context)
+                    .translate('packages.active_package'),
+                style: theme.textTheme.titleMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  color: isActive
+                      ? Colors.green.withValues(alpha: 0.1)
+                      : (isRejected
+                          ? Colors.red.withValues(alpha: 0.1)
+                          : Colors.orange.withValues(alpha: 0.1)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  _activePackage!.statusText,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: isActive
+                        ? Colors.green
+                        : (isRejected ? Colors.red : Colors.orange),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          if (isActive || _activePackage!.status == 0) ...[
+            Text(
+              '${AppLocalization.of(context).translate('packages.remaining_use')}: ${_activePackage!.limitUse}',
+              style: theme.textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '${AppLocalization.of(context).translate('packages.end_date')}: ${_activePackage!.expiresAt.toString().split(' ')[0]}',
+              style: theme.textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 8),
+            if (!_activePackage!.expired)
+              Text(
+                '${AppLocalization.of(context).translate('packages.remaining_time')}: ${_activePackage!.remainingDays.toInt()} ${AppLocalization.of(context).translate('packages.days')} ${_activePackage!.remainingHours} ${AppLocalization.of(context).translate('packages.hours')}',
+                style: theme.textTheme.bodyMedium,
+              ),
+          ],
+        ],
+      ),
     );
   }
 
   Widget _buildPackageCard(Package package) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isPremium = package.code.toUpperCase().contains('PREMIUM') ||
-        package.code.toUpperCase().contains('VIP') ||
-        package.price > 0;
+    final isPremium = package.price > 0;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 24),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(24),
         gradient: isPremium
             ? LinearGradient(
                 colors: [
@@ -193,7 +291,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(24),
         child: Stack(
           children: [
             if (isPremium) ...[
@@ -219,7 +317,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
               child: InkWell(
                 onTap: () => _showPackageDetail(package),
                 child: Padding(
-                  padding: const EdgeInsets.all(28),
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -251,7 +349,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                     ),
                                   ),
                                 Text(
-                                  package.title,
+                                  package.name,
                                   style:
                                       theme.textTheme.headlineSmall?.copyWith(
                                     fontWeight: FontWeight.w900,
@@ -273,7 +371,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
-                                    package.code,
+                                    isPremium ? 'PREMIUM' : 'FREE',
                                     style:
                                         theme.textTheme.labelMedium?.copyWith(
                                       color: isPremium
@@ -320,8 +418,8 @@ class _PackagesScreenState extends State<PackagesScreen> {
                               ? Colors.white24
                               : colorScheme.outline.withValues(alpha: 0.1)),
                       const SizedBox(height: 16),
-                      AppHtmlText(
-                        htmlData: package.description,
+                      Text(
+                        '${package.durationMonth} Aylık Eğitim Paketi',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: isPremium
                               ? Colors.white.withValues(alpha: 0.9)
@@ -436,9 +534,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
   void _showPackageDetail(Package package) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isPremium = package.code.toUpperCase().contains('PREMIUM') ||
-        package.code.toUpperCase().contains('VIP') ||
-        package.price > 0;
+    final isPremium = package.price > 0;
 
     showModalBottomSheet(
       context: context,
@@ -476,7 +572,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          package.title,
+                          package.name,
                           style: theme.textTheme.headlineMedium?.copyWith(
                             fontWeight: FontWeight.w900,
                             letterSpacing: -1,
@@ -484,7 +580,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          package.code,
+                          isPremium ? 'PREMIUM' : 'FREE',
                           style: theme.textTheme.labelLarge?.copyWith(
                             color: isPremium
                                 ? colorScheme.primary
@@ -513,8 +609,8 @@ class _PackagesScreenState extends State<PackagesScreen> {
                     ?.copyWith(fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 16),
-              AppHtmlText(
-                htmlData: package.description,
+              Text(
+                '${package.durationMonth} Aylık Eğitim Paketi',
                 style: theme.textTheme.bodyLarge?.copyWith(
                     height: 1.6, color: colorScheme.onSurfaceVariant),
               ),

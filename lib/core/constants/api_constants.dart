@@ -74,6 +74,7 @@ class ApiConstants {
   // Public Content
   static const String packages = '/packages';
   static String packageDetail(String packageId) => '/packages/$packageId';
+  static const String activePackage = '/subscription/active-package';
   static const String signs = '/signs';
   static String signDetail(String signId) => '/signs/$signId';
   static const String swishCreate = '/swish/create';

@@ -1,18 +1,20 @@
 class Package {
   final int id;
-  final String title;
-  final String description;
+  final int appId;
+  final String appName;
+  final String name;
+  final int durationMonth;
   final double price;
-  final String code;
   final DateTime createdAt;
   final DateTime updatedAt;
 
   Package({
     required this.id,
-    required this.title,
-    required this.description,
+    required this.appId,
+    required this.appName,
+    required this.name,
+    required this.durationMonth,
     required this.price,
-    required this.code,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -20,10 +22,11 @@ class Package {
   factory Package.fromJson(Map<String, dynamic> json) {
     return Package(
       id: json['id'] ?? 0,
-      title: json['title'] ?? '',
-      description: json['description'] ?? '',
+      appId: json['app_id'] ?? 0,
+      appName: json['app_name'] ?? '',
+      name: json['name'] ?? '',
+      durationMonth: json['duration_month'] ?? 0,
       price: (json['price'] ?? 0).toDouble(),
-      code: json['code'] ?? '',
       createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
       updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
     );
@@ -32,10 +35,11 @@ class Package {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'title': title,
-      'description': description,
+      'app_id': appId,
+      'app_name': appName,
+      'name': name,
+      'duration_month': durationMonth,
       'price': price,
-      'code': code,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -175,11 +177,10 @@ class BaseApiService {
       final dioError = _handleDioError<T>(e);
       final ctx = NavigationService.context;
       final title = ctx != null
-          ? '${AppLocalization.of(ctx).translate('error.error_title') ?? 'Hata'} (${dioError.statusCode})'
+          ? '${AppLocalization.of(ctx).translate('error.error_title')} (${dioError.statusCode})'
           : 'Hata (${dioError.statusCode})';
       final fallbackMsg = ctx != null
-          ? AppLocalization.of(ctx).translate('error.unknown_exception') ??
-              'Bilinmeyen bir hata oluştu'
+          ? AppLocalization.of(ctx).translate('error.unknown_exception')
           : 'Bilinmeyen bir hata oluştu';
       final message = dioError.message ?? fallbackMsg;
 
@@ -195,11 +196,10 @@ class BaseApiService {
       LoggerService.error('Unexpected API Error:', e);
       final ctx = NavigationService.context;
       final title = ctx != null
-          ? '${AppLocalization.of(ctx).translate('error.error_title') ?? 'Hata'} (500)'
+          ? '${AppLocalization.of(ctx).translate('error.error_title')} (500)'
           : 'Hata (500)';
       final message = ctx != null
-          ? AppLocalization.of(ctx).translate('error.unexpected_exception') ??
-              'Beklenmeyen bir hata oluştu'
+          ? AppLocalization.of(ctx).translate('error.unexpected_exception')
           : 'Beklenmeyen bir hata oluştu';
 
       NavigationService.showAlertDialog(
@@ -314,9 +314,18 @@ class BaseApiService {
       }
     } on DioException catch (e) {
       final dioError = _handleDioError<List<T>>(e);
+      final ctx = NavigationService.context;
+      final title = ctx != null
+          ? '${AppLocalization.of(ctx).translate('error.error_title')} (${dioError.statusCode})'
+          : 'Hata (${dioError.statusCode})';
+      final message = dioError.message ??
+          (ctx != null
+              ? AppLocalization.of(ctx).translate('error.unknown_exception')
+              : 'Bilinmeyen bir hata oluştu');
+
       NavigationService.showAlertDialog(
-        title: 'Hata (${dioError.statusCode})',
-        message: dioError.message ?? 'Bilinmeyen bir hata oluştu',
+        title: title,
+        message: message,
         onConfirm: onConfirm,
         buttonText: buttonText,
         barrierDismissible: barrierDismissible,
@@ -324,9 +333,17 @@ class BaseApiService {
       return dioError;
     } catch (e) {
       LoggerService.error('Unexpected API Error:', e);
+      final ctx = NavigationService.context;
+      final title = ctx != null
+          ? '${AppLocalization.of(ctx).translate('error.error_title')} (500)'
+          : 'Hata (500)';
+      final message = ctx != null
+          ? AppLocalization.of(ctx).translate('error.unexpected_exception')
+          : 'Beklenmeyen bir hata oluştu';
+
       NavigationService.showAlertDialog(
-        title: 'Hata (500)',
-        message: 'Beklenmeyen bir hata oluştu',
+        title: title,
+        message: message,
         onConfirm: onConfirm,
         buttonText: buttonText,
         barrierDismissible: barrierDismissible,
@@ -334,7 +351,7 @@ class BaseApiService {
       return ApiResponse<List<T>>(
         success: false,
         statusCode: 500,
-        message: 'Beklenmeyen bir hata oluştu',
+        message: message,
       );
     }
   }
