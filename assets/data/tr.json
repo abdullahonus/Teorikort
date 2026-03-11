@@ -117,7 +117,11 @@
     "start_exam": "Sınava Başla",
     "exam_info": "Sınav Bilgisi",
     "no_exams": "Henüz sınav bulunmuyor",
-    "exam_completed": "Sınav Tamamlandı"
+    "exam_completed": "Sınav Tamamlandı",
+    "all_questions_answered_title": "Hata",
+    "all_questions_answered_message": "Bu sınav ile ilgili tüm soruları cevapladınız.",
+    "all_questions_answered_error": "Soru bulunmuyor",
+    "go_back": "Geri Dön"
   },
   "profile": {
     "title": "Profil",

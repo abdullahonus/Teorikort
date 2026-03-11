@@ -117,7 +117,11 @@
     "start_exam": "شروع آزمون",
     "exam_info": "اطلاعات آزمون",
     "no_exams": "هنوز آزمونی وجود ندارد",
-    "exam_completed": "آزمون تکمیل شد"
+    "exam_completed": "آزمون تکمیل شد",
+    "all_questions_answered_title": "خطا",
+    "all_questions_answered_message": "شما به تمام سوالات مربوط به این آزمون پاسخ داده اید.",
+    "all_questions_answered_error": "سوالی یافت نشد",
+    "go_back": "برگرد"
   },
   "profile": {
     "title": "پروفایل",

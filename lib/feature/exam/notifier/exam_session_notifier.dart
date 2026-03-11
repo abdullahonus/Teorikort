@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/localization/app_localization.dart';
 import '../../../core/services/logger_service.dart';
+import '../../../core/services/navigation_service.dart';
 import '../../../domain/repository/i_exam_repository.dart';
 import '../../../product/provider/service_providers.dart';
 import '../state/exam_session_state.dart';
@@ -31,6 +33,34 @@ class ExamSessionNotifier extends AutoDisposeNotifier<ExamSessionState> {
               .getTestQuestions(categoryId) // testId is passed as categoryId
           : await _repository.getQuestions(categoryId);
       if (response.success && response.data != null) {
+        if (response.data!.questions.isEmpty) {
+          final navContext = NavigationService.context;
+          if (navContext == null || !navContext.mounted) return;
+
+          final title = AppLocalization.of(navContext)
+              .translate('exam.all_questions_answered_title');
+          final message = AppLocalization.of(navContext)
+              .translate('exam.all_questions_answered_message');
+          final btnText =
+              AppLocalization.of(navContext).translate('exam.go_back');
+          final errText = AppLocalization.of(navContext)
+              .translate('exam.all_questions_answered_error');
+
+          NavigationService.showAlertDialog(
+            title: title,
+            message: message,
+            onConfirm: () {
+              if (navContext.mounted) {
+                Navigator.pop(navContext);
+              }
+            },
+            buttonText: btnText,
+            barrierDismissible: false,
+          );
+          state = state.copyWith(isLoading: false, error: errText);
+          return;
+        }
+
         state = state.copyWith(
           questions: response.data!.questions,
           isDemo: response.data!.isDemo,

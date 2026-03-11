@@ -119,7 +119,11 @@
     "start_exam": "Start prøven",
     "exam_info": "Prøveinformasjon",
     "no_exams": "Ingen prøver ennå",
-    "exam_completed": "Prøven fullført"
+    "exam_completed": "Prøven fullført",
+    "all_questions_answered_title": "Feil",
+    "all_questions_answered_message": "Du har besvart alle spørsmål knyttet til denne eksamenen.",
+    "all_questions_answered_error": "Ingen spørsmål funnet",
+    "go_back": "Gå tilbake"
   },
   "profile": {
     "title": "Profil",

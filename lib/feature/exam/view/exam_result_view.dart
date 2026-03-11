@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/presentation/widgets/app_scaffold.dart';
 import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_html_text.dart';
 
+import '../../home/provider/home_provider.dart';
 import '../model/exam_question.dart';
 import '../model/exam_result.dart';
 
-class ExamResultView extends StatelessWidget {
+class ExamResultView extends ConsumerWidget {
   final ExamResult result;
   final List<ExamQuestion> questions;
   final Map<String, String?> userAnswers;
@@ -20,7 +22,7 @@ class ExamResultView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     return Scaffold(
@@ -29,10 +31,13 @@ class ExamResultView extends StatelessWidget {
         title:
             AppLocalization.of(context).translate('quiz_result.screen_title'),
         showBackButton: true,
-        onBackPress: () => Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const AppScaffold()),
-          (route) => false,
-        ),
+        onBackPress: () {
+          ref.invalidate(homeProvider);
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const AppScaffold()),
+            (route) => false,
+          );
+        },
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -63,10 +68,13 @@ class ExamResultView extends StatelessWidget {
             _buildWrongAnswersContext(context),
             const SizedBox(height: 32),
             ElevatedButton(
-              onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => const AppScaffold()),
-                (route) => false,
-              ),
+              onPressed: () {
+                ref.invalidate(homeProvider);
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const AppScaffold()),
+                  (route) => false,
+                );
+              },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(

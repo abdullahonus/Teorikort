@@ -119,7 +119,11 @@
     "start_exam": "Starta provet",
     "exam_info": "Provinformation",
     "no_exams": "Inga prov än",
-    "exam_completed": "Provet slutfört"
+    "exam_completed": "Provet slutfört",
+    "all_questions_answered_title": "Fel",
+    "all_questions_answered_message": "Du har besvarat alla frågor relaterade till detta prov.",
+    "all_questions_answered_error": "Inga frågor hittades",
+    "go_back": "Gå tillbaka"
   },
   "profile": {
     "title": "Profil",
