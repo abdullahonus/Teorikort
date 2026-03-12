@@ -78,6 +78,7 @@ class ApiConstants {
   static const String signs = '/signs';
   static String signDetail(String signId) => '/signs/$signId';
   static const String swishCreate = '/swish/create';
+  static String swishStatus(String paymentId) => '/swish/status/$paymentId';
 
   // API Headers
   static Map<String, String> headers = {

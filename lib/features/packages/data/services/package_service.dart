@@ -6,6 +6,7 @@ import '../../../../core/services/base_api_service.dart';
 import '../models/active_package.dart';
 import '../models/package.dart';
 import '../models/payment_response.dart';
+import '../models/payment_status.dart';
 
 class PackageService extends BaseApiService {
   // GET /packages
@@ -47,6 +48,14 @@ class PackageService extends BaseApiService {
     return await handleResponse<ActivePackage>(
       get(ApiConstants.activePackage),
       ActivePackage.fromJson,
+    );
+  }
+
+  // GET /swish/status/{id}
+  Future<ApiResponse<PaymentStatus>> getPaymentStatus(String paymentId) async {
+    return await handleResponse<PaymentStatus>(
+      get(ApiConstants.swishStatus(paymentId)),
+      PaymentStatus.fromJson,
     );
   }
 }

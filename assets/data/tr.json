@@ -451,7 +451,16 @@
     "hours": "Saat",
     "months_package_desc": "Aylık Eğitim Paketi",
     "one_time_payment": "Tek seferlik ödeme",
-    "current_plan": "MEVCUT PAKETİNİZ"
+    "current_plan": "MEVCUT PAKETİNİZ",
+    "payment_success": "Ödeme başarılı!",
+    "payment_failed": "Ödeme başarısız!",
+    "payment_declined": "Ödeme kullanıcı tarafından reddedildi.",
+    "payment_processing": "Ödeme işleniyor...",
+    "payment_waiting": "Ödeme onayı bekleniyor...",
+    "upgrade_now": "ŞİMDİ YÜKSELT",
+    "start_free": "ÜCRETSİZ BAŞLA",
+    "premium": "PREMİUM",
+    "free_label": "ÜCRETSİZ"
   },
   "signs": {
     "title": "Trafik İşaretleri",

@@ -451,7 +451,16 @@
     "hours": "Hours",
     "months_package_desc": "Months Training Package",
     "one_time_payment": "One-time payment",
-    "current_plan": "CURRENT PLAN"
+    "current_plan": "CURRENT PLAN",
+    "payment_success": "Payment successful!",
+    "payment_failed": "Payment failed!",
+    "payment_declined": "Payment declined by user.",
+    "payment_processing": "Processing payment...",
+    "payment_waiting": "Waiting for payment confirmation...",
+    "upgrade_now": "UPGRADE NOW",
+    "start_free": "START FOR FREE",
+    "premium": "PREMIUM",
+    "free_label": "FREE"
   },
   "signs": {
     "title": "Traffic Signs",

@@ -1,64 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
 import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 
-import '../data/models/active_package.dart';
 import '../data/models/package.dart';
-import '../data/services/package_service.dart';
+import 'providers/packages_provider.dart';
 
-class PackagesScreen extends StatefulWidget {
+class PackagesScreen extends ConsumerStatefulWidget {
   const PackagesScreen({super.key});
 
   @override
-  State<PackagesScreen> createState() => _PackagesScreenState();
+  ConsumerState<PackagesScreen> createState() => _PackagesScreenState();
 }
 
-class _PackagesScreenState extends State<PackagesScreen> {
-  final PackageService _packageService = PackageService();
-  List<Package> _packages = [];
-  ActivePackage? _activePackage;
-  bool _isLoading = true;
-  bool _isPurchasing = false;
-  String? _errorMessage;
-
+class _PackagesScreenState extends ConsumerState<PackagesScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchPackages();
-  }
-
-  Future<void> _fetchPackages() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
+    Future.microtask(() {
+      ref.read(packagesProvider.notifier).fetchPackages();
     });
-
-    try {
-      final responseFuture = _packageService.getPackages(context: context);
-      final activeRespFuture =
-          _packageService.getActivePackage(context: context);
-
-      final results = await Future.wait([responseFuture, activeRespFuture]);
-
-      if (mounted) {
-        setState(() {
-          _packages = (results[0].data as List<dynamic>?)
-                  ?.map((e) => e as Package)
-                  .toList() ??
-              [];
-          _activePackage = results[1].data as ActivePackage?;
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = e.toString();
-        });
-      }
-    }
   }
 
   @override
@@ -66,6 +28,22 @@ class _PackagesScreenState extends State<PackagesScreen> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final l10n = AppLocalization.of(context);
+    final state = ref.watch(packagesProvider);
+
+    ref.listen(packagesProvider, (previous, next) {
+      if (next.error != null && next.error != previous?.error) {
+        _showErrorSnackBar(next.error!);
+        ref.read(packagesProvider.notifier).clearError();
+      } else if (previous?.isPurchasing == true && next.isPurchasing == false) {
+        if (next.purchasingStatus == 'PAID') {
+          _showSuccessSnackBar(l10n.translate('packages.payment_success'));
+        } else if (next.purchasingStatus == 'DECLINED') {
+          _showErrorSnackBar(l10n.translate('packages.payment_declined'));
+        } else if (next.purchasingStatus == 'ERROR' && next.error == null) {
+          _showErrorSnackBar(l10n.translate('packages.payment_failed'));
+        }
+      }
+    });
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -74,12 +52,44 @@ class _PackagesScreenState extends State<PackagesScreen> {
       ),
       body: Stack(
         children: [
-          _buildBody(),
-          if (_isPurchasing)
+          _buildBody(state),
+          if (state.isPurchasing)
             Container(
-              color: Colors.black45,
-              child: const Center(
-                child: AppLoadingWidget(size: 80),
+              color: Colors.black.withValues(alpha: 0.85),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/loading/payment.gif',
+                        width: 180,
+                        height: 180,
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        state.purchasingStatus ??
+                            l10n.translate('packages.payment_processing'),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        l10n.translate('packages.payment_waiting'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.6),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
         ],
@@ -87,12 +97,12 @@ class _PackagesScreenState extends State<PackagesScreen> {
     );
   }
 
-  Widget _buildBody() {
-    if (_isLoading) {
+  Widget _buildBody(PackagesState state) {
+    if (state.isLoading) {
       return const AppLoadingWidget.fullscreen();
     }
 
-    if (_errorMessage != null) {
+    if (state.error != null && state.packages.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -113,13 +123,14 @@ class _PackagesScreenState extends State<PackagesScreen> {
               ),
               const SizedBox(height: 24),
               Text(
-                _errorMessage!,
+                state.error!,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               const SizedBox(height: 32),
               ElevatedButton.icon(
-                onPressed: _fetchPackages,
+                onPressed: () =>
+                    ref.read(packagesProvider.notifier).fetchPackages(),
                 icon: const Icon(Icons.refresh),
                 label:
                     Text(AppLocalization.of(context).translate('common.retry')),
@@ -136,7 +147,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
       );
     }
 
-    if (_packages.isEmpty) {
+    if (state.packages.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -156,33 +167,35 @@ class _PackagesScreenState extends State<PackagesScreen> {
       );
     }
 
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      children: [
-        if (_activePackage != null) ...[
-          _buildActivePackageCard(),
-          const SizedBox(height: 16),
-          Text(
-            AppLocalization.of(context).translate('packages.other_packages'),
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
+    return RefreshIndicator(
+      onRefresh: () => ref.read(packagesProvider.notifier).fetchPackages(),
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        children: [
+          if (state.activePackage != null) ...[
+            _buildActivePackageCard(state),
+            const SizedBox(height: 16),
+            Text(
+              AppLocalization.of(context).translate('packages.other_packages'),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+          ],
+          ...state.packages.map((package) => _buildPackageCard(package)),
         ],
-        ..._packages.map((package) => _buildPackageCard(package)),
-      ],
+      ),
     );
   }
 
-  Widget _buildActivePackageCard() {
-    if (_activePackage == null) return const SizedBox.shrink();
-
+  Widget _buildActivePackageCard(PackagesState state) {
+    final activePackage = state.activePackage!;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isActive = _activePackage!.status == 1;
-    final isRejected = _activePackage!.status == 2;
+    final isActive = activePackage.status == 1;
+    final isRejected = activePackage.status == 2;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -221,7 +234,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  _activePackage!.statusText,
+                  activePackage.statusText,
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: isActive
                         ? Colors.green
@@ -233,20 +246,20 @@ class _PackagesScreenState extends State<PackagesScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          if (isActive || _activePackage!.status == 0) ...[
+          if (isActive || activePackage.status == 0) ...[
             Text(
-              '${AppLocalization.of(context).translate('packages.remaining_use')}: ${_activePackage!.limitUse}',
+              '${AppLocalization.of(context).translate('packages.remaining_use')}: ${activePackage.limitUse}',
               style: theme.textTheme.bodyMedium,
             ),
             const SizedBox(height: 4),
             Text(
-              '${AppLocalization.of(context).translate('packages.end_date')}: ${_activePackage!.expiresAt.toString().split(' ')[0]}',
+              '${AppLocalization.of(context).translate('packages.end_date')}: ${activePackage.expiresAt.toString().split(' ')[0]}',
               style: theme.textTheme.bodyMedium,
             ),
             const SizedBox(height: 4),
-            if (!_activePackage!.expired)
+            if (!activePackage.expired)
               Text(
-                '${AppLocalization.of(context).translate('packages.remaining_time')}: ${_activePackage!.remainingDays.toInt()} ${AppLocalization.of(context).translate('packages.days')} ${_activePackage!.remainingHours} ${AppLocalization.of(context).translate('packages.hours')}',
+                '${AppLocalization.of(context).translate('packages.remaining_time')}: ${activePackage.remainingDays.toInt()} ${AppLocalization.of(context).translate('packages.days')} ${activePackage.remainingHours} ${AppLocalization.of(context).translate('packages.hours')}',
                 style: theme.textTheme.bodyMedium,
               ),
           ],
@@ -256,11 +269,13 @@ class _PackagesScreenState extends State<PackagesScreen> {
   }
 
   Widget _buildPackageCard(Package package) {
+    final l10n = AppLocalization.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isPremium = package.price > 0;
     final canPurchase = package.canPurchase;
     final isActive = package.isActive;
+    final isPurchasing = ref.watch(packagesProvider).isPurchasing;
 
     Widget card = Container(
       decoration: BoxDecoration(
@@ -332,9 +347,9 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                           Colors.white.withValues(alpha: 0.2),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
-                                    child: const Text(
-                                      'PREMIUM',
-                                      style: TextStyle(
+                                    child: Text(
+                                      l10n.translate('packages.premium'),
+                                      style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 9,
                                           fontWeight: FontWeight.bold,
@@ -353,7 +368,9 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  isPremium ? 'PREMIUM' : 'FREE',
+                                  isPremium
+                                      ? l10n.translate('packages.premium')
+                                      : l10n.translate('packages.free_label'),
                                   style: theme.textTheme.labelSmall?.copyWith(
                                     color: isPremium
                                         ? Colors.white70
@@ -369,7 +386,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                             children: [
                               Text(
                                 package.price == 0
-                                    ? 'FREE'
+                                    ? l10n.translate('packages.free_label')
                                     : '₺${package.price.toInt()}',
                                 style: theme.textTheme.titleLarge?.copyWith(
                                   fontWeight: FontWeight.w900,
@@ -413,9 +430,14 @@ class _PackagesScreenState extends State<PackagesScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: (!canPurchase || _isPurchasing)
+                          onPressed: (!canPurchase || isPurchasing)
                               ? null
-                              : () => _handlePurchase(package),
+                              : () => ref
+                                  .read(packagesProvider.notifier)
+                                  .purchasePackage(
+                                      package.id,
+                                      AppLocalization.of(context).translate(
+                                          'packages.payment_processing')),
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 isPremium ? Colors.white : colorScheme.primary,
@@ -434,11 +456,10 @@ class _PackagesScreenState extends State<PackagesScreen> {
                           ),
                           child: Text(
                             isActive
-                                ? AppLocalization.of(context)
-                                    .translate('packages.current_plan')
+                                ? l10n.translate('packages.current_plan')
                                 : (package.price == 0
-                                    ? 'START FOR FREE'
-                                    : 'UPGRADE NOW'),
+                                    ? l10n.translate('packages.start_free')
+                                    : l10n.translate('packages.upgrade_now')),
                             style: const TextStyle(
                                 fontWeight: FontWeight.w900,
                                 fontSize: 14,
@@ -531,67 +552,40 @@ class _PackagesScreenState extends State<PackagesScreen> {
     );
   }
 
-  Future<void> _handlePurchase(Package package) async {
-    if (_isPurchasing) return;
+  void _showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle, color: Colors.white),
+            const SizedBox(width: 12),
+            Expanded(child: Text(message)),
+          ],
+        ),
+        backgroundColor: Colors.green.shade700,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        margin: const EdgeInsets.all(16),
+      ),
+    );
+  }
 
-    setState(() => _isPurchasing = true);
-
-    try {
-      final response = await _packageService.createPayment(package.id);
-      if (mounted) {
-        setState(() => _isPurchasing = false);
-        if (response.success && response.data != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                children: [
-                  const Icon(Icons.check_circle, color: Colors.white),
-                  const SizedBox(width: 12),
-                  Expanded(child: Text(response.message ?? 'Ödeme başlatıldı')),
-                ],
-              ),
-              backgroundColor: Colors.green.shade700,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              margin: const EdgeInsets.all(16),
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                children: [
-                  const Icon(Icons.error, color: Colors.white),
-                  const SizedBox(width: 12),
-                  Expanded(
-                      child: Text(response.message ?? 'Ödeme başlatılamadı')),
-                ],
-              ),
-              backgroundColor: Colors.red.shade700,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              margin: const EdgeInsets.all(16),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() => _isPurchasing = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Hata: $e'),
-            backgroundColor: Colors.red.shade700,
-            behavior: SnackBarBehavior.floating,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            margin: const EdgeInsets.all(16),
-          ),
-        );
-      }
-    }
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.error, color: Colors.white),
+            const SizedBox(width: 12),
+            Expanded(child: Text(message)),
+          ],
+        ),
+        backgroundColor: Colors.red.shade700,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        margin: const EdgeInsets.all(16),
+      ),
+    );
   }
 
   void _showPackageDetail(Package package) {
@@ -704,11 +698,14 @@ class _PackagesScreenState extends State<PackagesScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _isPurchasing
+                  onPressed: ref.watch(packagesProvider).isPurchasing
                       ? null
                       : () {
                           Navigator.pop(context);
-                          _handlePurchase(package);
+                          ref.read(packagesProvider.notifier).purchasePackage(
+                              package.id,
+                              AppLocalization.of(context)
+                                  .translate('packages.payment_processing'));
                         },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -716,7 +713,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                         borderRadius: BorderRadius.circular(16)),
                   ),
                   child: Text(
-                    _isPurchasing
+                    ref.watch(packagesProvider).isPurchasing
                         ? 'PROCESSING...'
                         : (package.price == 0
                             ? 'START NOW'

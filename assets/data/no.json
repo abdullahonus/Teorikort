@@ -451,7 +451,16 @@
     "hours": "Timer",
     "months_package_desc": "Måneders Opplæringspakke",
     "one_time_payment": "Engangsbetaling",
-    "current_plan": "NÅVÆRENDE PLAN"
+    "current_plan": "NÅVÆRENDE PLAN",
+    "payment_success": "Betaling vellykket!",
+    "payment_failed": "Betaling mislyktes!",
+    "payment_declined": "Betaling avvist av bruker.",
+    "payment_processing": "Behandler betaling...",
+    "payment_waiting": "Venter på betalingsbekreftelse...",
+    "upgrade_now": "OPPGRADER NÅ",
+    "start_free": "START GRATIS",
+    "premium": "PREMIUM",
+    "free_label": "GRATIS"
   },
   "signs": {
     "title": "Trafikkskilt",
