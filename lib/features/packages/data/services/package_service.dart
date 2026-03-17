@@ -49,6 +49,7 @@ class PackageService extends BaseApiService {
     return await handleResponse<ActivePackage>(
       get(ApiConstants.activePackage),
       ActivePackage.fromJson,
+      showDialog: false,
     );
   }
 

@@ -82,8 +82,8 @@ class PackagesNotifier extends StateNotifier<PackagesState> {
     try {
       final response = await _service.createPayment(packageId);
       if (response.success && response.data != null) {
-        final paymentId = response.data!.paymentId;
-        await _startPolling(paymentId);
+        final paymentReference = response.data!.paymentReference;
+        await _startPolling(paymentReference);
       } else {
         state = state.copyWith(
           isPurchasing: false,
