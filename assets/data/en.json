@@ -171,7 +171,11 @@
     "contact": "Contact",
     "contact_content": "For questions and suggestions:\nEmail: support@drivingexam.com\nWeb: www.drivingexam.com",
     "copyright": "All rights reserved",
-    "photo_upload_inactive": "Photo upload is not available at the moment."
+    "photo_upload_inactive": "Photo upload is not available at the moment.",
+    "info": "Information",
+    "about_us": "About Us",
+    "gdpr": "GDPR",
+    "policy": "Privacy and Terms"
   },
   "navigation": {
     "home": "Home",

@@ -11,6 +11,9 @@ import 'package:teorikort/feature/splash/provider/splash_provider.dart';
 import 'package:teorikort/feature/splash/splash_view.dart';
 import 'package:teorikort/features/packages/presentation/packages_screen.dart';
 import 'package:teorikort/features/workbook/presentation/workbook_list_screen.dart';
+import 'about_view.dart';
+import 'gdpr_view.dart';
+import 'policy_view.dart';
 
 class ProfileView extends ConsumerStatefulWidget {
   const ProfileView({super.key});
@@ -311,6 +314,50 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
         ),
         const SizedBox(height: 24),
 
+        // Info
+        _buildSectionTitle(context, 'profile.info'),
+        _buildSettingsCard(
+          context,
+          children: [
+            InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AboutView()),
+              ),
+              child: _buildSettingsTile(
+                context,
+                title: AppLocalization.of(context).translate('profile.about_us'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              ),
+            ),
+            _buildDivider(context),
+            InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const GDPRView()),
+              ),
+              child: _buildSettingsTile(
+                context,
+                title: AppLocalization.of(context).translate('profile.gdpr'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              ),
+            ),
+            _buildDivider(context),
+            InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const PolicyView()),
+              ),
+              child: _buildSettingsTile(
+                context,
+                title: AppLocalization.of(context).translate('profile.policy'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+
         // Logout Button
         ElevatedButton(
           onPressed: () => _handleLogout(context),
@@ -394,6 +441,15 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     return ListTile(
       title: Text(title),
       trailing: trailing,
+    );
+  }
+
+  Widget _buildDivider(BuildContext context) {
+    return Divider(
+      height: 1,
+      indent: 16,
+      endIndent: 16,
+      color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
     );
   }
 }

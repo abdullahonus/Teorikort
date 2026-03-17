@@ -171,7 +171,11 @@
     "contact": "تماس با ما",
     "contact_content": "برای سوالات و پیشنهادات:\nایمیل: support@drivingexam.com\nوب: www.drivingexam.com",
     "copyright": "تمام حقوق محفوظ است",
-    "photo_upload_inactive": "بارگذاری عکس در حال حاضر امکان‌پذیر نیست."
+    "photo_upload_inactive": "بارگذاری عکس در حال حاضر امکان‌پذیر نیست.",
+    "info": "اطلاعات",
+    "about_us": "درباره ما",
+    "gdpr": "GDPR",
+    "policy": "حریم خصوصی و شرایط"
   },
   "navigation": {
     "home": "خانه",

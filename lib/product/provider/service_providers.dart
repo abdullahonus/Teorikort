@@ -34,6 +34,9 @@ import '../../features/topics/data/services/topic_service.dart';
 import '../../features/topics/data/services/traffic_sign_service.dart';
 import '../../features/user/data/repositories/user_repository.dart';
 import '../../features/workbook/data/services/workbook_service.dart';
+import '../../features/profile/data/services/about_service.dart';
+import '../../features/profile/data/services/gdpr_service.dart';
+import '../../features/profile/data/services/policy_service.dart';
 import '../network/network_manager.dart';
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -172,4 +175,16 @@ final reportServiceProvider = Provider<ReportService>((ref) {
 
 final userRepositoryServiceProvider = Provider<UserRepository>((ref) {
   return UserRepository();
+});
+
+final aboutServiceProvider = Provider<AboutService>((ref) {
+  return AboutService();
+});
+
+final gdprServiceProvider = Provider<GDPRService>((ref) {
+  return GDPRService();
+});
+
+final policyServiceProvider = Provider<PolicyService>((ref) {
+  return PolicyService();
 });

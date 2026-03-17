@@ -171,7 +171,11 @@
     "contact": "İletişim",
     "contact_content": "Sorularınız ve önerileriniz için:\nE-posta: support@drivingexam.com\nWeb: www.drivingexam.com",
     "copyright": "Tüm hakları saklıdır",
-    "photo_upload_inactive": "Fotoğraf yükleme şu an aktif değil."
+    "photo_upload_inactive": "Fotoğraf yükleme şu an aktif değil.",
+    "info": "Bilgi",
+    "about_us": "Hakkımızda",
+    "gdpr": "KVKK (GDPR)",
+    "policy": "Gizlilik ve Koşullar"
   },
   "navigation": {
     "home": "Ana Sayfa",

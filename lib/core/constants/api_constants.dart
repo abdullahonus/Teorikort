@@ -61,6 +61,9 @@ class ApiConstants {
   static const String userProfile = '/profile';
   static const String userProfilePhoto = '/profile/photo';
   static const String userSettings = '/user/settings';
+  static const String aboutUs = '/info/about';
+  static const String gdpr = '/info/gdpr';
+  static const String policy = '/info/policy';
 
   // Search Endpoints
   static const String searchQuestions = '/search/questions';

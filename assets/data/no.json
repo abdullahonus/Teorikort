@@ -171,7 +171,11 @@
     "contact": "Kontakt",
     "contact_content": "For spørsmål og forslag:\nE-post: support@drivingexam.com\nNett: www.drivingexam.com",
     "copyright": "Alle rettigheter forbeholdt",
-    "photo_upload_inactive": "Opplasting av bilde er ikke tilgjengelig for øyeblikket."
+    "photo_upload_inactive": "Opplasting av bilde er ikke tilgjengelig for øyeblikket.",
+    "info": "Informasjon",
+    "about_us": "Om oss",
+    "gdpr": "GDPR",
+    "policy": "Personvern og vilkår"
   },
   "navigation": {
     "home": "Hjem",

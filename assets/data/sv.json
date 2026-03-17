@@ -171,7 +171,11 @@
     "contact": "Kontakt",
     "contact_content": "För frågor och förslag:\nE-post: support@drivingexam.com\nWebb: www.drivingexam.com",
     "copyright": "Alla rättigheter förbehållna",
-    "photo_upload_inactive": "Fotouppladdning är inte tillgänglig för tillfället."
+    "photo_upload_inactive": "Fotouppladdning är inte tillgänglig för tillfället.",
+    "info": "Information",
+    "about_us": "Om oss",
+    "gdpr": "GDPR",
+    "policy": "Integritet och villkor"
   },
   "navigation": {
     "home": "Hem",
