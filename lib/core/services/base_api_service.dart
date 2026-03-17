@@ -30,6 +30,9 @@ class BaseApiService {
       connectTimeout: const Duration(seconds: AppConfig.apiTimeoutSeconds),
       receiveTimeout: const Duration(seconds: AppConfig.apiTimeoutSeconds),
       sendTimeout: const Duration(seconds: AppConfig.apiTimeoutSeconds),
+      validateStatus: (status) {
+        return status != null && (status < 400 || status == 402 || status == 422);
+      },
     ));
 
     _setupInterceptors();
@@ -112,6 +115,7 @@ class BaseApiService {
     VoidCallback? onConfirm,
     String? buttonText,
     bool barrierDismissible = true,
+    bool showDialog = true,
   }) async {
     try {
       final response = await apiCall;
@@ -131,6 +135,8 @@ class BaseApiService {
 
       if (statusCode == 100 ||
           statusCode == 200 ||
+          statusCode == 201 ||
+          statusCode == 402 ||
           statusCode == ApiConstants.success) {
         return ApiResponse<T>(
           success: true,
@@ -157,14 +163,16 @@ class BaseApiService {
           details = data['details'] as Map<String, dynamic>;
         }
 
-        NavigationService.showAlertDialog(
-          title: 'Hata ($statusCode)',
-          message: errorMessage,
-          details: details,
-          onConfirm: onConfirm,
-          buttonText: buttonText,
-          barrierDismissible: barrierDismissible,
-        );
+        if (showDialog) {
+          NavigationService.showAlertDialog(
+            title: 'Hata ($statusCode)',
+            message: errorMessage,
+            details: details,
+            onConfirm: onConfirm,
+            buttonText: buttonText,
+            barrierDismissible: barrierDismissible,
+          );
+        }
 
         return ApiResponse<T>(
           success: false,
@@ -184,13 +192,15 @@ class BaseApiService {
           : 'Bilinmeyen bir hata oluştu';
       final message = dioError.message ?? fallbackMsg;
 
-      NavigationService.showAlertDialog(
-        title: title,
-        message: message,
-        onConfirm: onConfirm,
-        buttonText: buttonText,
-        barrierDismissible: barrierDismissible,
-      );
+      if (showDialog) {
+        NavigationService.showAlertDialog(
+          title: title,
+          message: message,
+          onConfirm: onConfirm,
+          buttonText: buttonText,
+          barrierDismissible: barrierDismissible,
+        );
+      }
       return dioError;
     } catch (e) {
       LoggerService.error('Unexpected API Error:', e);
@@ -202,13 +212,15 @@ class BaseApiService {
           ? AppLocalization.of(ctx).translate('error.unexpected_exception')
           : 'Beklenmeyen bir hata oluştu';
 
-      NavigationService.showAlertDialog(
-        title: title,
-        message: message,
-        onConfirm: onConfirm,
-        buttonText: buttonText,
-        barrierDismissible: barrierDismissible,
-      );
+      if (showDialog) {
+        NavigationService.showAlertDialog(
+          title: title,
+          message: message,
+          onConfirm: onConfirm,
+          buttonText: buttonText,
+          barrierDismissible: barrierDismissible,
+        );
+      }
       return ApiResponse<T>(
         success: false,
         statusCode: 500,
@@ -224,6 +236,7 @@ class BaseApiService {
     VoidCallback? onConfirm,
     String? buttonText,
     bool barrierDismissible = true,
+    bool showDialog = true,
   }) async {
     try {
       final response = await apiCall;
@@ -241,9 +254,11 @@ class BaseApiService {
       final data = responseData['data'];
 
       if ((statusCode == 100 ||
-              statusCode == 200 ||
-              statusCode == ApiConstants.success) &&
-          data != null) {
+                  statusCode == 200 ||
+                  statusCode == 201 ||
+                  statusCode == 402 ||
+                  statusCode == ApiConstants.success) &&
+              data != null) {
         // ... list parsing logic (unchanged)
         List<dynamic> items = [];
         if (data is Map<String, dynamic>) {
@@ -296,14 +311,16 @@ class BaseApiService {
           details = data['details'] as Map<String, dynamic>;
         }
 
-        NavigationService.showAlertDialog(
-          title: 'Hata ($statusCode)',
-          message: errorMessage,
-          details: details,
-          onConfirm: onConfirm,
-          buttonText: buttonText,
-          barrierDismissible: barrierDismissible,
-        );
+        if (showDialog) {
+          NavigationService.showAlertDialog(
+            title: 'Hata ($statusCode)',
+            message: errorMessage,
+            details: details,
+            onConfirm: onConfirm,
+            buttonText: buttonText,
+            barrierDismissible: barrierDismissible,
+          );
+        }
 
         return ApiResponse<List<T>>(
           success: false,
@@ -323,13 +340,15 @@ class BaseApiService {
               ? AppLocalization.of(ctx).translate('error.unknown_exception')
               : 'Bilinmeyen bir hata oluştu');
 
-      NavigationService.showAlertDialog(
-        title: title,
-        message: message,
-        onConfirm: onConfirm,
-        buttonText: buttonText,
-        barrierDismissible: barrierDismissible,
-      );
+      if (showDialog) {
+        NavigationService.showAlertDialog(
+          title: title,
+          message: message,
+          onConfirm: onConfirm,
+          buttonText: buttonText,
+          barrierDismissible: barrierDismissible,
+        );
+      }
       return dioError;
     } catch (e) {
       LoggerService.error('Unexpected API Error:', e);
@@ -341,13 +360,15 @@ class BaseApiService {
           ? AppLocalization.of(ctx).translate('error.unexpected_exception')
           : 'Beklenmeyen bir hata oluştu';
 
-      NavigationService.showAlertDialog(
-        title: title,
-        message: message,
-        onConfirm: onConfirm,
-        buttonText: buttonText,
-        barrierDismissible: barrierDismissible,
-      );
+      if (showDialog) {
+        NavigationService.showAlertDialog(
+          title: title,
+          message: message,
+          onConfirm: onConfirm,
+          buttonText: buttonText,
+          barrierDismissible: barrierDismissible,
+        );
+      }
       return ApiResponse<List<T>>(
         success: false,
         statusCode: 500,

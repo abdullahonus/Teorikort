@@ -1,3 +1,4 @@
+import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,6 +46,7 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp(
       navigatorKey: NavigationService.navigatorKey,
+      navigatorObservers: [ChuckerFlutter.navigatorObserver],
       title: 'Teorikort',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,

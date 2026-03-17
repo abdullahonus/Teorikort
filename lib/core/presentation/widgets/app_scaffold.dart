@@ -1,3 +1,5 @@
+import 'package:chucker_flutter/chucker_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teorikort/core/localization/app_localization.dart';
@@ -249,6 +251,13 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
           ),
         ],
       ),
+      floatingActionButton: kDebugMode
+          ? FloatingActionButton(
+              mini: true,
+              onPressed: () => ChuckerFlutter.showChuckerScreen(),
+              child: const Icon(Icons.network_check),
+            )
+          : null,
     );
   }
 }

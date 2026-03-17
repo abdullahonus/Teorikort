@@ -38,6 +38,7 @@ class PackageService extends BaseApiService {
         data: {'package_id': packageId},
       ),
       PaymentResponse.fromJson,
+      showDialog: false,
     );
   }
 
@@ -56,6 +57,7 @@ class PackageService extends BaseApiService {
     return await handleResponse<PaymentStatus>(
       get(ApiConstants.swishStatus(paymentId)),
       PaymentStatus.fromJson,
+      showDialog: false,
     );
   }
 }
