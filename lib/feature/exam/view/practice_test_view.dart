@@ -5,10 +5,10 @@ import 'package:teorikort/core/widgets/app_bar_widget.dart';
 import 'package:teorikort/core/widgets/app_loading_widget.dart';
 import 'package:teorikort/core/widgets/custom_elevated_button.dart';
 
+import '../../statistics/provider/statistics_provider.dart';
 import '../model/exam_category.dart';
 import '../provider/practice_provider.dart';
 import 'exam_session_view.dart';
-import '../../statistics/provider/statistics_provider.dart';
 
 class PracticeTestView extends ConsumerStatefulWidget {
   final ExamCategory subCategory;
@@ -77,10 +77,10 @@ class _PracticeTestViewState extends ConsumerState<PracticeTestView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (tests.isNotEmpty) ...[
+                    /*  if (tests.isNotEmpty) ...[
                       _buildExamInfoCard(context, tests.first, colorScheme),
                       const SizedBox(height: 24),
-                    ],
+                    ], */
                     Center(
                       child: CustomElevatedButton(
                         onPressed: () {
@@ -241,7 +241,8 @@ class _PracticeTestViewState extends ConsumerState<PracticeTestView> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                color:
+                    colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: colorScheme.outlineVariant.withValues(alpha: 0.5),
@@ -249,11 +250,25 @@ class _PracticeTestViewState extends ConsumerState<PracticeTestView> {
               ),
               child: Column(
                 children: [
-                  _buildDialogInfoRow(Icons.timer_outlined, AppLocalization.of(context).translate('exam.duration'), '${test.timeSeconds ~/ 60} ${AppLocalization.of(context).translate('exam.minute_short')}', colorScheme),
+                  _buildDialogInfoRow(
+                      Icons.timer_outlined,
+                      AppLocalization.of(context).translate('exam.duration'),
+                      '${test.timeSeconds ~/ 60} ${AppLocalization.of(context).translate('exam.minute_short')}',
+                      colorScheme),
                   const SizedBox(height: 8),
-                  _buildDialogInfoRow(Icons.help_outline, AppLocalization.of(context).translate('exam.question_count_label'), '${test.totalQuestions}', colorScheme),
+                  _buildDialogInfoRow(
+                      Icons.help_outline,
+                      AppLocalization.of(context)
+                          .translate('exam.question_count_label'),
+                      '${test.totalQuestions}',
+                      colorScheme),
                   const SizedBox(height: 8),
-                  _buildDialogInfoRow(Icons.verified_outlined, AppLocalization.of(context).translate('exam.success_rate'), '%${test.successPoint}', colorScheme),
+                  _buildDialogInfoRow(
+                      Icons.verified_outlined,
+                      AppLocalization.of(context)
+                          .translate('exam.success_rate'),
+                      '%${test.successPoint}',
+                      colorScheme),
                 ],
               ),
             ),
@@ -295,7 +310,8 @@ class _PracticeTestViewState extends ConsumerState<PracticeTestView> {
     }
   }
 
-  Widget _buildDialogInfoRow(IconData icon, String label, String value, ColorScheme colorScheme) {
+  Widget _buildDialogInfoRow(
+      IconData icon, String label, String value, ColorScheme colorScheme) {
     return Row(
       children: [
         Icon(icon, size: 20, color: colorScheme.primary),
@@ -304,13 +320,15 @@ class _PracticeTestViewState extends ConsumerState<PracticeTestView> {
         const Spacer(),
         Text(
           value,
-          style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.onSurface),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, color: colorScheme.onSurface),
         ),
       ],
     );
   }
 
-  Widget _buildExamInfoCard(BuildContext context, ExamCategory test, ColorScheme colorScheme) {
+/*   Widget _buildExamInfoCard(
+      BuildContext context, ExamCategory test, ColorScheme colorScheme) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -341,19 +359,32 @@ class _PracticeTestViewState extends ConsumerState<PracticeTestView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildInfoStat(Icons.schedule, '${test.timeSeconds ~/ 60}', AppLocalization.of(context).translate('exam.minute'), colorScheme),
+              _buildInfoStat(
+                  Icons.schedule,
+                  '${test.timeSeconds ~/ 60}',
+                  AppLocalization.of(context).translate('exam.minute'),
+                  colorScheme),
               _buildVerticalDivider(colorScheme),
-              _buildInfoStat(Icons.help_outline, '${test.totalQuestions}', AppLocalization.of(context).translate('exam.question'), colorScheme),
+              _buildInfoStat(
+                  Icons.help_outline,
+                  '${test.totalQuestions}',
+                  AppLocalization.of(context).translate('exam.question'),
+                  colorScheme),
               _buildVerticalDivider(colorScheme),
-              _buildInfoStat(Icons.star_outline, '%${test.successPoint}', AppLocalization.of(context).translate('exam.success_rate'), colorScheme),
+              _buildInfoStat(
+                  Icons.star_outline,
+                  '%${test.successPoint}',
+                  AppLocalization.of(context).translate('exam.success_rate'),
+                  colorScheme),
             ],
           ),
         ],
       ),
     );
   }
-
-  Widget _buildInfoStat(IconData icon, String value, String label, ColorScheme colorScheme) {
+ */
+  Widget _buildInfoStat(
+      IconData icon, String value, String label, ColorScheme colorScheme) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
