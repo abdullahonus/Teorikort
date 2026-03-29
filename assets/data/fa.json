@@ -138,7 +138,14 @@
     "all_questions_answered_message": "شما به تمام سوالات مربوط به این آزمون پاسخ داده اید.",
     "all_questions_answered_error": "سوالی یافت نشد",
     "go_back": "برگرد",
-    "start_new_test": "شروع آزمون جدید"
+    "start_new_test": "شروع آزمون جدید",
+    "exam_details": "جزئیات امتحان",
+    "duration": "مدت زمان",
+    "question_count_label": "تعداد سوالات",
+    "success_rate": "موفقیت",
+    "minute_short": "دقیقه",
+    "minute": "دقیقه",
+    "question": "سؤال"
   },
   "profile": {
     "title": "پروفایل",

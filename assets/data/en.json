@@ -138,7 +138,14 @@
     "all_questions_answered_message": "You have answered all questions related to this exam.",
     "all_questions_answered_error": "No questions found",
     "go_back": "Go Back",
-    "start_new_test": "Start a New Test"
+    "start_new_test": "Start a New Test",
+    "exam_details": "Exam Details",
+    "duration": "Duration",
+    "question_count_label": "Question Count",
+    "success_rate": "Success Rate",
+    "minute_short": "Min",
+    "minute": "Minute",
+    "question": "Question"
   },
   "profile": {
     "title": "Profile",

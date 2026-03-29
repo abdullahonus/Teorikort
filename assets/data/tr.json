@@ -138,7 +138,14 @@
     "all_questions_answered_message": "Bu sınav ile ilgili tüm soruları cevapladınız.",
     "all_questions_answered_error": "Soru bulunmuyor",
     "go_back": "Geri Dön",
-    "start_new_test": "Yeni Teste Başla"
+    "start_new_test": "Yeni Teste Başla",
+    "exam_details": "Sınav Detayları",
+    "duration": "Süre",
+    "question_count_label": "Soru Sayısı",
+    "success_rate": "Başarı",
+    "minute_short": "Dk",
+    "minute": "Dakika",
+    "question": "Soru"
   },
   "profile": {
     "title": "Profil",

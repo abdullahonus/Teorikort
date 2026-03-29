@@ -138,7 +138,14 @@
     "all_questions_answered_message": "Du har besvart alle spørsmål knyttet til denne eksamenen.",
     "all_questions_answered_error": "Ingen spørsmål funnet",
     "go_back": "Gå tilbake",
-    "start_new_test": "Start en ny test"
+    "start_new_test": "Start en ny test",
+    "exam_details": "Eksamensdetaljer",
+    "duration": "Varighet",
+    "question_count_label": "Antall spørsmål",
+    "success_rate": "Suksessrate",
+    "minute_short": "Min",
+    "minute": "Minutt",
+    "question": "Spørsmål"
   },
   "profile": {
     "title": "Profil",

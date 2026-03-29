@@ -138,7 +138,14 @@
     "all_questions_answered_message": "Du har besvarat alla frågor relaterade till detta prov.",
     "all_questions_answered_error": "Inga frågor hittades",
     "go_back": "Gå tillbaka",
-    "start_new_test": "Starta ett nytt test"
+    "start_new_test": "Starta ett nytt test",
+    "exam_details": "Tentamensdetaljer",
+    "duration": "Varaktighet",
+    "question_count_label": "Antal frågor",
+    "success_rate": "Framgång",
+    "minute_short": "Min",
+    "minute": "Minut",
+    "question": "Fråga"
   },
   "profile": {
     "title": "Profil",

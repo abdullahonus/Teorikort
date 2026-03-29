@@ -77,6 +77,10 @@ class _PracticeTestViewState extends ConsumerState<PracticeTestView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    if (tests.isNotEmpty) ...[
+                      _buildExamInfoCard(context, tests.first, colorScheme),
+                      const SizedBox(height: 24),
+                    ],
                     Center(
                       child: CustomElevatedButton(
                         onPressed: () {
@@ -213,10 +217,48 @@ class _PracticeTestViewState extends ConsumerState<PracticeTestView> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(
-            AppLocalization.of(context).translate('mock_exam.confirm_start')),
-        content: Text(AppLocalization.of(context)
-            .translate('mock_exam.confirm_description')),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Icon(Icons.rocket_launch, color: colorScheme.primary),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                AppLocalization.of(context)
+                    .translate('mock_exam.confirm_start'),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(AppLocalization.of(context)
+                .translate('mock_exam.confirm_description')),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+                ),
+              ),
+              child: Column(
+                children: [
+                  _buildDialogInfoRow(Icons.timer_outlined, AppLocalization.of(context).translate('exam.duration'), '${test.timeSeconds ~/ 60} ${AppLocalization.of(context).translate('exam.minute_short')}', colorScheme),
+                  const SizedBox(height: 8),
+                  _buildDialogInfoRow(Icons.help_outline, AppLocalization.of(context).translate('exam.question_count_label'), '${test.totalQuestions}', colorScheme),
+                  const SizedBox(height: 8),
+                  _buildDialogInfoRow(Icons.verified_outlined, AppLocalization.of(context).translate('exam.success_rate'), '%${test.successPoint}', colorScheme),
+                ],
+              ),
+            ),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -251,5 +293,97 @@ class _PracticeTestViewState extends ConsumerState<PracticeTestView> {
         ),
       );
     }
+  }
+
+  Widget _buildDialogInfoRow(IconData icon, String label, String value, ColorScheme colorScheme) {
+    return Row(
+      children: [
+        Icon(icon, size: 20, color: colorScheme.primary),
+        const SizedBox(width: 8),
+        Text(label, style: TextStyle(color: colorScheme.onSurfaceVariant)),
+        const Spacer(),
+        Text(
+          value,
+          style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.onSurface),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExamInfoCard(BuildContext context, ExamCategory test, ColorScheme colorScheme) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.info_outline, color: colorScheme.primary, size: 24),
+              const SizedBox(width: 8),
+              Text(
+                AppLocalization.of(context).translate('exam.exam_details'),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildInfoStat(Icons.schedule, '${test.timeSeconds ~/ 60}', AppLocalization.of(context).translate('exam.minute'), colorScheme),
+              _buildVerticalDivider(colorScheme),
+              _buildInfoStat(Icons.help_outline, '${test.totalQuestions}', AppLocalization.of(context).translate('exam.question'), colorScheme),
+              _buildVerticalDivider(colorScheme),
+              _buildInfoStat(Icons.star_outline, '%${test.successPoint}', AppLocalization.of(context).translate('exam.success_rate'), colorScheme),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoStat(IconData icon, String value, String label, ColorScheme colorScheme) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, color: colorScheme.primary, size: 28),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildVerticalDivider(ColorScheme colorScheme) {
+    return Container(
+      height: 40,
+      width: 1,
+      color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+    );
   }
 }
