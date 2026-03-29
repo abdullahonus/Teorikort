@@ -10,7 +10,7 @@ import 'package:teorikort/feature/profile/provider/profile_provider.dart';
 import 'package:teorikort/feature/splash/provider/splash_provider.dart';
 import 'package:teorikort/feature/splash/splash_view.dart';
 import 'package:teorikort/features/packages/presentation/packages_screen.dart';
-import 'package:teorikort/features/workbook/presentation/workbook_list_screen.dart';
+// import 'package:teorikort/features/workbook/presentation/workbook_list_screen.dart';
 import 'about_view.dart';
 import 'gdpr_view.dart';
 import 'policy_view.dart';
@@ -193,6 +193,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
         ),
         const SizedBox(height: 24),
 
+        /* 
         // Workbook
         _buildSectionTitle(context, 'workbook.title'),
         _buildSettingsCard(
@@ -212,6 +213,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
           ],
         ),
         const SizedBox(height: 24),
+        */
 
         // Packages
         _buildSectionTitle(context, 'packages.title'),

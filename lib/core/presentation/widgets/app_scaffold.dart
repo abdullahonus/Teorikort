@@ -9,7 +9,7 @@ import 'package:teorikort/feature/profile/provider/profile_provider.dart';
 import 'package:teorikort/feature/profile/view/profile_view.dart';
 import 'package:teorikort/feature/search/view/search_view.dart';
 import 'package:teorikort/feature/statistics/view/statistics_view.dart';
-import 'package:teorikort/feature/topics/view/topics_view.dart';
+// import 'package:teorikort/feature/topics/view/topics_view.dart';
 
 class AppScaffold extends ConsumerStatefulWidget {
   const AppScaffold({super.key});
@@ -23,7 +23,7 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
 
   late final List<Widget> _screens = [
     const HomeView(),
-    const TopicsView(),
+    // const TopicsView(), // Çalışma kitabı şimdilik gizlendi
     const StatisticsView(),
     const ProfileView(),
   ];
@@ -179,7 +179,8 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
         tooltip: AppLocalization.of(context).translate('app_bar.back'),
       ),
       actions: [
-        if (_currentIndex == 2)
+        if (_currentIndex ==
+            1) // Topics gizlendiği için Statistics 1. indekse düştü
           IconButton(
             icon: Icon(Icons.leaderboard_outlined,
                 color: Theme.of(context).colorScheme.primary),
@@ -201,11 +202,11 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
 
   String _buildTitle() {
     switch (_currentIndex) {
+      // case 1:
+      //   return AppLocalization.of(context).translate('topics.screen_title');
       case 1:
-        return AppLocalization.of(context).translate('topics.screen_title');
-      case 2:
         return AppLocalization.of(context).translate('statistics.screen_title');
-      case 3:
+      case 2:
         return AppLocalization.of(context).translate('profile.title');
       default:
         return '';
@@ -233,11 +234,11 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
             selectedIcon: const Icon(Icons.home),
             label: AppLocalization.of(context).translate('bottom_nav.home'),
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.menu_book_outlined),
-            selectedIcon: const Icon(Icons.menu_book),
-            label: AppLocalization.of(context).translate('bottom_nav.topics'),
-          ),
+          // NavigationDestination(
+          //   icon: const Icon(Icons.menu_book_outlined),
+          //   selectedIcon: const Icon(Icons.menu_book),
+          //   label: AppLocalization.of(context).translate('bottom_nav.topics'),
+          // ),
           NavigationDestination(
             icon: const Icon(Icons.bar_chart_outlined),
             selectedIcon: const Icon(Icons.bar_chart),
