@@ -44,51 +44,107 @@ class _TrafficSignsViewState extends ConsumerState<TrafficSignsView> {
     final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalization.of(context);
 
-    return Scaffold(
-      backgroundColor: colorScheme.surface,
-      appBar: AppHeader(
-        title: l10n.translate('signs.title'),
-      ),
-      body: state.isLoading && state.signs.isEmpty
-          ? const AppLoadingWidget.fullscreen()
-          : RefreshIndicator(
-              onRefresh: () => ref.read(trafficSignProvider.notifier).refresh(),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: state.signs.isEmpty
-                        ? Center(child: Text(l10n.translate('signs.no_data')))
-                        : GridView.builder(
-                            controller: _scrollController,
-                            padding: const EdgeInsets.all(16),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.85,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                            ),
-                            itemCount: state.signs.length,
-                            itemBuilder: (context, index) =>
-                                _TrafficSignCard(sign: state.signs[index]),
+    // Telefonun geri tuşu için mantık: Seçili kategori varsa listeye dön, yoksa sayfayı kapat.
+    return PopScope(
+      canPop: state.selectedCategory == null,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          ref.read(trafficSignProvider.notifier).selectCategory(null);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: colorScheme.surface,
+        appBar: AppHeader(
+          title: state.selectedCategory != null
+              ? state.selectedCategory!.title
+              : l10n.translate('signs.title'),
+          showBackButton: true,
+          onBackPress: () {
+            // Eğer bir kategori seçiliyse, ana kategori listesine dön
+            if (state.selectedCategory != null) {
+              ref.read(trafficSignProvider.notifier).selectCategory(null);
+            } else {
+              // Değilse normal şekilde önceki sayfaya (örneğin Home) git
+              Navigator.pop(context);
+            }
+          },
+        ),
+        body: state.isLoading && state.categories.isEmpty
+            ? const AppLoadingWidget.fullscreen()
+            : RefreshIndicator(
+                onRefresh: () =>
+                    ref.read(trafficSignProvider.notifier).refresh(),
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    if (state.categories.isEmpty && !state.isLoading)
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Center(
+                            child: Text(l10n.translate('signs.no_data'))),
+                      )
+                    else
+                      SliverPadding(
+                        padding: const EdgeInsets.all(16),
+                        sliver: SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.85,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
                           ),
-                  ),
-                  if (state.isLoading && state.signs.isNotEmpty)
-                    const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: AppLoadingWidget.small(),
-                    ),
-                ],
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              if (state.selectedCategory == null) {
+                                // 1) Ana Liste (Kategoriler) Modu
+                                final cat = state.categories[index];
+                                return _TrafficSignCard(
+                                  sign: cat,
+                                  onTapAction: () => ref
+                                      .read(trafficSignProvider.notifier)
+                                      .selectCategory(cat),
+                                );
+                              } else {
+                                // 2) Seçili Kategori altındaki işaretleri gösterme (Detay Listesi) Modu
+                                final sign =
+                                    state.selectedCategory!.children[index];
+                                return _TrafficSignCard(sign: sign);
+                              }
+                            },
+                            childCount: state.selectedCategory == null
+                                ? state.categories.length
+                                : state.selectedCategory!.children.length,
+                          ),
+                        ),
+                      ),
+
+                    // Listenin en altına loading indikatörü
+                    if (state.isLoading && state.categories.isNotEmpty)
+                      const SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: AppLoadingWidget.small(),
+                        ),
+                      ),
+                  ],
+                ),
               ),
-            ),
+      ),
     );
   }
 }
 
+// ─────────────────────────────────────────────────────────────
+// Tekil Kart (Hem Ana Kategori hem de Alt İşaret için Dinamik)
+// ─────────────────────────────────────────────────────────────
 class _TrafficSignCard extends StatelessWidget {
   final TrafficSign sign;
+  // onTapAction girilmişse (kategoriyse), yaprağı açmak yerine kategori içine girer
+  final VoidCallback? onTapAction;
 
-  const _TrafficSignCard({required this.sign});
+  const _TrafficSignCard({required this.sign, this.onTapAction});
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +158,7 @@ class _TrafficSignCard extends StatelessWidget {
         side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.1)),
       ),
       child: InkWell(
-        onTap: () => _showDetail(context, sign),
+        onTap: onTapAction ?? () => _showDetail(context, sign),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -118,13 +174,9 @@ class _TrafficSignCard extends StatelessWidget {
                     ? Image.network(
                         sign.imageUrl,
                         fit: BoxFit.contain,
-                        errorBuilder: (_, __, ___) => Icon(
-                          Icons.warning_amber_rounded,
-                          color: colorScheme.primary.withValues(alpha: 0.1),
-                        ),
+                        errorBuilder: (_, __, ___) => _FallbackIcon(),
                       )
-                    : Icon(Icons.warning_amber_rounded,
-                        color: colorScheme.primary.withValues(alpha: 0.1)),
+                    : _FallbackIcon(),
               ),
             ),
             Padding(
@@ -135,7 +187,7 @@ class _TrafficSignCard extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   fontSize: 13,
                   height: 1.2,
                 ),
@@ -157,6 +209,20 @@ class _TrafficSignCard extends StatelessWidget {
   }
 }
 
+class _FallbackIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      Icons.image_not_supported_outlined,
+      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+      size: 40,
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Alt İşarete tıkıldığında açılan Pop-Up detay sayfası
+// ─────────────────────────────────────────────────────────────
 class _TrafficSignDetailSheet extends ConsumerWidget {
   final TrafficSign sign;
 
@@ -164,8 +230,6 @@ class _TrafficSignDetailSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final detailAsync =
-        ref.watch(trafficSignDetailProvider(sign.id.toString()));
     final colorScheme = Theme.of(context).colorScheme;
 
     return DraggableScrollableSheet(
@@ -198,13 +262,8 @@ class _TrafficSignDetailSheet extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: detailAsync.when(
-                loading: () => const Center(child: AppLoadingWidget.small()),
-                error: (err, stack) => _buildDetailContent(
-                    context, sign, colorScheme, scrollController),
-                data: (detail) => _buildDetailContent(
-                    context, detail, colorScheme, scrollController),
-              ),
+              child: _buildDetailContent(
+                  context, sign, colorScheme, scrollController),
             ),
           ],
         ),
@@ -212,8 +271,14 @@ class _TrafficSignDetailSheet extends ConsumerWidget {
     );
   }
 
-  Widget _buildDetailContent(BuildContext context, TrafficSign data,
-      ColorScheme colorScheme, ScrollController scrollController) {
+  Widget _buildDetailContent(
+    BuildContext context,
+    TrafficSign data,
+    ColorScheme colorScheme,
+    ScrollController scrollController,
+  ) {
+    final description = data.descriptionText;
+
     return ListView(
       controller: scrollController,
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 48),
@@ -230,7 +295,7 @@ class _TrafficSignDetailSheet extends ConsumerWidget {
                   height: 160,
                   fit: BoxFit.contain,
                   errorBuilder: (_, __, ___) => Icon(
-                    Icons.warning_amber_rounded,
+                    Icons.image_not_supported_outlined,
                     size: 80,
                     color: colorScheme.primary.withValues(alpha: 0.1),
                   ),
@@ -273,9 +338,7 @@ class _TrafficSignDetailSheet extends ConsumerWidget {
         const Divider(),
         const SizedBox(height: 24),
         AppHtmlText(
-          htmlData: data.description.isEmpty
-              ? 'Açıklama bulunamadı.'
-              : data.description,
+          htmlData: description.isEmpty ? 'Açıklama bulunamadı.' : description,
           style: TextStyle(
             fontSize: 16,
             height: 1.6,

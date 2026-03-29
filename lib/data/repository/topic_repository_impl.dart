@@ -75,23 +75,8 @@ class TopicRepositoryImpl implements ITopicRepository {
     try {
       final response = await _trafficSignService.getSigns(page: page);
       if (response.success && response.data != null) {
-        final legacyRes = response.data!;
-        return ApiResponse.success(sign_model.TrafficSignResponse(
-          signs: legacyRes.signs
-              .map((s) => sign_model.TrafficSign(
-                    id: s.id,
-                    title: s.title,
-                    slug: s.slug,
-                    description: s.description,
-                    imageUrl: s.imageUrl,
-                  ))
-              .toList(),
-          pagination: sign_model.PaginationData(
-            currentPage: legacyRes.pagination.currentPage,
-            lastPage: legacyRes.pagination.lastPage,
-            total: legacyRes.pagination.total,
-          ),
-        ));
+        // Servis zaten TrafficSignResponse döndürüyor (children dahil)
+        return ApiResponse.success(response.data!);
       }
       return ApiResponse.error(response.message);
     } catch (e) {
@@ -106,14 +91,8 @@ class TopicRepositoryImpl implements ITopicRepository {
     try {
       final response = await _trafficSignService.getSignById(id);
       if (response.success && response.data != null) {
-        final s = response.data!;
-        return ApiResponse.success(sign_model.TrafficSign(
-          id: s.id,
-          title: s.title,
-          slug: s.slug,
-          description: s.description,
-          imageUrl: s.imageUrl,
-        ));
+        // Servis zaten TrafficSign döndürüyor (top + children dahil)
+        return ApiResponse.success(response.data!);
       }
       return ApiResponse.error(response.message);
     } catch (e) {

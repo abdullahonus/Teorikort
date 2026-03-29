@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import '../../../../core/services/base_api_service.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/models/api_response.dart';
-import '../models/traffic_sign.dart';
+import '../../../../feature/topics/model/traffic_sign.dart';
 
 class TrafficSignService extends BaseApiService {
+  /// Tüm kategorileri sayfalı getirir.
+  /// Yeni API: { statuscode, description, data: { signs: [...], pagination: {...} } }
   Future<ApiResponse<TrafficSignResponse>> getSigns({
     int page = 1,
     BuildContext? context,
@@ -24,6 +26,7 @@ class TrafficSignService extends BaseApiService {
     );
   }
 
+  /// Tekil işaret detayını getirir.
   Future<ApiResponse<TrafficSign>> getSignById(
     String id, {
     BuildContext? context,
